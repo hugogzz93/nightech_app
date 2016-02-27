@@ -2,29 +2,86 @@
 (function () {
 
     /* ---------------------------------- Local Variables ---------------------------------- */
-    HomeView.prototype.template = Handlebars.compile($("#home-tpl").html());
-    SessionListView.prototype.template = Handlebars.compile($("#session-list-tpl").html());
-    SessionView.prototype.template = Handlebars.compile($("#session-tpl").html());
 
-    var service = new ConferenceService();
-    var slider = new PageSlider($('body'));
+    LogInView.prototype.template = Handlebars.compile($('#coordinator-menu-tpl').html());
+    
+    const communication = new Communication();
+    const slider = new PageSlider($('body'));
 
-    service.initialize().done(function () {
-        
+    communication.initialize("http://api.localhost:3000").done( function () {
+         
+         // Front Page
         router.addRoute('', function() {
-            console.log('empty');
-            slider.slidePage(new HomeView(service).render().$el);
+            if (!communication.auth_token) {
+                console.log("Log In");
+                slider.slidePage(new LogInView(communication).render().$el);
+
+            } else {
+                console.log("Logged In");
+            }
         });
 
-        router.addRoute('sessions/:id', function(id) {
-            console.log('details');
-            service.findById(parseInt(id)).done(function(session) {
-                slider.slidePage(new SessionView(session).render().$el);
-            });
-        });
+        // // Coordinator reservations menu
+        // router.addRoute('reservations', function() {
+        //     console.log('empty');
+        //     communication.getReservations().done(function (reservations) {
+        //          slider.slidePage(new MenuReservations(reservations).render().$el);
+        //     })
+        // });
+
+        // // Show User
+        // router.addRoute('users/:id', function (id) {
+        //      console.log('show user') ;
+        //      communication.findUserById(parseInt(id)).done(function (user) {
+        //           slider.slidePage(new UserView(user).render().$el) ;
+        //      })
+        // });
+
+        // // Administrator
+
+        // // Show Service
+        // router.addRoute('services/:id', function (id) {
+        //      console.log('show service') ;
+        //      communication.findServiceById(parseInt(id)).done(function (service) {
+        //           slider.slidePage(new ServiceView(service).render().$el) ;
+        //      })
+        // });
+
+        // // Update Service
+        // router.addRoute('services/:id/update', function (id) {
+        //      console.log('update service') ;
+        //      communication.findServiceById(parseInt(id)).done(function (service) {
+        //           slider.slidePage(new UpdateServiceView(service).render().$el) ;
+        //      })
+        // });
+
+        // // Super User
+
+        // // User Index
+        // router.addRoute('users', function () {
+        //      console.log("User index") ;
+        //      communication.getUsers().done(function (users) {
+        //           slider.slidePage(new UserIndexView(users).render().$el) ;
+        //      })
+        // });
+
+        // // Admin View User
+        // router.addRoute('users/:id', function (id) {
+        //      console.log("Admin User Update") ;
+        //      communication.findUserById(parseInt(id)).done(function (user) {
+        //           slider.slidePage(new AdminViewUser(user).render().$el) ;
+        //      })
+        // });
+
+        // router.addRoute('finance', function () {
+        //      console.log("finance") ;
+        //      // missing api implementation
+        // })
 
         router.start();
-    });
+
+    } );
+
 
     /* --------------------------------- Event Registration -------------------------------- */
     document.addEventListener('deviceready', function () {
@@ -34,7 +91,7 @@
                 navigator.notification.alert(
                     message,    // message
                     null,       // callback
-                    "Workshop", // title
+                    "Error",    // title
                     'OK'        // buttonName
                 );
             };
