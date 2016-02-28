@@ -16,11 +16,8 @@ var LogInView = function (communication) {
 	 this.logIn = function () {
 	 	const email = this.$el.find('#email-field').val();
 	 	const password = this.$el.find('#password-field').val();
-	 	communication.logIn( { email: email, password: password }).done(function (argument) {
-	 		 console.log(argument) ;
-	 	}).fail(function (response) {
-	 		alert(JSON.parse(response.responseText).errors);
-	 	})
+
+	 	events.emit("logInAttempt", { email: email, password: password });
 	 }
 
 

@@ -3,12 +3,15 @@
 
     /* ---------------------------------- Local Variables ---------------------------------- */
 
-    LogInView.prototype.template = Handlebars.compile($('#coordinator-menu-tpl').html());
+    LogInView.prototype.template = Handlebars.compile($('#log-in-tpl').html());
+    ReservationsView.prototype.template = Handlebars.compile($('#coordinator-menu-tpl').html());
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
+    const mainUrl = "http://api.localhost:3000";
 
-    communication.initialize("http://api.localhost:3000").done( function () {
+
+    communication.initialize(mainUrl).done( function () {
          
          // Front Page
         router.addRoute('', function() {
@@ -21,13 +24,14 @@
             }
         });
 
-        // // Coordinator reservations menu
-        // router.addRoute('reservations', function() {
-        //     console.log('empty');
-        //     communication.getReservations().done(function (reservations) {
-        //          slider.slidePage(new MenuReservations(reservations).render().$el);
-        //     })
-        // });
+        // Coordinator reservations menu
+        router.addRoute('reservations', function() {
+            console.log('empty');
+            const date = new Date()
+            communication.getReservationsByDate(date).done(function (response) {
+                 slider.slidePage(new ReservationsView(response).render().$el);
+            })
+        });
 
         // // Show User
         // router.addRoute('users/:id', function (id) {
@@ -98,7 +102,35 @@
         }
     }, false);
 
+    events.on('navigationRequest', function (url) {
+             router.load(url);
+        })
+
+    events.on('logInSuccess', function () {
+         router.load("reservations");
+    })
+
     /* ---------------------------------- Local Functions ---------------------------------- */
+    /* ---------------------------------- Handlebars Helpers ------------------------------- */
+    Handlebars.registerHelper('reservationIcon', function (text) {
+         // const text = Handlebars.escapeExpression(text);
+         var returnText;
+         if (text === "pending") {
+            returnText = new Handlebars.SafeString(
+            '<span class="icon pull-right"></span>'
+            );
+         } else if(text === "accepted"){
+            returnText = new Handlebars.SafeString(
+            '<span class="icon icon-check pull-right"></span>'
+            );
+         } else {
+            returnText = new Handlebars.SafeString(
+            '<span class="icon icon-close pull-right"></span>'
+            );
+         }
+         return returnText;
+    })
+
 
 
 }());
