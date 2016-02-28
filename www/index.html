@@ -3,69 +3,67 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <link href="assets/ratchet/css/ratchet.css" rel="stylesheet">
+    <!-- <link href="assets/ratchet/css/ratchet.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="assets/materialize/css/materialize.css">
     <link href="assets/css/styles.css" rel="stylesheet">
     <link href="assets/css/pageslider-fix.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
+  
 
     <script id="log-in-tpl" type="text/template">
-        <input type="text" placeholder="Email" id="email-field" value="mohammed@ruecker.ca">
-        <input type="text" placeholder="Password" id="password-field" value="12345678">
-        <button class="btn btn-negative">
-              <span class="icon icon-search"></span>
-              Log In
-        </button>
+        <div class="row valign-wrapper">
+          <div class="col s12 offset-s3 valign">
+            <div class="row">
+              <div class="input-field col s6">
+                <input placeholder="Email" id="email-field" type="text" class="validate" value="mohammed@ruecker.ca">
+                <label for="email-field">Email</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s6">
+                <input placeholder="Placeholder" id="password-field" type="text" class="validate" value="12345678">
+                <label for="password-field">Password</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s6">
+                <a class="waves-effect waves-light btn">Enter</a>
+              </div>
+            </div>
+          </div>
+        </div>
     </script>
 
-
     <script id="coordinator-menu-tpl" type="text/template">
-        <header class="bar bar-nav">
-            <div class="icon icon-gear pull-right"></div>
-        </header>
+    <nav>
+      <div class="nav-wrapper">
+        <a href="" class="brand-logo left">Reservation</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
+        </ul>
+      </div>
+    </nav>
 
-        <div class="bar bar-standard bar-header-secondary">
-          <a class="icon icon-gear pull-left" href="#settingsModal"></a>
-            <div class="content-padded">
-                  <div class="dateLabel pull-right">27-03-16</div>
-            </div>
-        </div>
+     <input type="date" class="datepicker">
 
-        <!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
-        <div class="content">
-          <div class="content-padded">
-            <h3>Ratchet Example App</h3>
-            <p>Use this Ratchet mobile app template to build web apps that feel native.</p>
-          </div>
-          <div class="card">
-            <ul class="table-view">
+      <ul class="collection">
+        {{#each reservations}}
+          <li class="collection-item" style="text-align:left;"><div>{{ client }}<a href="#!" class="secondary-content">{{reservationIcon status}}</a></div></li>
+        {{/each}}
+      </ul>  
 
-              {{#each reservations }}
-              <li class="table-view-cell">
-                <a class="push-right" href="#settingsModal" data-transition="slide-in">
-                  <strong>{{ client }}</strong>
-                  {{ reservationIcon status }}
-                </a>
-              </li>
-              {{/each}}
-
-            </ul>
-          </div>
-
-          <a href="#myModalexample" class="btn">Open modal</a>
-<div id="myModalexample" class="modal">
-  <header class="bar bar-nav">
-    <a class="icon icon-close pull-right" href="#myModalexample"></a>
-    <h1 class="title">Modal</h1>
-  </header>
-
-  <div class="content">
-    <p class="content-padded">The contents of my modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
-  </div>
-</div>
+      <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+        <a class="btn-floating btn-large red" href="#reservations/create">
+          <i class="large material-icons">add</i>
+        </a>
       </div>
       
-        
+    </script>
+
+    <script id="create-reservation-tpl">
+     
     </script>
 
     <!-- <script src="cordova.js"></script> -->
@@ -80,7 +78,9 @@
     <script src="js/services/CommunicationService.js"></script>
     <script src="js/views/LogInView.js"></script>
     <script src="js/views/ReservationsView.js"></script>
+    <script src="js/views/CreateReservationView.js"></script>
     <script src="js/app.js"></script>
+    <script type="text/javascript" src="assets/materialize/js/materialize.min.js"></script>
 
 </body>
 </html>

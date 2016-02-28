@@ -5,6 +5,7 @@
 
     LogInView.prototype.template = Handlebars.compile($('#log-in-tpl').html());
     ReservationsView.prototype.template = Handlebars.compile($('#coordinator-menu-tpl').html());
+    CreateReservationView.prototype.template = Handlebars.compile($('#create-reservation-tpl').html());
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
@@ -32,6 +33,11 @@
                  slider.slidePage(new ReservationsView(response).render().$el);
             })
         });
+
+        // create reservation
+        router.addRoute('reservations/create', function () {
+            slider.slidePage(new CreateReservationView().render().$el) ;
+        })
 
         // // Show User
         // router.addRoute('users/:id', function (id) {
@@ -117,15 +123,15 @@
          var returnText;
          if (text === "pending") {
             returnText = new Handlebars.SafeString(
-            '<span class="icon pull-right"></span>'
+            ''
             );
          } else if(text === "accepted"){
             returnText = new Handlebars.SafeString(
-            '<span class="icon icon-check pull-right"></span>'
+            '<i class="material-icons">done</i>'
             );
          } else {
             returnText = new Handlebars.SafeString(
-            '<span class="icon icon-close pull-right"></span>'
+            '<i class="material-icons">not_interested</i>'
             );
          }
          return returnText;

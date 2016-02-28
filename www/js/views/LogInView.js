@@ -4,7 +4,7 @@ var LogInView = function (communication) {
 	 	this.$el = $('<div/>');
 	 	this.$email = this.$el.find('#email-field');
 	 	this.$password = this.$el.find('#password-field');
-	 	this.$el.on('click', '.btn.btn-negative', this.logIn.bind(this));
+	 	this.$el.on('click', '.btn', this.logIn.bind(this));
         this.render();
 	 };
 
