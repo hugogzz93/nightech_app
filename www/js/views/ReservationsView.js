@@ -1,22 +1,36 @@
-var ReservationsView = function (jsonData) {
+var ReservationsView = function (communication) {
+
+	var reservationsListView
 	 
 	 this.initialize = function () {
 	 	 this.$el = $('<div/>') ;
-	 	 this.$el.on('click', '.icon.icon-check.pull-right', function () {
-	 	 });
-	 	 this.$el.on('change', '.datepicker', function (event) {
-	 	 	const date = new Date(this.$el.find('.datepicker').val());
-	 	 	events.emit('requestReservationsForDate', date);
-	 	 })
-	 	 this.render(jsonData);
-
+         reservationsListView = new ReservationsListView();
+	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
+	 	 this.findByDate(new Date());
+	 	 this.render();
 	 } 
 
-	this.render = function (jsonData) {
-	 	this.$el.html(this.template(jsonData));
-	 	this.$el.find('.datepicker').pickadate({});	 	
-	 	return this;
+	this.render = function () {
+	 	this.$el.html(this.template());
+	    $('.content', this.$el).html(reservationsListView.$el);
+	 	const $datepicker = this.$el.find('.datepicker');
+	 	$datepicker.pickadate({});
+		$datepicker.val( $datepicker.val() === "" ? new Date().toDateString() : $datepicker.val());
 
+	 	return this;
 	}
+
+	this.datePickerChange = function () {
+		 const date = new Date(this.$el.find('.datepicker').val());
+		 this.findByDate(date);
+	}
+
+	this.findByDate = function(date) {
+		communication.getReservationsByDate(date).done(function(response) {
+	        reservationsListView.setReservations(response.reservations);
+	    });
+	}
+
+
 	 this.initialize();
 }

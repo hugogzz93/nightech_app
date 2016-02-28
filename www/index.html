@@ -14,52 +14,57 @@
 
     <script id="log-in-tpl" type="text/template">
         <div class="row valign-wrapper">
-          <div class="col s12 offset-s3 valign">
+          <div class="col s12 valign">
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s9">
                 <input placeholder="Email" id="email-field" type="text" class="validate" value="mohammed@ruecker.ca">
                 <label for="email-field">Email</label>
               </div>
             </div>
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s9">
                 <input placeholder="Placeholder" id="password-field" type="text" class="validate" value="12345678">
                 <label for="password-field">Password</label>
               </div>
             </div>
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s9">
                 <a class="waves-effect waves-light btn">Enter</a>
               </div>
             </div>
           </div>
         </div>
     </script>
-
+    
     <script id="coordinator-menu-tpl" type="text/template">
-    <nav>
-      <div class="nav-wrapper">
-        <a href="" class="brand-logo left">Reservation</a>
-        <ul class="right hide-on-med-and-down">
-          <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
-        </ul>
+      <nav>
+        <div class="nav-wrapper">
+          <a href="" class="brand-logo left">Reservation</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <input type="date" class="datepicker">
+
+      <div class="content">
+        
       </div>
-    </nav>
-
-     <input type="date" class="datepicker">
-
-      <ul class="collection">
-        {{#each reservations}}
-          <li class="collection-item" style="text-align:left;"><div>{{ client }}<a href="#!" class="secondary-content">{{reservationIcon status}}</a></div></li>
-        {{/each}}
-      </ul>  
 
       <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
         <a class="btn-floating btn-large red" href="#reservations/create">
           <i class="large material-icons">add</i>
         </a>
       </div>
-      
+    </script>
+
+    <script id="reservations-list-tpl" type="text/template">
+      <ul class="collection">
+        {{#each this}}
+          <li class="collection-item" style="text-align:left;"><div>{{ client }}<a href="#!" class="secondary-content">{{reservationIcon status}}</a></div></li>
+        {{/each}}
+      </ul>  
     </script>
 
     <script id="create-reservation-tpl">
@@ -77,6 +82,7 @@
     <!-- // <script src="js/services/ErrorHandler.js"></script> -->
     <script src="js/services/CommunicationService.js"></script>
     <script src="js/views/LogInView.js"></script>
+    <script src="js/views/ReservationsListView.js"></script>
     <script src="js/views/ReservationsView.js"></script>
     <script src="js/views/CreateReservationView.js"></script>
     <script src="js/app.js"></script>

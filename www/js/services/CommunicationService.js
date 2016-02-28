@@ -19,9 +19,6 @@ const Communication = function () {
 	 		 this.logIn(parameters);
 	 	}.bind(this));
 
-	 	events.on("reservationsRetrieval", function (date) {
-	 		 this.getReservationsByDate(date); 
-	 	}.bind(this));
 
 	 this.startSession = function (user) {
 	 	 auth_token = user.auth_token;

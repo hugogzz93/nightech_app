@@ -6,6 +6,7 @@
     LogInView.prototype.template = Handlebars.compile($('#log-in-tpl').html());
     ReservationsView.prototype.template = Handlebars.compile($('#coordinator-menu-tpl').html());
     CreateReservationView.prototype.template = Handlebars.compile($('#create-reservation-tpl').html());
+    ReservationsListView.prototype.template = Handlebars.compile($('#reservations-list-tpl').html());
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
@@ -18,7 +19,7 @@
         router.addRoute('', function() {
             if (!communication.auth_token) {
                 console.log("Log In");
-                slider.slidePage(new LogInView(communication).render().$el);
+                slider.slidePage(new LogInView().render().$el);
 
             } else {
                 console.log("Logged In");
@@ -29,9 +30,7 @@
         router.addRoute('reservations', function() {
             console.log('empty');
             const date = new Date()
-            communication.getReservationsByDate(date).done(function (response) {
-                 slider.slidePage(new ReservationsView(response).render().$el);
-            })
+             slider.slidePage(new ReservationsView(communication).render().$el);
         });
 
         // create reservation
