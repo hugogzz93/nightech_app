@@ -1,5 +1,5 @@
 
-li.collection-item:active {
+.collapsible-header:active {
     background-color: #26A69A;
     color: white;
     transition: all 0.3s;
@@ -7,4 +7,20 @@ li.collection-item:active {
 
 .datepicker {
     text-align: center;
+}
+
+.collapsible-header {
+	text-align:left;
+}
+
+.collapsible-header i {
+	float: right;
+}
+
+.progress {
+	margin: 0;
+}
+
+.hidden {
+	display: none;
 }

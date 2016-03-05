@@ -19,6 +19,10 @@ const Communication = function () {
 	 		 this.logIn(parameters);
 	 	}.bind(this));
 
+	 	events.on("reservationSubmitted", function (parameters) {
+	 		 this.submitReservation(parameters);
+	 	}.bind(this));
+
 
 	 this.startSession = function (user) {
 	 	 auth_token = user.auth_token;
@@ -60,6 +64,39 @@ const Communication = function () {
 	 	  });
 	 	   
 	 }
+
+	this.getRepresentatives = function () {
+		 return $.ajax({
+		 	url: url + '/representatives',
+		 	type: 'GET',
+		 	dataType: 'json',
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+	 		alert("Connection Error 002");
+		 });	  
+	}
+
+	this.submitReservation = function (reservationJson) {
+	 	$.ajax({
+	 	 	url: url + '/reservations',
+	 	 	type: 'POST',
+	 	 	dataType: 'json',
+	 	 	data: {reservation: reservationJson},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).done(function (response) {
+	 		 events.emit('reservationCreated', response);
+	 	 }).fail(function (response) {
+	 		alert(JSON.parse(response.responseText).errors);
+	 	 });
+	 	
+	}
 
 
 

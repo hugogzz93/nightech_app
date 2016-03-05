@@ -6,6 +6,10 @@ var ReservationsView = function (communication) {
 	 	 this.$el = $('<div/>') ;
          reservationsListView = new ReservationsListView();
 	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
+	 	 this.$el.on('click', '.mod-btn', function () {
+	 	 	console.log("aa")
+	 	 	 $('#modal1').openModal(); 
+	 	 });
 	 	 this.findByDate(new Date());
 	 	 this.render();
 	 } 

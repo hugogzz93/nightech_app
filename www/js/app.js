@@ -35,7 +35,9 @@
 
         // create reservation
         router.addRoute('reservations/create', function () {
-            slider.slidePage(new CreateReservationView().render().$el) ;
+            communication.getRepresentatives().done(function (representatives) {
+                 slider.slidePage(new CreateReservationView(communication, representatives).render().$el) ;
+            })
         })
 
         // // Show User
@@ -113,6 +115,12 @@
 
     events.on('logInSuccess', function () {
          router.load("reservations");
+    })
+
+    events.on('reservationCreated', function () {
+         router.load("reservations");
+         var $toastContent = $('<span>Reservation Created!</span>');
+          Materialize.toast($toastContent, 2500);
     })
 
     /* ---------------------------------- Local Functions ---------------------------------- */

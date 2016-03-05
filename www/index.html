@@ -10,25 +10,29 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
+
+  <script id="select-input-tpl" type="text/template">
+
+  </script>
   
 
     <script id="log-in-tpl" type="text/template">
         <div class="row valign-wrapper">
           <div class="col s12 valign">
             <div class="row">
-              <div class="input-field col s9">
+              <div class="input-field col s12">
                 <input placeholder="Email" id="email-field" type="text" class="validate" value="mohammed@ruecker.ca">
                 <label for="email-field">Email</label>
               </div>
             </div>
             <div class="row">
-              <div class="input-field col s9">
+              <div class="input-field col s12">
                 <input placeholder="Placeholder" id="password-field" type="text" class="validate" value="12345678">
                 <label for="password-field">Password</label>
               </div>
             </div>
             <div class="row">
-              <div class="input-field col s9">
+              <div class="input-field col s12">
                 <a class="waves-effect waves-light btn">Enter</a>
               </div>
             </div>
@@ -39,8 +43,8 @@
     <script id="coordinator-menu-tpl" type="text/template">
       <nav>
         <div class="nav-wrapper">
-          <a href="" class="brand-logo left">Reservation</a>
-          <ul class="right hide-on-med-and-down">
+          <a href="reservations" class="brand-logo">Reservation</a>
+          <ul class="left hide-on-med-and-down">
             <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
           </ul>
         </div>
@@ -52,23 +56,157 @@
         
       </div>
 
-      <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-        <a class="btn-floating btn-large red" href="#reservations/create">
+      <div class="fixed-action-btn click-to-toggle" style="bottom: 45px; right: 24px;">
+        <a class="btn-floating btn-large red">
           <i class="large material-icons">add</i>
         </a>
+        <ul>
+          <li><a class="btn-floating green" href="#reservations/create"><i class="material-icons">receipt</i></a></li>
+          <li class="btn-floating blue mod-btn" ><i class="material-icons">perm_identity</i></li>
+        </ul>
       </div>
+
+      <!-- Modal Structure -->
+      <div id="modal1" class="modal">
+        <div class="modal-content">
+          <h4>New Representative</h4>
+          <div class="input-field">
+            <i class="material-icons prefix">account_circle</i>
+            <input id="icon_prefix" type="text" class="validate">
+            <label for="icon_prefix">Representative Name</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Create</a>
+        </div>
+      </div>
+
+
+            
     </script>
 
-    <script id="reservations-list-tpl" type="text/template">
-      <ul class="collection">
+  <!-- <ul class="collection">
         {{#each this}}
           <li class="collection-item" style="text-align:left;"><div>{{ client }}<a href="#!" class="secondary-content">{{reservationIcon status}}</a></div></li>
         {{/each}}
-      </ul>  
+      </ul>   -->
+
+
+    <script id="reservations-list-tpl" type="text/template">
+      
+
+
+      <ul class="collapsible popout" data-collapsible="accordion">
+        {{#each this}}
+        <li>
+          <div class="collapsible-header">{{ client }}{{reservationIcon status}}</div>
+          <div class="collapsible-body">
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">account_circle</i>
+                    <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
+                    <label for="icon_prefix">First Name</label>
+                  </div>
+
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">person_pin</i>
+                    <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
+                    <label for="icon_rp">Representante</label>
+                  </div>
+
+                  <div class="input-field col s4 offset-s2">
+                    <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
+                      <label for="icon_quantity"># People</label>
+                    </input>
+                  </div>
+
+                  <div class="input-field col s6">
+                    <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
+                    <label for="date" class="">Date</label>
+                  </div>
+
+                  <div class="row">
+                    <div class="input-field col s12">
+                    <i class="material-icons prefix">message</i>
+                      <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
+                      <label for="comment-textarea">Comment</label>
+                    </div>
+                  </div>
+
+                  <button class="btn waves-effect waves-light red" type="submit" name="action">Delete
+                    <i class="material-icons right">send</i>
+                  </button>
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </li>
+        {{/each}}
+      </ul>
     </script>
 
-    <script id="create-reservation-tpl">
-     
+    <script id="create-reservation-tpl" type="text/template">
+
+      <nav>
+        <div class="nav-wrapper">
+          <div class="col s12">
+            <a href="#reservations" class="breadcrumb">Menu</a>
+            <a href="#reservations/create" class="breadcrumb">Create Reservation</a>
+          </div>
+        </div>
+        <div class="progress hidden">
+          <div class="indeterminate"></div>
+        </div>
+      </nav>
+
+     <div class="row">
+        <form class="col s12">
+          <div class="row">          
+
+            <div class="input-field col s12">
+              <i class="material-icons prefix">account_circle</i>
+              <input id="client-name" type="text" class="validate">
+              <label for="client-name">Client Name</label>
+            </div>
+
+            <div class="input-field col s12">
+              <select class="browser-default">
+                <option value="" disabled selected>Representative</option>
+                  {{#each representatives}}
+                    <option value="{{ id }}">{{ name }}</option>
+                  {{/each}}
+              </select>
+            </div>
+
+            <div class="input-field col s4 offset-s2">
+              <input type="number" class="validate" id="quantity" min="1" max="15">
+                <label for="quantity"># People</label>
+              </input>
+            </div>
+
+            <div class="input-field col s6">
+              <input type="date" class="datepicker" id="date">
+              <label for="date" class="">Date</label>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+              <i class="material-icons prefix">message</i>
+                <textarea id="comment" class="materialize-textarea"></textarea>
+                <label for="comment">Comment</label>
+              </div>
+            </div>
+          </div>
+        </form>
+
+            <button class="btn waves-effect waves-light" >Submit
+              <i class="material-icons right">send</i>
+            </button>
+      </div>
     </script>
 
     <!-- <script src="cordova.js"></script> -->
