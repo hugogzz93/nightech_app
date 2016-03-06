@@ -10,18 +10,14 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-
-  <script id="select-input-tpl" type="text/template">
-
-  </script>
   
-
+<!-- mohammed@ruecker.ca -->
     <script id="log-in-tpl" type="text/template">
         <div class="row valign-wrapper">
           <div class="col s12 valign">
             <div class="row">
               <div class="input-field col s12">
-                <input placeholder="Email" id="email-field" type="text" class="validate" value="mohammed@ruecker.ca">
+                <input placeholder="Email" id="email-field" type="text" class="validate" value="danial_cronin@steuber.ca">
                 <label for="email-field">Email</label>
               </div>
             </div>
@@ -80,22 +76,31 @@
           <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Create</a>
         </div>
       </div>
-
-
-            
     </script>
 
-  <!-- <ul class="collection">
-        {{#each this}}
-          <li class="collection-item" style="text-align:left;"><div>{{ client }}<a href="#!" class="secondary-content">{{reservationIcon status}}</a></div></li>
-        {{/each}}
-      </ul>   -->
+    <script id="administrator-menu-tpl" type="text/template">
+      <nav>
+        <div class="nav-wrapper">
+          <a href="reservations" class="brand-logo">Reservations</a>
+        </div>
+      </nav>
 
+      <input type="date" class="datepicker">
+
+      <div class="row">
+        <div class="col s12">
+          <ul class="tabs">
+            <li class="tab col s3" id="reservationTab" data-tab-id="reservationsTabCol"><a class="active" >Pending</a></li>
+            <li class="tab col s3" id="serviceTab" data-tab-id="servicesTabCol"><a>Confirmed</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="reservationsTabCol" class="col s12  tab-data"></div>
+      <div id="servicesTabCol" class="col s12  tab-data"></div>
+    </script>
 
     <script id="reservations-list-tpl" type="text/template">
-      
-
-
       <ul class="collapsible popout" data-collapsible="accordion">
         {{#each this}}
         <li>
@@ -150,7 +155,6 @@
     </script>
 
     <script id="create-reservation-tpl" type="text/template">
-
       <nav>
         <div class="nav-wrapper">
           <div class="col s12">
@@ -209,6 +213,8 @@
       </div>
     </script>
 
+
+
     <!-- <script src="cordova.js"></script> -->
     <script src="cordova.js"></script>
     <script src="lib/fastclick.js"></script>
@@ -221,8 +227,10 @@
     <script src="js/services/CommunicationService.js"></script>
     <script src="js/views/LogInView.js"></script>
     <script src="js/views/ReservationsListView.js"></script>
+    <script src="js/views/ServicesListView.js"></script>
     <script src="js/views/ReservationsView.js"></script>
     <script src="js/views/CreateReservationView.js"></script>
+    <script src="js/views/AdministratorView.js"></script>
     <script src="js/app.js"></script>
     <script type="text/javascript" src="assets/materialize/js/materialize.min.js"></script>
 

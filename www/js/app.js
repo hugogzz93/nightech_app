@@ -5,8 +5,10 @@
 
     LogInView.prototype.template = Handlebars.compile($('#log-in-tpl').html());
     ReservationsView.prototype.template = Handlebars.compile($('#coordinator-menu-tpl').html());
+    AdministratorView.prototype.template = Handlebars.compile($('#administrator-menu-tpl').html());
     CreateReservationView.prototype.template = Handlebars.compile($('#create-reservation-tpl').html());
     ReservationsListView.prototype.template = Handlebars.compile($('#reservations-list-tpl').html());
+    ServicesListView.prototype.template = Handlebars.compile($('#reservations-list-tpl').html());
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
@@ -38,6 +40,11 @@
             communication.getRepresentatives().done(function (representatives) {
                  slider.slidePage(new CreateReservationView(communication, representatives).render().$el) ;
             })
+        })
+
+        // administrator view
+        router.addRoute('administrator', function () {
+            slider.slidePage(new AdministratorView(communication).render().$el);
         })
 
         // // Show User
@@ -113,8 +120,8 @@
              router.load(url);
         })
 
-    events.on('logInSuccess', function () {
-         router.load("reservations");
+    events.on('logInSuccess', function (user) {
+         router.load(user.credentials === "coordinator" ? 'reservations' : 'administrator' );
     })
 
     events.on('reservationCreated', function () {

@@ -65,6 +65,24 @@ const Communication = function () {
 	 	   
 	 }
 
+	 this.getServicesByDate = function (date) {
+	 	 const dateString = date.toISOString();
+	 	 return $.ajax({
+	 	  	url: url + '/services',
+	 	  	type: 'GET',
+	 	  	dataType: 'json',
+	 	  	data: {date : dateString},
+	 	  	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	  })
+	 	  .fail(function() {
+	 		alert("Connection Error 003");
+	 	  });
+	 	   
+	 }
+
 	this.getRepresentatives = function () {
 		 return $.ajax({
 		 	url: url + '/representatives',
