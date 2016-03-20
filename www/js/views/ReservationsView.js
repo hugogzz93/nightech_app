@@ -9,6 +9,9 @@ var ReservationsView = function (communication) {
 	 	 this.$el.on('click', '.mod-btn', function () {
 	 	 	 $('#modal1').openModal(); 
 	 	 });
+ 	 	 this.$el.on('click', '.btn', function () {
+	 	 	 console.log('deleted') 
+	 	 });
 	 	 this.findByDate(new Date());
 	 	 this.render();
 	 } 

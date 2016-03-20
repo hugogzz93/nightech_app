@@ -1,7 +1,8 @@
 var AdministratorView = function (communication) {
 
 	var reservationsListView
-	var seviceListView
+	var servicesListView
+	var tables
 	 
 	 this.initialize = function () {
 	 	 this.$el = $('<div/>') ;
@@ -11,8 +12,8 @@ var AdministratorView = function (communication) {
 	 	 this.$el.on('click', '.tab', function () {
 	 	 	$('.tab-data').addClass('hidden')
 	 	 	$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
-	   		 // $('ul.tabs').tabs('select_tab', $(this).attr("data-tab-id"));
 	 	 })
+	 	 this.$el.on('click', '.service-submit', $.proxy(this.submitService, this));
 	 	 this.findByDate(new Date());
 	 	 this.render();
 	 } 
@@ -35,15 +36,32 @@ var AdministratorView = function (communication) {
 		 this.findByDate(date);
 	}
 
+
 	this.findByDate = function(date) {
 		date.setHours(0,0,0,0);
+
 		communication.getReservationsByDate(date).done(function(response) {
 	        reservationsListView.setReservations(response.reservations);
 	    });
 
-	    communication.getServicesByDate(date).done(function(response) {
-	        servicesListView.setServices(response.services);
+	    communication.getTablesByDate(date).done(function(response) {
+	        servicesListView.setTables(response.tables);
 	    });
+	}
+
+
+	this.submitService = function () {
+		 const form = this.$el.find('.active form')
+	 	 const clientName = form.find('#client-name').val()
+	 	 const quantity = form.find('#quantity').val()
+	 	 const comment = form.find('#comment').val()
+	 	 const table_id = form.find('#table-id').val()
+	 	 const date = new Date(this.$el.find('.datepicker').val());
+
+	 	 const serviceJson = {client: clientName, comment: comment, quantity: quantity, date: date, table_id: table_id} 
+	 	 communication.submitService(serviceJson).done(function (response) {
+	 	 	 debugger 
+	 	 })
 	}
 
 

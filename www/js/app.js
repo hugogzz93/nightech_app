@@ -8,7 +8,7 @@
     AdministratorView.prototype.template = Handlebars.compile($('#administrator-menu-tpl').html());
     CreateReservationView.prototype.template = Handlebars.compile($('#create-reservation-tpl').html());
     ReservationsListView.prototype.template = Handlebars.compile($('#reservations-list-tpl').html());
-    ServicesListView.prototype.template = Handlebars.compile($('#reservations-list-tpl').html());
+    ServicesListView.prototype.template = Handlebars.compile($('#services-list-tpl').html());
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
@@ -46,55 +46,6 @@
         router.addRoute('administrator', function () {
             slider.slidePage(new AdministratorView(communication).render().$el);
         })
-
-        // // Show User
-        // router.addRoute('users/:id', function (id) {
-        //      console.log('show user') ;
-        //      communication.findUserById(parseInt(id)).done(function (user) {
-        //           slider.slidePage(new UserView(user).render().$el) ;
-        //      })
-        // });
-
-        // // Administrator
-
-        // // Show Service
-        // router.addRoute('services/:id', function (id) {
-        //      console.log('show service') ;
-        //      communication.findServiceById(parseInt(id)).done(function (service) {
-        //           slider.slidePage(new ServiceView(service).render().$el) ;
-        //      })
-        // });
-
-        // // Update Service
-        // router.addRoute('services/:id/update', function (id) {
-        //      console.log('update service') ;
-        //      communication.findServiceById(parseInt(id)).done(function (service) {
-        //           slider.slidePage(new UpdateServiceView(service).render().$el) ;
-        //      })
-        // });
-
-        // // Super User
-
-        // // User Index
-        // router.addRoute('users', function () {
-        //      console.log("User index") ;
-        //      communication.getUsers().done(function (users) {
-        //           slider.slidePage(new UserIndexView(users).render().$el) ;
-        //      })
-        // });
-
-        // // Admin View User
-        // router.addRoute('users/:id', function (id) {
-        //      console.log("Admin User Update") ;
-        //      communication.findUserById(parseInt(id)).done(function (user) {
-        //           slider.slidePage(new AdminViewUser(user).render().$el) ;
-        //      })
-        // });
-
-        // router.addRoute('finance', function () {
-        //      console.log("finance") ;
-        //      // missing api implementation
-        // })
 
         router.start();
 

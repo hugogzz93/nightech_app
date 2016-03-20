@@ -3,31 +3,40 @@
 
     /* ---------------------------------- Local Variables ---------------------------------- */
 
-    LogInView.prototype.template = Handlebars.compile($('#coordinator-menu-tpl').html());
+    LogInView.prototype.template = Handlebars.compile($('#log-in-tpl').html());
+    ReservationsView.prototype.template = Handlebars.compile($('#coordinator-menu-tpl').html());
+    CreateReservationView.prototype.template = Handlebars.compile($('#create-reservation-tpl').html());
+    ReservationsListView.prototype.template = Handlebars.compile($('#reservations-list-tpl').html());
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
+    const mainUrl = "http://api.localhost:3000";
 
-    communication.initialize("http://api.localhost:3000").done( function () {
+
+    communication.initialize(mainUrl).done( function () {
          
          // Front Page
         router.addRoute('', function() {
             if (!communication.auth_token) {
                 console.log("Log In");
-                slider.slidePage(new LogInView(communication).render().$el);
+                slider.slidePage(new LogInView().render().$el);
 
             } else {
                 console.log("Logged In");
             }
         });
 
-        // // Coordinator reservations menu
-        // router.addRoute('reservations', function() {
-        //     console.log('empty');
-        //     communication.getReservations().done(function (reservations) {
-        //          slider.slidePage(new MenuReservations(reservations).render().$el);
-        //     })
-        // });
+        // Coordinator reservations menu
+        router.addRoute('reservations', function() {
+            console.log('empty');
+            const date = new Date()
+             slider.slidePage(new ReservationsView(communication).render().$el);
+        });
+
+        // create reservation
+        router.addRoute('reservations/create', function () {
+            slider.slidePage(new CreateReservationView(communication).render().$el) ;
+        })
 
         // // Show User
         // router.addRoute('users/:id', function (id) {
@@ -91,14 +100,42 @@
                 navigator.notification.alert(
                     message,    // message
                     null,       // callback
-                    "Workshop", // title
+                    "Error",    // title
                     'OK'        // buttonName
                 );
             };
         }
     }, false);
 
+    events.on('navigationRequest', function (url) {
+             router.load(url);
+        })
+
+    events.on('logInSuccess', function () {
+         router.load("reservations");
+    })
+
     /* ---------------------------------- Local Functions ---------------------------------- */
+    /* ---------------------------------- Handlebars Helpers ------------------------------- */
+    Handlebars.registerHelper('reservationIcon', function (text) {
+         // const text = Handlebars.escapeExpression(text);
+         var returnText;
+         if (text === "pending") {
+            returnText = new Handlebars.SafeString(
+            ''
+            );
+         } else if(text === "accepted"){
+            returnText = new Handlebars.SafeString(
+            '<i class="material-icons">done</i>'
+            );
+         } else {
+            returnText = new Handlebars.SafeString(
+            '<i class="material-icons">not_interested</i>'
+            );
+         }
+         return returnText;
+    })
+
 
 
 }());

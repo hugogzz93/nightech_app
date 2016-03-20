@@ -1,4 +1,4 @@
-var LogInView = function (communication) {
+var LogInView = function () {
 	 
 	 this.initialize = function () {
 	 	this.$el = $('<div/>');

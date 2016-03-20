@@ -98,6 +98,23 @@ const Communication = function () {
 		 });	  
 	}
 
+	this.getTablesByDate = function (date) {
+		const dateString = date.toISOString();
+		 return $.ajax({
+	 	 	url: url + '/tables',
+	 	 	type: 'GET',
+	 	 	dataType: 'json',
+	 	 	data: {date : dateString},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		alert(JSON.parse(response.responseText).errors);
+	 	 });
+		   
+	}
+
 	this.submitReservation = function (reservationJson) {
 	 	$.ajax({
 	 	 	url: url + '/reservations',
@@ -114,6 +131,21 @@ const Communication = function () {
 	 		alert(JSON.parse(response.responseText).errors);
 	 	 });
 	 	
+	}
+
+	this.submitService = function (serviceJson) {
+		 return $.ajax({
+	 	 	url: url + '/services',
+	 	 	type: 'POST',
+	 	 	dataType: 'json',
+	 	 	data: {service: serviceJson},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		alert(JSON.parse(response.responseText).errors);
+	 	 });
 	}
 
 

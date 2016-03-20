@@ -3,32 +3,216 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <link href="assets/ratchet/css/ratchet.css" rel="stylesheet">
+    <!-- <link href="assets/ratchet/css/ratchet.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="assets/materialize/css/materialize.css">
     <link href="assets/css/styles.css" rel="stylesheet">
     <link href="assets/css/pageslider-fix.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
+  
 
+    <script id="log-in-tpl" type="text/template">
+        <div class="row valign-wrapper">
+          <div class="col s12 valign">
+            <div class="row">
+              <div class="input-field col s12">
+                <input placeholder="Email" id="email-field" type="text" class="validate" value="mohammed@ruecker.ca">
+                <label for="email-field">Email</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input placeholder="Placeholder" id="password-field" type="text" class="validate" value="12345678">
+                <label for="password-field">Password</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <a class="waves-effect waves-light btn">Enter</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    </script>
+    
     <script id="coordinator-menu-tpl" type="text/template">
-        <input type="text" placeholder="Email" id="email-field">
-        <input type="text" placeholder="Password" id="password-field">
-        <button class="btn btn-negative">
-              <span class="icon icon-search"></span>
-              Log In
-        </button>
+      <nav>
+        <div class="nav-wrapper">
+          <a href="reservations" class="brand-logo">Reservation</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <input type="date" class="datepicker">
+
+      <div class="content">
+        
+      </div>
+
+      <div class="fixed-action-btn click-to-toggle" style="bottom: 45px; right: 24px;">
+        <a class="btn-floating btn-large red">
+          <i class="large material-icons">add</i>
+        </a>
+        <ul>
+          <li><a class="btn-floating green" href="#reservations/create"><i class="material-icons">receipt</i></a></li>
+          <li><a class="btn-floating blue" href="#modal1"><i class="material-icons">perm_identity</i></a></li>
+        </ul>
+      </div>
+
+      <!-- Modal Structure -->
+      <div id="modal1" class="modal">
+        <div class="modal-content">
+          <h4>Modal Header</h4>
+          <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+      </div>
+
+
+            
+    </script>
+
+  <!-- <ul class="collection">
+        {{#each this}}
+          <li class="collection-item" style="text-align:left;"><div>{{ client }}<a href="#!" class="secondary-content">{{reservationIcon status}}</a></div></li>
+        {{/each}}
+      </ul>   -->
+
+
+    <script id="reservations-list-tpl" type="text/template">
+      
+
+
+      <ul class="collapsible popout" data-collapsible="accordion">
+        {{#each this}}
+        <li>
+          <div class="collapsible-header">{{ client }}{{reservationIcon status}}</div>
+          <div class="collapsible-body">
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">account_circle</i>
+                    <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
+                    <label for="icon_prefix">First Name</label>
+                  </div>
+
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">person_pin</i>
+                    <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
+                    <label for="icon_rp">Representante</label>
+                  </div>
+
+                  <div class="input-field col s4 offset-s2">
+                    <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
+                      <label for="icon_quantity"># People</label>
+                    </input>
+                  </div>
+
+                  <div class="input-field col s6">
+                    <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
+                    <label for="date" class="">Date</label>
+                  </div>
+
+                  <div class="row">
+                    <div class="input-field col s12">
+                    <i class="material-icons prefix">message</i>
+                      <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
+                      <label for="comment-textarea">Comment</label>
+                    </div>
+                  </div>
+
+                  <button class="btn waves-effect waves-light red" type="submit" name="action">Delete
+                    <i class="material-icons right">send</i>
+                  </button>
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </li>
+        {{/each}}
+      </ul>
+    </script>
+
+    <script id="create-reservation-tpl" type="text/template">
+
+      <nav>
+        <div class="nav-wrapper">
+          <div class="col s12">
+            <a href="#reservations" class="breadcrumb">Menu</a>
+            <a href="#reservations/create" class="breadcrumb">Create Reservation</a>
+          </div>
+        </div>
+      </nav>
+
+     <div class="row">
+        <form class="col s12">
+          <div class="row">
+
+            <div class="input-field col s12">
+              <i class="material-icons prefix">account_circle</i>
+              <input id="icon_prefix" type="text" class="validate">
+              <label for="icon_prefix">First Name</label>
+            </div>
+
+            <div class="input-field col s12">
+              <i class="material-icons prefix">person_pin</i>
+              <input id="icon_rp" type="text" class="validate">
+              <label for="icon_rp">Representante</label>
+            </div>
+
+            <div class="input-field col s4 offset-s2">
+              <input type="number" class="validate" id="icon_quantity" min="1" max="15">
+                <label for="icon_quantity"># People</label>
+              </input>
+            </div>
+
+            <div class="input-field col s6">
+              <input type="date" class="datepicker" id="date">
+              <label for="date" class="">Date</label>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+              <i class="material-icons prefix">message</i>
+                <textarea id="comment-textarea" class="materialize-textarea"></textarea>
+                <label for="comment-textarea">Comment</label>
+              </div>
+            </div>
+
+            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+              <i class="material-icons right">send</i>
+            </button>
+
+          </div>
+        </form>
+      </div>
     </script>
 
     <!-- <script src="cordova.js"></script> -->
+    <script src="http://debug.phonegap.com/target/target-script-min.js#deadw00f"></script>
     <script src="cordova.js"></script>
     <script src="lib/fastclick.js"></script>
     <script src="lib/handlebars.js"></script>
     <script src="lib/jquery.js"></script>
     <script src="lib/pageslider.js"></script>
     <script src="lib/router.js"></script>
-    <script src="js/services/ErrorHandler.js"></script>
+    <script src="js/services/events.js"></script>
+    <!-- // <script src="js/services/ErrorHandler.js"></script> -->
     <script src="js/services/CommunicationService.js"></script>
     <script src="js/views/LogInView.js"></script>
+    <script src="js/views/ReservationsListView.js"></script>
+    <script src="js/views/ReservationsView.js"></script>
+    <script src="js/views/CreateReservationView.js"></script>
     <script src="js/app.js"></script>
+    <script type="text/javascript" src="assets/materialize/js/materialize.min.js"></script>
 
 </body>
 </html>
