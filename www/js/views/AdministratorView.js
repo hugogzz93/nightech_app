@@ -6,7 +6,7 @@ var AdministratorView = function (communication) {
 	 
 	 this.initialize = function () {
 	 	 this.$el = $('<div/>') ;
-         reservationsListView = new ReservationsListView();
+         reservationsListView = new ReservationsListView(true);
          servicesListView = new ServicesListView();
 	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
 	 	 this.$el.on('click', '.tab', function () {
@@ -15,6 +15,7 @@ var AdministratorView = function (communication) {
 	 	 })
 	 	 this.$el.on('click', '.service-submit', $.proxy(this.submitService, this));
 	 	 this.$el.on('click', '.delete-btn', $.proxy(this.destroyService, this));
+	 	 this.$el.on('click', '.accept-btn', $.proxy(this.acceptReservation, this));
 	 	 this.findByDate(new Date());
 	 	 this.render();
 	 } 
@@ -50,6 +51,7 @@ var AdministratorView = function (communication) {
 	    });
 	}
 
+	// ---------------------------Service functionality------------------------------
 
 	this.submitService = function () {
 		 const form = this.$el.find('.active form');
@@ -75,6 +77,18 @@ var AdministratorView = function (communication) {
 		communication.destroyService(serviceId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Service Destroyed"); 
+		})
+	}
+
+	// ---------------------------Reservation functionality------------------------------
+
+	this.acceptReservation = function (event) {
+		const reservationId = $(event.target).attr('data-service-id');
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+
+		communication.acceptReservation(reservationId).done(function () {
+			 updateView();
+			 events.emit('toastRequest', "Reservation Accepted!"); 
 		})
 	}
 

@@ -4,7 +4,7 @@ var ReservationsView = function (communication) {
 	 
 	 this.initialize = function () {
 	 	 this.$el = $('<div/>') ;
-         reservationsListView = new ReservationsListView();
+         reservationsListView = new ReservationsListView(false);
 	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
 	 	 this.$el.on('click', '.mod-btn', function () {
 	 	 	 $('#modal1').openModal(); 

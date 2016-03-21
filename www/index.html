@@ -18,7 +18,7 @@
           <div class="col s12 valign">
             <div class="row">
               <div class="input-field col s12">
-                <input placeholder="Email" id="email-field" type="text" class="validate" value="danial_cronin@steuber.ca">
+                <input placeholder="Email" id="email-field" type="text" class="validate" value="mohammed@ruecker.ca">
                 <label for="email-field">Email</label>
               </div>
             </div>
@@ -103,7 +103,7 @@
 
     <script id="reservations-list-tpl" type="text/template">
       <ul class="collapsible popout" data-collapsible="accordion">
-        {{#each this}}
+        {{#each reservations}}
         <li>
           <div class="collapsible-header">{{ client }}{{reservationIcon status}}</div>
           <div class="collapsible-body">
@@ -142,9 +142,15 @@
                     </div>
                   </div>
 
-                  <div class="btn waves-effect waves-light red" type="submit" name="action">Delete
-                    <i class="material-icons right">send</i>
-                  </div>
+                  {{#if ../isAdmin}}
+                      <div class="btn waves-effect waves-light" type="submit" name="action">Accept
+                        <i class="material-icons right">send</i>
+                      </div>
+                  {{ else }}
+                      <div class="btn waves-effect waves-light red" type="submit" name="action">Delete
+                        <i class="material-icons right">send</i>
+                      </div>
+                  {{/if}}
 
                 </div>
               </form>

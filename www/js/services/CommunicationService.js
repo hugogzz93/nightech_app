@@ -24,6 +24,8 @@ const Communication = function () {
 	 	}.bind(this));
 
 
+/* ---------------------------------- Session Handling ---------------------------------- */
+
 	 this.startSession = function (user) {
 	 	 auth_token = user.auth_token;
 	 	 credentials = user.credentials; 
@@ -47,6 +49,8 @@ const Communication = function () {
 
 	 }
 
+/* ---------------------------------- Reservations Handling ---------------------------------- */
+
 	 this.getReservationsByDate = function (date) {
 	 	 const dateString = date.toISOString();
 	 	 return $.ajax({
@@ -65,6 +69,41 @@ const Communication = function () {
 	 	   
 	 }
 
+ 	this.submitReservation = function (reservationJson) {
+	 	$.ajax({
+	 	 	url: url + '/reservations',
+	 	 	type: 'POST',
+	 	 	dataType: 'json',
+	 	 	data: {reservation: reservationJson},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).done(function (response) {
+	 		 events.emit('reservationCreated', response);
+	 	 }).fail(function (response) {
+	 		alert(JSON.parse(response.responseText).errors);
+	 	 });
+	}
+
+	this.acceptReservation = function (reservationId) {
+		 return $.ajax({
+	 	 	url: url + '/reservations/' + reservationId,
+	 	 	type: 'DELETE',
+	 	 	dataType: 'json',
+	 	 	data: {service: { id: reservationId }},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		alert(JSON.parse(response.responseText).errors);
+	 	 });
+	}
+
+
+/* ---------------------------------- Service Handling ---------------------------------- */
+
 	 this.getServicesByDate = function (date) {
 	 	 const dateString = date.toISOString();
 	 	 return $.ajax({
@@ -80,23 +119,7 @@ const Communication = function () {
 	 	  .fail(function() {
 	 		alert("Connection Error 003");
 	 	  });
-	 	   
 	 }
-
-	this.getRepresentatives = function () {
-		 return $.ajax({
-		 	url: url + '/representatives',
-		 	type: 'GET',
-		 	dataType: 'json',
-		 	beforeSend: function (request)
-            {
-                request.setRequestHeader("Authorization", auth_token);
-            }
-		 })
-		 .fail(function() {
-	 		alert("Connection Error 002");
-		 });	  
-	}
 
 	this.getTablesByDate = function (date) {
 		const dateString = date.toISOString();
@@ -112,25 +135,6 @@ const Communication = function () {
 	 	 }).fail(function (response) {
 	 		alert(JSON.parse(response.responseText).errors);
 	 	 });
-		   
-	}
-
-	this.submitReservation = function (reservationJson) {
-	 	$.ajax({
-	 	 	url: url + '/reservations',
-	 	 	type: 'POST',
-	 	 	dataType: 'json',
-	 	 	data: {reservation: reservationJson},
-	 	 	beforeSend: function (request)
-            {
-                request.setRequestHeader("Authorization", auth_token);
-            }
-	 	 }).done(function (response) {
-	 		 events.emit('reservationCreated', response);
-	 	 }).fail(function (response) {
-	 		alert(JSON.parse(response.responseText).errors);
-	 	 });
-	 	
 	}
 
 	this.submitService = function (serviceJson) {
@@ -163,10 +167,22 @@ const Communication = function () {
 	 	 });
 	}
 
+/* ---------------------------------- Representatives Handling ---------------------------------- */
 
-
-
-
+	this.getRepresentatives = function () {
+		 return $.ajax({
+		 	url: url + '/representatives',
+		 	type: 'GET',
+		 	dataType: 'json',
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+	 		alert("Connection Error 002");
+		 });	  
+	}
 
 
 }
