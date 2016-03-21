@@ -28,9 +28,8 @@ var CreateReservationView = function (communication, representatives) {
 	 		date: date.toISOString(),
 	 		comment: comment
 	 	};
-
-	 	events.emit('reservationSubmitted', reservationJson);
-	 	// communication.submitReservation(reservationJson);
+	 	
+	 	communication.submitReservation(reservationJson);
 	}
 
 	 this.initialize();

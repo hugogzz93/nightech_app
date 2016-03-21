@@ -76,8 +76,12 @@
     })
 
     events.on('reservationCreated', function () {
-         router.load("reservations");
-         var $toastContent = $('<span>Reservation Created!</span>');
+        router.load("reservations"); 
+        events.emit('toastRequest', "Reservation Created!");
+    })
+
+    events.on('toastRequest', function (message) {
+         var $toastContent = $('<span>' + message + '</span>');
           Materialize.toast($toastContent, 2500);
     })
 

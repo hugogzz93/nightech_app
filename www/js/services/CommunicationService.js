@@ -148,6 +148,21 @@ const Communication = function () {
 	 	 });
 	}
 
+	this.destroyService = function (serviceId) {
+		 return $.ajax({
+	 	 	url: url + '/services/' + serviceId,
+	 	 	type: 'DELETE',
+	 	 	dataType: 'json',
+	 	 	data: {service: { id: serviceId }},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		alert(JSON.parse(response.responseText).errors);
+	 	 });
+	}
+
 
 
 

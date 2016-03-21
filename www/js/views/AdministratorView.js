@@ -14,6 +14,7 @@ var AdministratorView = function (communication) {
 	 	 	$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
 	 	 })
 	 	 this.$el.on('click', '.service-submit', $.proxy(this.submitService, this));
+	 	 this.$el.on('click', '.delete-btn', $.proxy(this.destroyService, this));
 	 	 this.findByDate(new Date());
 	 	 this.render();
 	 } 
@@ -51,17 +52,30 @@ var AdministratorView = function (communication) {
 
 
 	this.submitService = function () {
-		 const form = this.$el.find('.active form')
-	 	 const clientName = form.find('#client-name').val()
-	 	 const quantity = form.find('#quantity').val()
-	 	 const comment = form.find('#comment').val()
-	 	 const table_id = form.find('#table-id').val()
+		 const form = this.$el.find('.active form');
+	 	 const clientName = form.find('#client-name').val();
+	 	 const quantity = form.find('#quantity').val();
+	 	 const comment = form.find('#comment').val();
+	 	 const table_id = form.find('#table-id').val();
 	 	 const date = new Date(this.$el.find('.datepicker').val());
 
 	 	 const serviceJson = {client: clientName, comment: comment, quantity: quantity, date: date, table_id: table_id} 
-	 	 communication.submitService(serviceJson).done(function (response) {
-	 	 	 debugger 
-	 	 })
+	 	 const updateView = $.proxy(this.datePickerChange, this); 
+
+	 	 communication.submitService(serviceJson).done(function () {
+	 	 	 updateView();
+	 	 	 events.emit("toastRequest", "Service Created!");
+	 	 }); 
+	}
+
+	this.destroyService = function (event) {
+		const serviceId = $(event.target).attr('data-service-id');
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+
+		communication.destroyService(serviceId).done(function () {
+			 updateView();
+			 events.emit('toastRequest', "Service Destroyed"); 
+		})
 	}
 
 
