@@ -44,7 +44,7 @@ const Communication = function () {
 	 	 	 events.emit("logInSuccess", response.user);
 	 	 	 logIn(response.user);
 	 	 }).fail(function (response) {
-	 		alert(JSON.parse(response.responseText).errors);
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 	 	 });
 
 	 }
@@ -82,22 +82,22 @@ const Communication = function () {
 	 	 }).done(function (response) {
 	 		 events.emit('reservationCreated', response);
 	 	 }).fail(function (response) {
-	 		alert(JSON.parse(response.responseText).errors);
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 	 	 });
 	}
 
-	this.acceptReservation = function (reservationId) {
+	this.acceptReservation = function (reservationId, table_number) {
 		 return $.ajax({
 	 	 	url: url + '/reservations/' + reservationId,
-	 	 	type: 'DELETE',
+	 	 	type: 'PATCH',
 	 	 	dataType: 'json',
-	 	 	data: {service: { id: reservationId }},
+	 	 	data: {id: reservationId, table_number: table_number, reservation: { status: "accepted" }},
 	 	 	beforeSend: function (request)
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
 	 	 }).fail(function (response) {
-	 		alert(JSON.parse(response.responseText).errors);
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 	 	 });
 	}
 
@@ -133,7 +133,7 @@ const Communication = function () {
                 request.setRequestHeader("Authorization", auth_token);
             }
 	 	 }).fail(function (response) {
-	 		alert(JSON.parse(response.responseText).errors);
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 	 	 });
 	}
 
@@ -148,7 +148,7 @@ const Communication = function () {
                 request.setRequestHeader("Authorization", auth_token);
             }
 	 	 }).fail(function (response) {
-	 		alert(JSON.parse(response.responseText).errors);
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 	 	 });
 	}
 
@@ -163,7 +163,7 @@ const Communication = function () {
                 request.setRequestHeader("Authorization", auth_token);
             }
 	 	 }).fail(function (response) {
-	 		alert(JSON.parse(response.responseText).errors);
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 	 	 });
 	}
 

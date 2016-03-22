@@ -2,12 +2,15 @@ var AdministratorView = function (communication) {
 
 	var reservationsListView
 	var servicesListView
+	var tableChooseModalView
 	var tables
 	 
 	 this.initialize = function () {
 	 	 this.$el = $('<div/>') ;
          reservationsListView = new ReservationsListView(true);
          servicesListView = new ServicesListView();
+         tableChooseModalView = new TableChooseModalView();
+
 	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
 	 	 this.$el.on('click', '.tab', function () {
 	 	 	$('.tab-data').addClass('hidden')
@@ -15,13 +18,17 @@ var AdministratorView = function (communication) {
 	 	 })
 	 	 this.$el.on('click', '.service-submit', $.proxy(this.submitService, this));
 	 	 this.$el.on('click', '.delete-btn', $.proxy(this.destroyService, this));
-	 	 this.$el.on('click', '.accept-btn', $.proxy(this.acceptReservation, this));
+	 	 this.$el.on('click', '.accept-btn', $.proxy(this.displayTablesModal, this));
+	 	 this.$el.on('click', '.modal-content .table-option.blue', $.proxy(this.acceptReservation, this));
+
+
 	 	 this.findByDate(new Date());
 	 	 this.render();
 	 } 
 
 	this.render = function () {
-	 	this.$el.html(this.template());
+	 	this.$el.html(this.template(tables));
+	 	this.$el.append(tableChooseModalView.$el);
 	    $('#reservationsTabCol', this.$el).html(reservationsListView.$el);
 	    $('#servicesTabCol', this.$el).html(servicesListView.$el);
 	 	const $datepicker = this.$el.find('.datepicker');
@@ -29,7 +36,6 @@ var AdministratorView = function (communication) {
 	 	$datepicker.pickadate({});
 		$datepicker.val( $datepicker.val() === "" ? new Date().toDateString() : $datepicker.val());
 	 	$tabs.tabs();
-
 	 	return this;
 	}
 
@@ -48,7 +54,9 @@ var AdministratorView = function (communication) {
 
 	    communication.getTablesByDate(date).done(function(response) {
 	        servicesListView.setTables(response.tables);
+	        tableChooseModalView.setTables(response.tables);
 	    });
+
 	}
 
 	// ---------------------------Service functionality------------------------------
@@ -83,15 +91,26 @@ var AdministratorView = function (communication) {
 	// ---------------------------Reservation functionality------------------------------
 
 	this.acceptReservation = function (event) {
-		const reservationId = $(event.target).attr('data-service-id');
+		const tableId = $(event.target).attr('data-table-number');
+		const reservationId = $(event.target).attr('data-reservation-id');
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 
-		communication.acceptReservation(reservationId).done(function () {
+		communication.acceptReservation(reservationId, tableId).done(function () {
+			 $('#chooseTableModal').closeModal();
 			 updateView();
 			 events.emit('toastRequest', "Reservation Accepted!"); 
 		})
 	}
 
+	this.displayTablesModal = function (event) {
+   		 const reservationId = $(event.target).attr('data-reservation-id');
+		 $('#chooseTableModal .table-option', this.$el).attr('data-reservation-id', reservationId);
+
+		 this.$el.find('#chooseTableModal').openModal();
+	}
+
+	// ---------------------------Other functionality------------------------------
+	
 
 	 this.initialize();
 }

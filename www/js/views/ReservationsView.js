@@ -7,6 +7,7 @@ var ReservationsView = function (communication) {
          reservationsListView = new ReservationsListView(false);
 	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
 	 	 this.$el.on('click', '.mod-btn', function () {
+			 window.scrollTo(0) //else the modal will not be always viewable
 	 	 	 $('#modal1').openModal(); 
 	 	 });
  	 	 this.$el.on('click', '.btn', function () {

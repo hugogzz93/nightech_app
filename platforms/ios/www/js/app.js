@@ -9,6 +9,7 @@
     CreateReservationView.prototype.template = Handlebars.compile($('#create-reservation-tpl').html());
     ReservationsListView.prototype.template = Handlebars.compile($('#reservations-list-tpl').html());
     ServicesListView.prototype.template = Handlebars.compile($('#services-list-tpl').html());
+    TableChooseModalView.prototype.template = Handlebars.compile($('#table-choose-modal-tpl').html());
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
@@ -89,7 +90,7 @@
     /* ---------------------------------- Handlebars Helpers ------------------------------- */
     Handlebars.registerHelper('reservationIcon', function (text) {
          // const text = Handlebars.escapeExpression(text);
-         var returnText;
+         var returnText = "";
          if (text === "pending") {
             returnText = new Handlebars.SafeString(
             ''
@@ -98,9 +99,19 @@
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">done</i>'
             );
-         } else {
+         } else if(text === "rejected"){
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">not_interested</i>'
+            );
+         }
+         return returnText;
+    })
+
+    Handlebars.registerHelper('showPending', function (status) {
+         var returnText = "";
+         if(status === "accepted" || status === "rejected") {
+            returnText = new Handlebars.SafeString(
+            'class="hidden"'
             );
          }
          return returnText;
