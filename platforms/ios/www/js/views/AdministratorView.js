@@ -103,6 +103,7 @@ var AdministratorView = function (communication) {
 	}
 
 	this.displayTablesModal = function (event) {
+		 window.scrollTo(0) //else the modal will not be always viewable
    		 const reservationId = $(event.target).attr('data-reservation-id');
 		 $('#chooseTableModal .table-option', this.$el).attr('data-reservation-id', reservationId);
 

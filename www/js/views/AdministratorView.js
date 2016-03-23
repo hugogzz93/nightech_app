@@ -20,6 +20,8 @@ var AdministratorView = function (communication) {
 	 	 this.$el.on('click', '.delete-btn', $.proxy(this.destroyService, this));
 	 	 this.$el.on('click', '.accept-btn', $.proxy(this.displayTablesModal, this));
 	 	 this.$el.on('click', '.modal-content .table-option.blue', $.proxy(this.acceptReservation, this));
+	 	 this.$el.on('click', '.service-btn', $.proxy(this.handleServiceAction, this));
+	 	 this.$el.on('click', '#ammount-submit-btn', $.proxy(this.submitAmmount, this));
 
 
 	 	 this.findByDate(new Date());
@@ -86,6 +88,53 @@ var AdministratorView = function (communication) {
 			 updateView();
 			 events.emit('toastRequest', "Service Destroyed"); 
 		})
+	}
+
+	this.handleServiceAction = function (event) {
+		event.stopPropagation();
+		service = $(event.target);
+		const status = service.attr('data-service-status');
+		const serviceId = service.attr('data-service-id');
+
+		 if (status === "complete") {
+		 	this.displayAmmountModal(serviceId);
+		 } else if(status === "incomplete") {
+		 	this.completeService(serviceId);
+		 }
+	}
+
+	this.displayAmmountModal = function (serviceId) {
+		 window.scrollTo(0) //else the modal will not be always viewable
+		 const modal = $('#service-ammount-modal', this.$el);
+		 $('#service-ammount', modal).attr('data-service-id', serviceId);
+		 modal.openModal();
+	}
+
+	this.completeService = function (serviceId) {
+
+	 	 const updateView = $.proxy(this.datePickerChange, this); 
+	 	 const serviceJson = { status: "complete" };
+
+		 communication.updateService(serviceId, serviceJson).done(function () {
+		 	 updateView(); 
+			 events.emit('toastRequest', "Reservation Accepted!"); 
+		 });
+
+	}
+
+	this.submitAmmount = function (event) {
+		const field = $('#service-ammount', this.$el);
+		const ammount = field.val();
+		const serviceId = field.attr('data-service-id');
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+
+	 	const serviceJson = {ammount: ammount}
+
+		communication.updateService(serviceId, serviceJson).done(function () {
+			 updateView(); 
+			 events.emit('toastRequest', "Ammount Updated!"); 
+		})
+		
 	}
 
 	// ---------------------------Reservation functionality------------------------------

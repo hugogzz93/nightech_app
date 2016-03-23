@@ -10,6 +10,7 @@
     ReservationsListView.prototype.template = Handlebars.compile($('#reservations-list-tpl').html());
     ServicesListView.prototype.template = Handlebars.compile($('#services-list-tpl').html());
     TableChooseModalView.prototype.template = Handlebars.compile($('#table-choose-modal-tpl').html());
+
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
@@ -88,6 +89,10 @@
 
     /* ---------------------------------- Local Functions ---------------------------------- */
     /* ---------------------------------- Handlebars Helpers ------------------------------- */
+
+    Handlebars.registerPartial('serviceCollapsible', $('#service-collapsible-li-tpl').html());
+    Handlebars.registerPartial('createTable', $('#create-service-li-tpl').html());
+
     Handlebars.registerHelper('reservationIcon', function (text) {
          // const text = Handlebars.escapeExpression(text);
          var returnText = "";
@@ -107,6 +112,22 @@
          return returnText;
     })
 
+    Handlebars.registerHelper('serviceIcon', function (service) {
+         // const text = Handlebars.escapeExpression(text);
+         status = service.status
+         var returnText = "";
+         if (status === "incomplete") {
+            returnText = new Handlebars.SafeString(
+            '<i class="material-icons service-btn" data-service-status="' + service.status + '" data-service-id="' + service.id + '">done</i>'
+            );
+         } else if(status === "complete"){
+            returnText = new Handlebars.SafeString(
+            '<i class="material-icons service-btn" data-service-status="' + service.status + '" data-service-id="' + service.id + '">receipt</i>'
+            );
+         }
+         return returnText;
+    })
+
     Handlebars.registerHelper('showPending', function (status) {
          var returnText = "";
          if(status === "accepted" || status === "rejected") {
@@ -115,6 +136,45 @@
             );
          }
          return returnText;
+    })
+
+    Handlebars.registerHelper('serviceStatusColor', function (status) {
+         var returnText = "";
+         if(status === "complete") {
+            returnText = Handlebars.SafeString("orange accent-1");
+         }
+         return returnText;
+    })
+
+    Handlebars.registerHelper('ifnot', function(conditional, options) {
+      if(!conditional) {
+        return options.fn(this);
+      } else {
+        return options.inverse(this);
+      }
+    });
+
+    Handlebars.registerHelper('partial', function(name, ctx, hash) {
+        var ps = Handlebars.partials;
+        if(typeof ps[name] !== 'function')
+            ps[name] = Handlebars.compile(ps[name]);
+        debugger
+        return ps[name](ctx, hash);
+    });
+
+    Handlebars.registerHelper('tableHelper', function (table) {
+         const services = table.services;
+         var ps = Handlebars.partials;
+
+         ps["serviceCollapsible"] = typeof ps["serviceCollapsible"] === 'function' ? ps["serviceCollapsible"] : Handlebars.compile(ps["serviceCollapsible"]);
+         ps["createTable"] = typeof ps["createTable"] === 'function' ? ps["createTable"] : Handlebars.compile(ps["createTable"]);
+
+         for(var i = 0; i < services.length; i++) {
+                if(!services[i].ammount) {
+                    return ps["serviceCollapsible"](services[i]);
+                }
+         }
+        return ps["createTable"](table);
     })
 
 
