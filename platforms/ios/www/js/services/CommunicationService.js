@@ -167,6 +167,36 @@ const Communication = function () {
 	 	 });
 	}
 
+	this.completeService = function (serviceId) {
+		 return $.ajax({
+	 	 	url: url + '/services/' + serviceId,
+	 	 	type: 'PATCH',
+	 	 	dataType: 'json',
+	 	 	data: {id: serviceId, service: { status: "complete" }},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
+	}
+
+	this.updateService = function (serviceId, serviceJson) {
+		return $.ajax({
+	 	 	url: url + '/services/' + serviceId,
+	 	 	type: 'PATCH',
+	 	 	dataType: 'json',
+	 	 	data: {id: serviceId, service: serviceJson},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });	  
+	}
+
 /* ---------------------------------- Representatives Handling ---------------------------------- */
 
 	this.getRepresentatives = function () {
@@ -183,6 +213,45 @@ const Communication = function () {
 	 		alert("Connection Error 002");
 		 });	  
 	}
+
+/* ---------------------------------- Users Handling ---------------------------------- */
+	
+	this.getUsers = function () {
+		 return $.ajax({
+		 	url: url + '/users',
+		 	type: 'GET',
+		 	dataType: 'json',
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+	 		alert("Connection Error 005");
+		 });
+	}
+
+	this.getUserById = function (id) {
+
+		 return $.ajax({
+		 	url: url + '/users/' + id,
+		 	type: 'GET',
+		 	dataType: 'json',
+	 	 	data: {id: id},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+	 		alert("Connection Error 006");
+		 });
+	}
+
+	this.currentCredentials = function () {
+		 return credentials;
+	}
+
 
 
 }

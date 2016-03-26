@@ -214,5 +214,63 @@ const Communication = function () {
 		 });	  
 	}
 
+/* ---------------------------------- Users Handling ---------------------------------- */
+	
+	this.getUsers = function () {
+		 return $.ajax({
+		 	url: url + '/users',
+		 	type: 'GET',
+		 	dataType: 'json',
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+	 		alert("Connection Error 005");
+		 });
+	}
+
+	this.getUserById = function (id) {
+
+		 return $.ajax({
+		 	url: url + '/users/' + id,
+		 	type: 'GET',
+		 	dataType: 'json',
+	 	 	data: {id: id},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+	 		alert("Connection Error 006");
+		 });
+	}
+
+	this.currentCredentials = function () {
+		 return credentials;
+	}
+
+	this.deleteUser = function (userId) {
+		 return $.ajax({
+		 	url: url + '/users/' + userId,
+		 	type: 'DELETE',
+	 	 	dataType: 'json',
+	 	 	data: {id: userId},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .done(function (response) {
+		 	 events.emit('userDeleted', null);
+		 })
+		 .fail(function() {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+		 });
+	}
+
+
 
 }

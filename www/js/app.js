@@ -10,7 +10,10 @@
     ReservationsListView.prototype.template = Handlebars.compile($('#reservations-list-tpl').html());
     ServicesListView.prototype.template = Handlebars.compile($('#services-list-tpl').html());
     TableChooseModalView.prototype.template = Handlebars.compile($('#table-choose-modal-tpl').html());
-
+    SuperAdministratorView.prototype.template = Handlebars.compile($('#superAdministrator-menu-tpl').html());
+    UserListView.prototype.template = Handlebars.compile($('#user-list-tpl').html());
+    UserView.prototype.template = Handlebars.compile($('#show-user-tpl').html());
+    
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
@@ -49,6 +52,18 @@
             slider.slidePage(new AdministratorView(communication).render().$el);
         })
 
+        router.addRoute('administrator/super', function () {
+             slider.slidePage(new SuperAdministratorView(communication).render().$el) ;
+        })
+
+        // user index
+        router.addRoute('administrator/super/users/:id', function (id) {
+            communication.getUserById(id).done(function (response) {
+                 slider.slidePage(new UserView(communication, response.user).render().$el) ;
+            })
+             
+        })
+
         router.start();
 
     } );
@@ -82,6 +97,11 @@
         events.emit('toastRequest', "Reservation Created!");
     })
 
+    events.on('userDeleted', function () {
+         router.load('administrator/super');
+         events.emit('toastRequest', "User Deleted");
+    })
+
     events.on('toastRequest', function (message) {
          var $toastContent = $('<span>' + message + '</span>');
           Materialize.toast($toastContent, 2500);
@@ -92,6 +112,7 @@
 
     Handlebars.registerPartial('serviceCollapsible', $('#service-collapsible-li-tpl').html());
     Handlebars.registerPartial('createTable', $('#create-service-li-tpl').html());
+    // Handlebars.registerPartial('recentReservations', $('#recent-reservations-card-tpl').html());
 
     Handlebars.registerHelper('reservationIcon', function (text) {
          // const text = Handlebars.escapeExpression(text);
@@ -175,6 +196,39 @@
                 }
          }
         return ps["createTable"](table);
+    })
+
+    Handlebars.registerHelper('servicesCounter', function (services) {
+// a = new Date(services[0].date
+
+        var currentDate = new Date();
+        var month = new Array();
+        var serviceCount = 0;
+        month[0] = "January";
+        month[1] = "February";
+        month[2] = "March";
+        month[3] = "April";
+        month[4] = "May";
+        month[5] = "June";
+        month[6] = "July";
+        month[7] = "August";
+        month[8] = "September";
+        month[9] = "October";
+        month[10] = "November";
+        month[11] = "December";
+
+        for (var i = services.length - 1; i >= 0; i--) {
+            date = new Date(services[i].date);
+            if (currentDate.getMonth() == date.getMonth()) {
+                serviceCount++;
+            };
+        };
+
+        return serviceCount;
+    })
+
+    Handlebars.registerHelper('dateHelper', function (date) {
+         return moment(new Date(date)).format('MMMM Do YYYY, h:mm:ss a');
     })
 
 

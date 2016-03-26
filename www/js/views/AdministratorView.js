@@ -4,6 +4,7 @@ var AdministratorView = function (communication) {
 	var servicesListView
 	var tableChooseModalView
 	var tables
+	var currentUser
 	 
 	 this.initialize = function () {
 	 	 this.$el = $('<div/>') ;
@@ -29,15 +30,23 @@ var AdministratorView = function (communication) {
 	 } 
 
 	this.render = function () {
-	 	this.$el.html(this.template(tables));
+	
+		const credentials = {isSuper: communication.currentCredentials() === "super"};
+
+	 	this.$el.html(this.template(credentials));
 	 	this.$el.append(tableChooseModalView.$el);
+
 	    $('#reservationsTabCol', this.$el).html(reservationsListView.$el);
 	    $('#servicesTabCol', this.$el).html(servicesListView.$el);
+
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	const $tabs = this.$el.find('ul.tabs');
+
 	 	$datepicker.pickadate({});
 		$datepicker.val( $datepicker.val() === "" ? new Date().toDateString() : $datepicker.val());
 	 	$tabs.tabs();
+
+	 	$('input', this.$el).focus(); //fixes bug with input css
 	 	return this;
 	}
 

@@ -1,3 +1,10 @@
+.page.transition.center {
+	background-color: #FCFCFC;
+}
+
+ul.collection.with-header {
+	text-align: left;
+}
 
 .collapsible-header:active {
     background-color: #26A69A;
@@ -32,4 +39,22 @@
 
 .finished {
 	background-color: #c5c5c5;
+}
+
+.header {
+	text-transform: capitalize;
+	color: #ee6e73;
+    font-weight: 300;
+}
+
+.capitalize {
+	text-transform: capitalize;
+}
+
+.wrapper {
+	padding: 0 10px;
+}
+
+.card-content:not(:first-child) {
+    border-top: 1px solid rgba(160,160,160,0.2);
 }
