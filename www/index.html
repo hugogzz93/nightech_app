@@ -383,6 +383,12 @@
 
     <div class="administratorsList"></div>
     <div class="coordinatorsList"></div>
+
+     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+        <a href="#administrator/super/users/new"class="btn-floating btn-large red">
+          <i class="large material-icons">mode_edit</i>
+        </a>
+      </div>
     </script>
 
     <script id="show-user-tpl" type="text/template">
@@ -444,10 +450,73 @@
         </div>
 
       </div>
+    </script>
 
-      
+    <script id="create-user-tpl" type="text/template">
+
+      <nav>
+        <div class="nav-wrapper">
+          <div class="col s12">
+            <a href="#administrator/super" class="breadcrumb">Users</a>
+            <a href="#administrator/super/users/create" class="breadcrumb">Create User</a>
+          </div>
+        </div>
+        <div class="progress hidden">
+          <div class="indeterminate"></div>
+        </div>
+      </nav>
+
+     <div class="row">
+        <form class="col s12">
+          <div class="row">          
+
+            <div class="input-field col s12">
+              <i class="material-icons prefix">account_circle</i>
+              <input id="user-name" type="text" class="validate">
+              <label for="user-name">Name</label>
+            </div>
+
+            <div class="input-field col s12">
+              <i class="material-icons prefix">email</i>
+              <input id="email" type="text" class="validate">
+              <label for="email">email</label>
+            </div>
+
+            <div class="input-field col s12">
+              <i class="material-icons prefix">lock</i>
+              <input id="password" type="password" class="validate">
+              <label for="password">Password</label>
+            </div>
+
+            <div class="input-field col s12">
+              <i class="material-icons prefix">lock_outline</i>
+              <input id="password-confirmation" type="password" class="validate">
+              <label for="password-confirmation">Password Confirmation</label>
+            </div>
+
+
+
+            <div class="input-field col s12">
+              <p>
+                <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
+                <label for="administrator-radio">Administrator</label>
+              </p>
+              <p>
+                <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
+                <label for="coordinator-radio">Coordinator</label>
+              </p>
+            </div>
+            
+        </form>
+
+            <div class="submit-btn btn waves-effect waves-light" >Submit
+              <i class="material-icons right">send</i>
+            </div>
+      </div>
 
     </script>
+
+
 
 
 
@@ -479,6 +548,7 @@
     <script src="js/views/SuperAdministratorView.js"></script>
     <script src="js/views/UserListView.js"></script>
     <script src="js/views/UserView.js"></script>
+    <script src="js/views/CreateUserView.js"></script>
     <script src="js/app.js"></script>
     <script type="text/javascript" src="assets/materialize/js/materialize.min.js"></script>
     <script type="text/javascript" src="assets/moment.js"></script>

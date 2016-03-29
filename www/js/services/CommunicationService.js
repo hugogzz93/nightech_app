@@ -252,6 +252,23 @@ const Communication = function () {
 		 return credentials;
 	}
 
+	this.createUser = function (userJson) {
+		 $.ajax({
+		 	url: url + '/users',
+		 	type: 'POST',
+		 	dataType: 'json',
+	 	 	data: {user: userJson },
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 }).done(function (response) {
+	 	 	 events.emit('userCreated', response);
+	 	 }).fail(function(response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+		 });	 
+	}
+
 	this.deleteUser = function (userId) {
 		 return $.ajax({
 		 	url: url + '/users/' + userId,
