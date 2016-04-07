@@ -13,6 +13,7 @@
     SuperAdministratorView.prototype.template = Handlebars.compile($('#superAdministrator-menu-tpl').html());
     UserListView.prototype.template = Handlebars.compile($('#user-list-tpl').html());
     UserView.prototype.template = Handlebars.compile($('#show-user-tpl').html());
+    CreateUserView.prototype.template = Handlebars.compile($('#create-user-tpl').html());
     
     
     const communication = new Communication();
@@ -56,6 +57,10 @@
              slider.slidePage(new SuperAdministratorView(communication).render().$el) ;
         })
 
+        router.addRoute('administrator/super/users/new', function () {
+            slider.slidePage(new CreateUserView(communication).render().$el);
+        })
+
         // user index
         router.addRoute('administrator/super/users/:id', function (id) {
             communication.getUserById(id).done(function (response) {
@@ -63,6 +68,7 @@
             })
              
         })
+
 
         router.start();
 
@@ -95,6 +101,16 @@
     events.on('reservationCreated', function () {
         router.load("reservations"); 
         events.emit('toastRequest', "Reservation Created!");
+    })
+
+    events.on('userDeleted', function () {
+         router.load('administrator/super');
+         events.emit('toastRequest', "User Deleted");
+    })
+
+    events.on('userCreated', function (response) {
+         router.load('administrator/super');
+         events.emit('toastRequest', "User Created!");
     })
 
     events.on('toastRequest', function (message) {
@@ -220,6 +236,10 @@
         };
 
         return serviceCount;
+    })
+
+    Handlebars.registerHelper('dateHelper', function (date) {
+         return moment(new Date(date)).format('MMMM Do YYYY, h:mm:ss a');
     })
 
 

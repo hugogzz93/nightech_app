@@ -2,8 +2,21 @@ var UserView = function (communication, user) {
 	 var userDigest;
 
 	 this.initialize = function () {
-	 	 this.$el = $('<div/>') ;
 	 	 userDigest = this.digestUser(user);
+	 	 this.$el = $('<div/>') ;
+	 	 this.$el.on('click', '.delete-btn', function (event) {
+	 	 	var confirmationMessage;
+	 	 	if (user.credentials === "administrator") { 
+	 	 		confirmationMessage = "This will permamently delete the user, aswell as all the services he created. "
+	 	 	} else {
+	 	 		confirmationMessage = "This will permamently delete the user, aswell as all the reservations he created. "
+	 	 	}
+	 	 	 var confirmation = confirm(confirmationMessage);
+	 	 	 if (confirmation) {
+	 	 	 	 const userId = $(event.target).attr('data-user-id');
+		 	 	 communication.deleteUser(userId);
+	 	 	 };
+	 	 })
 	 	 this.render();
 	 }
 

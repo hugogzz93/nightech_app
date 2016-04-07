@@ -140,6 +140,10 @@
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">not_interested</i>'
             );
+         } else if(text === "seated") {
+            returnText = new Handlebars.SafeString(
+            '<i class="material-icons">all_done</i>'
+            );
          }
          return returnText;
     })
@@ -151,6 +155,10 @@
          if (status === "incomplete") {
             returnText = new Handlebars.SafeString(
             '<i class="material-icons service-btn" data-service-status="' + service.status + '" data-service-id="' + service.id + '">done</i>'
+            );
+         } else if(status === "seated") {
+            returnText = new Handlebars.SafeString(
+            '<i class="material-icons service-btn" data-service-status="' + service.status + '" data-service-id="' + service.id + '">done_all</i>'
             );
          } else if(status === "complete"){
             returnText = new Handlebars.SafeString(
@@ -186,6 +194,8 @@
       }
     });
 
+
+
     Handlebars.registerHelper('partial', function(name, ctx, hash) {
         var ps = Handlebars.partials;
         if(typeof ps[name] !== 'function')
@@ -194,6 +204,9 @@
         return ps[name](ctx, hash);
     });
 
+
+    // if the table has at least one service in status incomplete or accepted, it will show that service, else 
+    // it will show the option to create a new service
     Handlebars.registerHelper('tableHelper', function (table) {
          const services = table.services;
          var ps = Handlebars.partials;
@@ -202,11 +215,22 @@
          ps["createTable"] = typeof ps["createTable"] === 'function' ? ps["createTable"] : Handlebars.compile(ps["createTable"]);
 
          for(var i = 0; i < services.length; i++) {
-                if(!services[i].ammount) {
+                if(services[i].status === "incomplete" || services[i].status === "seated") {
                     return ps["serviceCollapsible"](services[i]);
                 }
          }
         return ps["createTable"](table);
+    })
+
+
+    Handlebars.registerHelper('serviceHelper', function (service) {
+         var ps = Handlebars.partials;
+
+         ps["serviceCollapsible"] = typeof ps["serviceCollapsible"] === 'function' ? ps["serviceCollapsible"] : Handlebars.compile(ps["serviceCollapsible"]);
+         
+         if (service.status === "complete") {
+            return ps["serviceCollapsible"](service);
+        };
     })
 
     Handlebars.registerHelper('servicesCounter', function (services) {

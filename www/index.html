@@ -85,9 +85,7 @@
         <div class="nav-wrapper">
           <a href="reservations" class="brand-logo">Reservations</a>
           {{#if isSuper}}
-            <ul class="right hide-on-med-and-down">
-              <li><a href="#administrator/super"><i class="material-icons right">view_module</i></a></li>
-            </ul>
+              <a href="#administrator/super"><i class="material-icons right">view_module</i></a>
           {{/if}}
         </div>
       </nav>
@@ -252,9 +250,7 @@
         <h4>Completed</h4>
         {{#each this}}
             {{#each services}}
-              {{#if ammount}}
-                  {{> serviceCollapsible }}
-              {{/if}}
+                  {{{serviceHelper this}}}
             {{/each}}
           {{/each}}
         </ul>
@@ -386,7 +382,7 @@
 
      <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
         <a href="#administrator/super/users/new"class="btn-floating btn-large red">
-          <i class="large material-icons">mode_edit</i>
+          <i class="large material-icons">add</i>
         </a>
       </div>
     </script>

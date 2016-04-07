@@ -107,8 +107,10 @@ var AdministratorView = function (communication) {
 
 		 if (status === "complete") {
 		 	this.displayAmmountModal(serviceId);
-		 } else if(status === "incomplete") {
+		 } else if(status === "seated") {
 		 	this.completeService(serviceId);
+		 } else if(status === "incomplete") {
+		 	this.seatService(serviceId);
 		 }
 	}
 
@@ -129,6 +131,16 @@ var AdministratorView = function (communication) {
 			 events.emit('toastRequest', "Reservation Accepted!"); 
 		 });
 
+	}
+
+	this.seatService = function (serviceId) {
+		 const updateView = $.proxy(this.datePickerChange, this); 
+	 	 const serviceJson = { status: "seated" };
+
+		 communication.updateService(serviceId, serviceJson).done(function () {
+		 	 updateView(); 
+			 events.emit('toastRequest', "Seated!"); 
+		 });
 	}
 
 	this.submitAmmount = function (event) {
