@@ -51,9 +51,7 @@
 
   <input type="date" class="datepicker">
 
-  <div class="content">
-    
-  </div>
+  <div class="content"></div>
 
   <div class="fixed-action-btn click-to-toggle" style="bottom: 45px; right: 24px;">
     <a class="btn-floating btn-large red">
@@ -379,11 +377,11 @@
   <div class="administratorsList"></div>
   <div class="coordinatorsList"></div>
 
-   <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-      <a href="#administrator/super/users/new"class="btn-floating btn-large red">
-        <i class="large material-icons">add</i>
-      </a>
-    </div>
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a href="#administrator/super/users/new"class="btn-floating btn-large red">
+      <i class="large material-icons">add</i>
+    </a>
+  </div>
 </script>
 
 <script id="show-user-tpl" type="text/template">
@@ -512,7 +510,7 @@
 <script id="representatives-list-view" type="text/template">
   <ul class="collection">
       {{#each this}}
-        <a href="#representatives/{{ id }}" class="collection-item" data-representative-id="{{ id }}">{{ name }}</a>
+        <li class="collection-item" data-representative-id="{{ id }}"><a href="#representatives">{{ name }}</a></li>
       {{/each}}
   </ul>
 </script>
@@ -528,7 +526,29 @@
   </nav>
 
   <div class="content"></div>
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a href="#representatives" class="btn-floating btn-large red add-rep-btn">
+      <i class="large material-icons">add</i>
+    </a>
+  </div>
+
+  <!--Representative Modal  -->
+  <div id="add-rep-modal" class="modal">
+    <div class="modal-content">
+      <h4>New Representative</h4>
+      <div class="input-field">
+        <i class="material-icons prefix">account_circle</i>
+        <input id="representative-name" type="text" class="validate">
+        <label for="representative-name">Representative Name</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#representatives" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+      <a href="#representatives" class=" modal-action modal-close waves-effect waves-green btn-flat confirm-btn">Create</a>
+    </div>
+  </div>
 </script>
+
   <!-- <script src="cordova.js"></script> -->
   <script src="cordova.js"></script>
   <script src="lib/fastclick.js"></script>
@@ -536,6 +556,7 @@
   <script src="lib/jquery.js"></script>
   <script src="lib/pageslider.js"></script>
   <script src="lib/router.js"></script>
+  <script src="lib/jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
   <script src="js/services/events.js"></script>
   <!-- // <script src="js/services/ErrorHandler.js"></script> -->
   <script src="js/services/CommunicationService.js"></script>
