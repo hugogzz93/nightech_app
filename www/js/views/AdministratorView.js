@@ -1,4 +1,4 @@
-var AdministratorView = function (communication) {
+ var AdministratorView = function (communication) {
 
 	var reservationsListView
 	var servicesListView
@@ -17,13 +17,13 @@ var AdministratorView = function (communication) {
 	 	 	$('.tab-data').addClass('hidden')
 	 	 	$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
 	 	 })
+
 	 	 this.$el.on('click', '.service-submit', $.proxy(this.submitService, this));
 	 	 this.$el.on('click', '.delete-btn', $.proxy(this.destroyService, this));
 	 	 this.$el.on('click', '.accept-btn', $.proxy(this.displayTablesModal, this));
 	 	 this.$el.on('click', '.modal-content .table-option.blue', $.proxy(this.acceptReservation, this));
 	 	 this.$el.on('click', '.service-btn', $.proxy(this.handleServiceAction, this));
 	 	 this.$el.on('click', '#ammount-submit-btn', $.proxy(this.submitAmmount, this));
-
 
 	 	 this.findByDate(new Date());
 	 	 this.render();
@@ -50,10 +50,9 @@ var AdministratorView = function (communication) {
 	}
 
 	this.datePickerChange = function () {
-		 const date = new Date(this.$el.find('.datepicker').val());
-		 this.findByDate(date);
+		const date = new Date(this.$el.find('.datepicker').val());
+		this.findByDate(date);
 	}
-
 
 	this.findByDate = function(date) {
 		date.setHours(0,0,0,0);
@@ -66,26 +65,24 @@ var AdministratorView = function (communication) {
 	        servicesListView.setTables(response.tables);
 	        tableChooseModalView.setTables(response.tables);
 	    });
-
 	}
 
 	// ---------------------------Service functionality------------------------------
 
 	this.submitService = function () {
-		 const form = this.$el.find('.active form');
-	 	 const clientName = form.find('#client-name').val();
-	 	 const quantity = form.find('#quantity').val();
-	 	 const comment = form.find('#comment').val();
-	 	 const table_id = form.find('#table-id').val();
-	 	 const date = new Date(this.$el.find('.datepicker').val());
+		const form = this.$el.find('.active form');
+	 	const clientName = form.find('#client-name').val();
+	 	const quantity = form.find('#quantity').val();
+	 	const comment = form.find('#comment').val();
+	 	const table_id = form.find('#table-id').val();
+	 	const date = new Date(this.$el.find('.datepicker').val());
+	 	const serviceJson = {client: clientName, comment: comment, quantity: quantity, date: date, table_id: table_id} 
+	 	const updateView = $.proxy(this.datePickerChange, this); 
 
-	 	 const serviceJson = {client: clientName, comment: comment, quantity: quantity, date: date, table_id: table_id} 
-	 	 const updateView = $.proxy(this.datePickerChange, this); 
-
-	 	 communication.submitService(serviceJson).done(function () {
-	 	 	 updateView();
-	 	 	 events.emit("toastRequest", "Service Created!");
-	 	 }); 
+	 	communication.submitService(serviceJson).done(function () {
+	 	 	updateView();
+	 	 	events.emit("toastRequest", "Service Created!");
+	 	}); 
 	}
 
 	this.destroyService = function (event) {
@@ -114,32 +111,30 @@ var AdministratorView = function (communication) {
 	}
 
 	this.displayAmmountModal = function (serviceId) {
-		 window.scrollTo(0) //else the modal will not be always viewable
-		 const modal = $('#service-ammount-modal', this.$el);
-		 $('#service-ammount', modal).attr('data-service-id', serviceId);
-		 modal.openModal();
+		window.scrollTo(0) //else the modal will not be always viewable
+		const modal = $('#service-ammount-modal', this.$el);
+		$('#service-ammount', modal).attr('data-service-id', serviceId);
+		modal.openModal();
 	}
 
 	this.completeService = function (serviceId) {
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+	 	const serviceJson = { status: "complete" };
 
-	 	 const updateView = $.proxy(this.datePickerChange, this); 
-	 	 const serviceJson = { status: "complete" };
-
-		 communication.updateService(serviceId, serviceJson).done(function () {
-		 	 updateView(); 
-			 events.emit('toastRequest', "Reservation Accepted!"); 
-		 });
-
+		communication.updateService(serviceId, serviceJson).done(function () {
+		 	updateView(); 
+			events.emit('toastRequest', "Reservation Accepted!"); 
+		});
 	}
 
 	this.seatService = function (serviceId) {
-		 const updateView = $.proxy(this.datePickerChange, this); 
-	 	 const serviceJson = { status: "seated" };
+		const updateView = $.proxy(this.datePickerChange, this); 
+	 	const serviceJson = { status: "seated" };
 
-		 communication.updateService(serviceId, serviceJson).done(function () {
-		 	 updateView(); 
-			 events.emit('toastRequest', "Seated!"); 
-		 });
+		communication.updateService(serviceId, serviceJson).done(function () {
+		 	updateView(); 
+			events.emit('toastRequest', "Seated!"); 
+		});
 	}
 
 	this.submitAmmount = function (event) {
@@ -154,7 +149,6 @@ var AdministratorView = function (communication) {
 			 updateView(); 
 			 events.emit('toastRequest', "Ammount Updated!"); 
 		})
-		
 	}
 
 	// ---------------------------Reservation functionality------------------------------
@@ -172,15 +166,13 @@ var AdministratorView = function (communication) {
 	}
 
 	this.displayTablesModal = function (event) {
-		 window.scrollTo(0) //else the modal will not be always viewable
-   		 const reservationId = $(event.target).attr('data-reservation-id');
-		 $('#chooseTableModal .table-option', this.$el).attr('data-reservation-id', reservationId);
+		window.scrollTo(0) //else the modal will not be always viewable
+   		const reservationId = $(event.target).attr('data-reservation-id');
+		$('#chooseTableModal .table-option', this.$el).attr('data-reservation-id', reservationId);
 
-		 this.$el.find('#chooseTableModal').openModal();
+		this.$el.find('#chooseTableModal').openModal();
 	}
 
 	// ---------------------------Other functionality------------------------------
-	
-
-	 this.initialize();
+	this.initialize();
 }

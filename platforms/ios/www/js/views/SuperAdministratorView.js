@@ -21,8 +21,6 @@ var SuperAdministratorView = function (communication) {
 	 }
 
 	 this.updateUsers = function () {
-	 	 
-
 	 	 communication.getUsers().done(function (response) {
 	 	 	 var administrators = [];
 			 var coordinators = [];

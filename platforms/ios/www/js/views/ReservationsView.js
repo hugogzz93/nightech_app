@@ -14,15 +14,20 @@ var ReservationsView = function (communication) {
 	 	 	 console.log('deleted') 
 	 	 });
 	 	 this.findByDate(new Date());
+
 	 	 this.render();
 	 } 
 
 	this.render = function () {
 	 	this.$el.html(this.template());
 	    $('.content', this.$el).html(reservationsListView.$el);
+	 	
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	$datepicker.pickadate({});
 		$datepicker.val( $datepicker.val() === "" ? new Date().toDateString() : $datepicker.val());
+
+		const $dropdown = this.$el.find('.dropdown-button');
+	 	$dropdown.dropdown({hover:false});
 
 	 	return this;
 	}

@@ -1,4 +1,4 @@
-var AdministratorView = function (communication) {
+ var AdministratorView = function (communication) {
 
 	var reservationsListView
 	var servicesListView
@@ -17,6 +17,7 @@ var AdministratorView = function (communication) {
 	 	 	$('.tab-data').addClass('hidden')
 	 	 	$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
 	 	 })
+
 	 	 this.$el.on('click', '.service-submit', $.proxy(this.submitService, this));
 	 	 this.$el.on('click', '.delete-btn', $.proxy(this.destroyService, this));
 	 	 this.$el.on('click', '.accept-btn', $.proxy(this.displayTablesModal, this));
@@ -24,13 +25,11 @@ var AdministratorView = function (communication) {
 	 	 this.$el.on('click', '.service-btn', $.proxy(this.handleServiceAction, this));
 	 	 this.$el.on('click', '#ammount-submit-btn', $.proxy(this.submitAmmount, this));
 
-
 	 	 this.findByDate(new Date());
 	 	 this.render();
 	 } 
 
 	this.render = function () {
-	
 		const credentials = {isSuper: communication.currentCredentials() === "super"};
 
 	 	this.$el.html(this.template(credentials));
@@ -67,7 +66,6 @@ var AdministratorView = function (communication) {
 	        servicesListView.setTables(response.tables);
 	        tableChooseModalView.setTables(response.tables);
 	    });
-
 	}
 
 	// ---------------------------Service functionality------------------------------
@@ -95,7 +93,7 @@ var AdministratorView = function (communication) {
 
 		communication.destroyService(serviceId).done(function () {
 			 updateView();
-			 events.emit('toastRequest', "Service Destroyed"); 
+			 events.emit('toastRequest', "Service Canceled"); 
 		})
 	}
 
@@ -107,8 +105,10 @@ var AdministratorView = function (communication) {
 
 		 if (status === "complete") {
 		 	this.displayAmmountModal(serviceId);
-		 } else if(status === "incomplete") {
+		 } else if(status === "seated") {
 		 	this.completeService(serviceId);
+		 } else if(status === "incomplete") {
+		 	this.seatService(serviceId);
 		 }
 	}
 
@@ -120,7 +120,6 @@ var AdministratorView = function (communication) {
 	}
 
 	this.completeService = function (serviceId) {
-
 	 	 const updateView = $.proxy(this.datePickerChange, this); 
 	 	 const serviceJson = { status: "complete" };
 
@@ -129,6 +128,16 @@ var AdministratorView = function (communication) {
 			 events.emit('toastRequest', "Reservation Accepted!"); 
 		 });
 
+	}
+
+	this.seatService = function (serviceId) {
+		 const updateView = $.proxy(this.datePickerChange, this); 
+	 	 const serviceJson = { status: "seated" };
+
+		 communication.updateService(serviceId, serviceJson).done(function () {
+		 	 updateView(); 
+			 events.emit('toastRequest', "Seated!"); 
+		 });
 	}
 
 	this.submitAmmount = function (event) {
@@ -143,7 +152,6 @@ var AdministratorView = function (communication) {
 			 updateView(); 
 			 events.emit('toastRequest', "Ammount Updated!"); 
 		})
-		
 	}
 
 	// ---------------------------Reservation functionality------------------------------

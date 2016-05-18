@@ -14,6 +14,8 @@
     UserListView.prototype.template = Handlebars.compile($('#user-list-tpl').html());
     UserView.prototype.template = Handlebars.compile($('#show-user-tpl').html());
     CreateUserView.prototype.template = Handlebars.compile($('#create-user-tpl').html());
+    RepresentativesListView.prototype.template = Handlebars.compile($('#representatives-list-view').html());
+    RepresentativesView.prototype.template = Handlebars.compile($('#representatives-view').html());
     
     
     const communication = new Communication();
@@ -66,7 +68,11 @@
             communication.getUserById(id).done(function (response) {
                  slider.slidePage(new UserView(communication, response.user).render().$el) ;
             })
-             
+        })
+
+        // representatives list
+        router.addRoute('representatives', function () {
+            slider.slidePage(new RepresentativesView(communication).render().$el) ;
         })
 
 
