@@ -14,369 +14,368 @@
 <!-- mohammed@ruecker.ca -->
 <!-- danial_cronin@steuber.ca -->
 <!-- frederique.kautzer@thiel.biz -->
-    <script id="log-in-tpl" type="text/template">
-        <div class="row valign-wrapper">
-          <div class="col s12 valign">
-            <div class="row">
-              <div class="input-field col s12">
-                <input placeholder="Email" id="email-field" type="text" class="validate" value="frederique.kautzer@thiel.biz">
-                <label for="email-field">Email</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s12">
-                <input placeholder="Placeholder" id="password-field" type="text" class="validate" value="12345678">
-                <label for="password-field">Password</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s12">
-                <a class="waves-effect waves-light btn">Enter</a>
-              </div>
-            </div>
+
+  <script id="log-in-tpl" type="text/template">
+    <div class="row valign-wrapper">
+      <div class="col s12 valign">
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="Email" id="email-field" type="text" class="validate" value="frederique.kautzer@thiel.biz">
+            <label for="email-field">Email</label>
           </div>
         </div>
-    </script>
-    
-    <script id="coordinator-menu-tpl" type="text/template">
-      <nav>
-        <div class="nav-wrapper">
-          <a href="reservations" class="brand-logo">Reservation</a>
-          <ul class="left hide-on-med-and-down">
-            <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
-          </ul>
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="Placeholder" id="password-field" type="text" class="validate" value="12345678">
+            <label for="password-field">Password</label>
+          </div>
         </div>
-      </nav>
-
-      <input type="date" class="datepicker">
-
-      <div class="content">
-        
+        <div class="row">
+          <div class="input-field col s12">
+            <a class="waves-effect waves-light btn">Enter</a>
+          </div>
+        </div>
       </div>
-
-      <div class="fixed-action-btn click-to-toggle" style="bottom: 45px; right: 24px;">
-        <a class="btn-floating btn-large red">
-          <i class="large material-icons">add</i>
-        </a>
-        <ul>
-          <li><a class="btn-floating green" href="#reservations/create"><i class="material-icons">receipt</i></a></li>
-          <li class="btn-floating blue mod-btn" ><i class="material-icons">perm_identity</i></li>
+    </div>
+  </script>
+  
+  <script id="coordinator-menu-tpl" type="text/template">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="reservations" class="brand-logo">Reservation</a>
+        <ul class="left hide-on-med-and-down">
+          <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
         </ul>
       </div>
+    </nav>
 
-      <!--Representative Modal  -->
-      <div id="modal1" class="modal">
-        <div class="modal-content">
-          <h4>New Representative</h4>
-          <div class="input-field">
-            <i class="material-icons prefix">account_circle</i>
-            <input id="icon_prefix" type="text" class="validate">
-            <label for="icon_prefix">Representative Name</label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Create</a>
-        </div>
-      </div>
-    </script>
+    <input type="date" class="datepicker">
 
-    <script id="administrator-menu-tpl" type="text/template">
-      <nav>
-        <div class="nav-wrapper">
-          <a href="reservations" class="brand-logo">Reservations</a>
-          {{#if isSuper}}
-              <a href="#administrator/super"><i class="material-icons right">view_module</i></a>
-          {{/if}}
-        </div>
-      </nav>
+    <div class="content">
+      
+    </div>
 
-      <input type="date" class="datepicker">
+    <div class="fixed-action-btn click-to-toggle" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large red">
+        <i class="large material-icons">add</i>
+      </a>
+      <ul>
+        <li><a class="btn-floating green" href="#reservations/create"><i class="material-icons">receipt</i></a></li>
+        <li class="btn-floating blue mod-btn" ><i class="material-icons">perm_identity</i></li>
+      </ul>
+    </div>
 
-      <div class="row">
-        <div class="col s12">
-          <ul class="tabs">
-            <li class="tab col s3" id="reservationTab" data-tab-id="reservationsTabCol"><a class="active" >Pending</a></li>
-            <li class="tab col s3" id="serviceTab" data-tab-id="servicesTabCol"><a>Confirmed</a></li>
-          </ul>
+    <!--Representative Modal  -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h4>New Representative</h4>
+        <div class="input-field">
+          <i class="material-icons prefix">account_circle</i>
+          <input id="icon_prefix" type="text" class="validate">
+          <label for="icon_prefix">Representative Name</label>
         </div>
       </div>
+      <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Create</a>
+      </div>
+    </div>
+  </script>
 
-      <div id="reservationsTabCol" class="col s12  tab-data"></div>
-      <div id="servicesTabCol" class="col s12  tab-data"></div>
+  <script id="administrator-menu-tpl" type="text/template">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="reservations" class="brand-logo">Reservations</a>
+        {{#if isSuper}}
+            <a href="#administrator/super"><i class="material-icons right">view_module</i></a>
+        {{/if}}
+      </div>
+    </nav>
 
-      <!-- Set service ammount Modal -->
-      <div id="service-ammount-modal" class="modal">
-        <div class="modal-content">
-          <h4>Set Ammount</h4>
-          <div class="input-field">
-            <input id="service-ammount" type="number">
-            <label for="service-ammount">Ammount: $</label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <div class=" modal-action modal-close waves-effect waves-green btn-flat" id="ammount-submit-btn">Submit</div>
+    <input type="date" class="datepicker">
+
+    <div class="row">
+      <div class="col s12">
+        <ul class="tabs">
+          <li class="tab col s3" id="reservationTab" data-tab-id="reservationsTabCol"><a class="active" >Pending</a></li>
+          <li class="tab col s3" id="serviceTab" data-tab-id="servicesTabCol"><a>Confirmed</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="reservationsTabCol" class="col s12  tab-data"></div>
+    <div id="servicesTabCol" class="col s12  tab-data"></div>
+
+    <!-- Set service ammount Modal -->
+    <div id="service-ammount-modal" class="modal">
+      <div class="modal-content">
+        <h4>Set Ammount</h4>
+        <div class="input-field">
+          <input id="service-ammount" type="number">
+          <label for="service-ammount">Ammount: $</label>
         </div>
       </div>
+      <div class="modal-footer">
+        <div class=" modal-action modal-close waves-effect waves-green btn-flat" id="ammount-submit-btn">Submit</div>
+      </div>
+    </div>
+  </script>
 
-    </script>
+  <script id="reservations-list-tpl" type="text/template">
+    <ul class="collapsible popout" data-collapsible="accordion">
+      {{#each reservations}}
+      <li {{showPending status}}>
+        <div class="collapsible-header">{{ client }}{{reservationIcon status}}</div>
+        <div class="collapsible-body">
+          <div class="row">
+            <form class="col s12">
+              <div class="row">
 
-    <script id="reservations-list-tpl" type="text/template">
-      <ul class="collapsible popout" data-collapsible="accordion">
-        {{#each reservations}}
-        <li {{showPending status}}>
-          <div class="collapsible-header">{{ client }}{{reservationIcon status}}</div>
-          <div class="collapsible-body">
-            <div class="row">
-              <form class="col s12">
-                <div class="row">
-
-                  <div class="input-field col s12">
-                    <i class="material-icons prefix">account_circle</i>
-                    <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
-                    <label for="icon_prefix">First Name</label>
-                  </div>
-
-                  <div class="input-field col s12">
-                    <i class="material-icons prefix">person_pin</i>
-                    <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
-                    <label for="icon_rp">Representante</label>
-                  </div>
-
-                  <div class="input-field col s4 offset-s2">
-                    <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
-                      <label for="icon_quantity"># People</label>
-                    </input>
-                  </div>
-
-                  <div class="input-field col s6">
-                    <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
-                    <label for="date" class="">Date</label>
-                  </div>
-
-                  <div class="row">
-                    <div class="input-field col s12">
-                    <i class="material-icons prefix">message</i>
-                      <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
-                      <label for="comment-textarea">Comment</label>
-                    </div>
-                  </div>
-
-                  {{#if ../isAdmin}}
-                      <div class="btn waves-effect waves-light accept-btn" type="submit" name="action" data-reservation-id="{{ id }}">Accept
-                        <i class="material-icons right">send</i>
-                      </div>
-                  {{ else }}
-                      <div class="btn waves-effect waves-light red" type="submit" name="action" data-reservation-id="{{ id }}">Delete
-                        <i class="material-icons right">send</i>
-                      </div>
-                  {{/if}}
-
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">account_circle</i>
+                  <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
+                  <label for="icon_prefix">First Name</label>
                 </div>
-              </form>
+
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">person_pin</i>
+                  <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
+                  <label for="icon_rp">Representante</label>
+                </div>
+
+                <div class="input-field col s4 offset-s2">
+                  <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
+                    <label for="icon_quantity"># People</label>
+                  </input>
+                </div>
+
+                <div class="input-field col s6">
+                  <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
+                  <label for="date" class="">Date</label>
+                </div>
+
+                <div class="row">
+                  <div class="input-field col s12">
+                  <i class="material-icons prefix">message</i>
+                    <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
+                    <label for="comment-textarea">Comment</label>
+                  </div>
+                </div>
+
+                {{#if ../isAdmin}}
+                    <div class="btn waves-effect waves-light accept-btn" type="submit" name="action" data-reservation-id="{{ id }}">Accept
+                      <i class="material-icons right">send</i>
+                    </div>
+                {{ else }}
+                    <div class="btn waves-effect waves-light red" type="submit" name="action" data-reservation-id="{{ id }}">Delete
+                      <i class="material-icons right">send</i>
+                    </div>
+                {{/if}}
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </li>
+      {{/each}}
+    </ul>
+  </script>
+  
+  <script id="create-reservation-tpl" type="text/template">
+    <nav>
+      <div class="nav-wrapper">
+        <div class="col s12">
+          <a href="#reservations" class="breadcrumb">Menu</a>
+          <a href="#reservations/create" class="breadcrumb">Create Reservation</a>
+        </div>
+      </div>
+      <div class="progress hidden">
+        <div class="indeterminate"></div>
+      </div>
+    </nav>
+
+   <div class="row">
+      <form class="col s12">
+        <div class="row">          
+
+          <div class="input-field col s12">
+            <i class="material-icons prefix">account_circle</i>
+            <input id="client-name" type="text" class="validate">
+            <label for="client-name">Client Name</label>
+          </div>
+
+          <div class="input-field col s12">
+            <select class="browser-default">
+              <option value="" disabled selected>Representative</option>
+                {{#each representatives}}
+                  <option value="{{ id }}">{{ name }}</option>
+                {{/each}}
+            </select>
+          </div>
+
+          <div class="input-field col s4 offset-s2">
+            <input type="number" class="validate" id="quantity" min="1" max="15">
+              <label for="quantity"># People</label>
+            </input>
+          </div>
+
+          <div class="input-field col s6">
+            <input type="date" class="datepicker" id="date">
+            <label for="date" class="">Date</label>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+            <i class="material-icons prefix">message</i>
+              <textarea id="comment" class="materialize-textarea"></textarea>
+              <label for="comment">Comment</label>
             </div>
           </div>
-        </li>
+        </div>
+      </form>
+
+          <button class="btn waves-effect waves-light" >Submit
+            <i class="material-icons right">send</i>
+          </button>
+    </div>
+  </script>
+
+  <script id="services-list-tpl" type="text/template">
+    <ul class="collapsible popout" data-collapsible="accordion">
+        {{#each this}}
+          {{{tableHelper this}}}
+        {{/each}}
+    </ul>
+
+      <ul class="collapsible popout" data-collapsible="accordion">
+      <h4>Completed</h4>
+      {{#each this}}
+          {{#each services}}
+                {{{serviceHelper this}}}
+          {{/each}}
         {{/each}}
       </ul>
-    </script>
-    
-    <script id="create-reservation-tpl" type="text/template">
-      <nav>
-        <div class="nav-wrapper">
-          <div class="col s12">
-            <a href="#reservations" class="breadcrumb">Menu</a>
-            <a href="#reservations/create" class="breadcrumb">Create Reservation</a>
-          </div>
+  </script>
+
+  <script id="table-choose-modal-tpl" type="text/applicaiton">
+    <!-- Modal Structure -->
+      <div id="chooseTableModal" class="modal">
+        <div class="modal-content">
+          <h4>Choose a Table</h4>
+          {{#each this }}
+            <div class="table-option btn-floating btn-small waves-effect waves-light {{#if services}} red {{else}} blue {{/if}}" data-table-number="{{ number }}"> {{ number }} </div>
+          {{/each }}
         </div>
-        <div class="progress hidden">
-          <div class="indeterminate"></div>
+        <div class="modal-footer">
+          <div class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</div>
         </div>
-      </nav>
-
-     <div class="row">
-        <form class="col s12">
-          <div class="row">          
-
-            <div class="input-field col s12">
-              <i class="material-icons prefix">account_circle</i>
-              <input id="client-name" type="text" class="validate">
-              <label for="client-name">Client Name</label>
-            </div>
-
-            <div class="input-field col s12">
-              <select class="browser-default">
-                <option value="" disabled selected>Representative</option>
-                  {{#each representatives}}
-                    <option value="{{ id }}">{{ name }}</option>
-                  {{/each}}
-              </select>
-            </div>
-
-            <div class="input-field col s4 offset-s2">
-              <input type="number" class="validate" id="quantity" min="1" max="15">
-                <label for="quantity"># People</label>
-              </input>
-            </div>
-
-            <div class="input-field col s6">
-              <input type="date" class="datepicker" id="date">
-              <label for="date" class="">Date</label>
-            </div>
-
-            <div class="row">
-              <div class="input-field col s12">
-              <i class="material-icons prefix">message</i>
-                <textarea id="comment" class="materialize-textarea"></textarea>
-                <label for="comment">Comment</label>
-              </div>
-            </div>
-          </div>
-        </form>
-
-            <button class="btn waves-effect waves-light" >Submit
-              <i class="material-icons right">send</i>
-            </button>
       </div>
-    </script>
+  </script>
 
-    <script id="services-list-tpl" type="text/template">
-      <ul class="collapsible popout" data-collapsible="accordion">
-          {{#each this}}
-            {{{tableHelper this}}}
-          {{/each}}
-      </ul>
-
-        <ul class="collapsible popout" data-collapsible="accordion">
-        <h4>Completed</h4>
-        {{#each this}}
-            {{#each services}}
-                  {{{serviceHelper this}}}
-            {{/each}}
-          {{/each}}
-        </ul>
-    </script>
-
-    <script id="table-choose-modal-tpl" type="text/applicaiton">
-      <!-- Modal Structure -->
-        <div id="chooseTableModal" class="modal">
-          <div class="modal-content">
-            <h4>Choose a Table</h4>
-            {{#each this }}
-              <div class="table-option btn-floating btn-small waves-effect waves-light {{#if services}} red {{else}} blue {{/if}}" data-table-number="{{ number }}"> {{ number }} </div>
-            {{/each }}
-          </div>
-          <div class="modal-footer">
-            <div class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</div>
-          </div>
-        </div>
-    </script>
-
-    <script id="service-collapsible-li-tpl" type="text/template">
-      <li>
-         <div class="collapsible-header {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">TABLE {{ table_number }}  {{ client }}{{serviceIcon this}}</div>
-         <div class="collapsible-body">
-           <div class="row">
-             <form class="col s12">
-               <div class="row">
-
-                 <div class="input-field col s12">
-                   <i class="material-icons prefix">account_circle</i>
-                   <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
-                   <label for="icon_prefix">First Name</label>
-                 </div>
-
-                 <div class="input-field col s12">
-                   <i class="material-icons prefix">person_pin</i>
-                   <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
-                   <label for="icon_rp">Representante</label>
-                 </div>
-
-                 <div class="input-field col s4 offset-s2">
-                   <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
-                     <label for="icon_quantity"># People</label>
-                   </input>
-                 </div>
-
-                 <div class="input-field col s6">
-                   <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
-                   <label for="date" class="">Date</label>
-                 </div>
-
-                 <div class="row">
-                   <div class="input-field col s12">
-                   <i class="material-icons prefix">message</i>
-                     <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
-                     <label for="comment-textarea">Comment</label>
-                   </div>
-                 </div>
-
-                 <div class="btn waves-effect waves-light red delete-btn" type="submit" name="action" data-service-id="{{ id }}">Delete
-                   <i class="material-icons right">send</i>
-                 </div>
-
-               </div>
-             </form>
-           </div>
-         </div>
-     </li>
-    </script>
-
-    <script id="create-service-li-tpl" type="text/template">
-      <li>
-       <div class="collapsible-header collapse-btn"><i class="material-icons">library_add</i>TABLE {{ number }}</div>
+  <script id="service-collapsible-li-tpl" type="text/template">
+    <li>
+       <div class="collapsible-header {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">TABLE {{ table_number }}  {{ client }}{{serviceIcon this}}</div>
        <div class="collapsible-body">
-         <form class="col s11">
-           <div class="row">
-
-             <div class="input-field col s11">
-               <i class="material-icons prefix">account_circle</i>
-               <input id="client-name" type="text" class="validate">
-               <label for="client-name">Client Name</label>
-             </div>
-
-             <div class="input-field col s4">
-             <i class="material-icons prefix">supervisor_account</i>
-               <input type="number" class="validate" id="quantity" min="1" max="15">
-                 <label for="quantity"># People</label>
-               </input>
-             </div>
-
+         <div class="row">
+           <form class="col s12">
              <div class="row">
-               <div class="input-field col s11">
-               <i class="material-icons prefix">message</i>
-                 <textarea id="comment" class="materialize-textarea"></textarea>
-                 <label for="comment">Comment</label>
+
+               <div class="input-field col s12">
+                 <i class="material-icons prefix">account_circle</i>
+                 <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
+                 <label for="icon_prefix">First Name</label>
                </div>
+
+               <div class="input-field col s12">
+                 <i class="material-icons prefix">person_pin</i>
+                 <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
+                 <label for="icon_rp">Representante</label>
+               </div>
+
+               <div class="input-field col s4 offset-s2">
+                 <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
+                   <label for="icon_quantity"># People</label>
+                 </input>
+               </div>
+
+               <div class="input-field col s6">
+                 <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
+                 <label for="date" class="">Date</label>
+               </div>
+
+               <div class="row">
+                 <div class="input-field col s12">
+                 <i class="material-icons prefix">message</i>
+                   <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
+                   <label for="comment-textarea">Comment</label>
+                 </div>
+               </div>
+
+               <div class="btn waves-effect waves-light red delete-btn" type="submit" name="action" data-service-id="{{ id }}">Delete
+                 <i class="material-icons right">send</i>
+               </div>
+
              </div>
-
-             <input id="table-id"type="hidden" value="{{ id }}">
-
-             <div class="btn waves-effect waves-light service-submit" >Submit
-               <i class="material-icons right">send</i>
-             </div>
-
-           </div>
-         </form>
+           </form>
+         </div>
        </div>
-     </li>
-    </script>
+   </li>
+  </script>
 
-    <script id="user-list-tpl" type="text/template">
+  <script id="create-service-li-tpl" type="text/template">
+    <li>
+     <div class="collapsible-header collapse-btn"><i class="material-icons">library_add</i>TABLE {{ number }}</div>
+     <div class="collapsible-body">
+       <form class="col s11">
+         <div class="row">
+
+           <div class="input-field col s11">
+             <i class="material-icons prefix">account_circle</i>
+             <input id="client-name" type="text" class="validate">
+             <label for="client-name">Client Name</label>
+           </div>
+
+           <div class="input-field col s4">
+           <i class="material-icons prefix">supervisor_account</i>
+             <input type="number" class="validate" id="quantity" min="1" max="15">
+               <label for="quantity"># People</label>
+             </input>
+           </div>
+
+           <div class="row">
+             <div class="input-field col s11">
+             <i class="material-icons prefix">message</i>
+               <textarea id="comment" class="materialize-textarea"></textarea>
+               <label for="comment">Comment</label>
+             </div>
+           </div>
+
+           <input id="table-id"type="hidden" value="{{ id }}">
+
+           <div class="btn waves-effect waves-light service-submit" >Submit
+             <i class="material-icons right">send</i>
+           </div>
+
+         </div>
+       </form>
+     </div>
+   </li>
+  </script>
+
+  <script id="user-list-tpl" type="text/template">
     <ul class="collection with-header">
         <li class="collection-header"><h4>{{ credentials }}</h4></li>
         {{#each users}}
           <a href="#administrator/super/users/{{ id }}" class="collection-item" data-user-id="">{{ name }}</a>
         {{/each}}
     </ul>
-    </script>
+  </script>
 
-    <script id="superAdministrator-menu-tpl" type="text/template">
-      <nav>
-        <div class="nav-wrapper">
-          <a href="Users" class="brand-logo">Users</a>
-        </div>
-      </nav>
-
+  <script id="superAdministrator-menu-tpl" type="text/template">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="Users" class="brand-logo">Users</a>
+      </div>
+    </nav>
     <div class="administratorsList"></div>
     <div class="coordinatorsList"></div>
 
@@ -385,144 +384,130 @@
           <i class="large material-icons">add</i>
         </a>
       </div>
-    </script>
+  </script>
 
-    <script id="show-user-tpl" type="text/template">
-      <nav>
-        <div class="nav-wrapper">
-          <div class="col s12">
-            <a href="#administrator/super" class="breadcrumb">Users</a>
-            <a href="#administrator/super/users/{{ id }}" class="breadcrumb">{{ name }}</a>
-          </div>
+  <script id="show-user-tpl" type="text/template">
+    <nav>
+      <div class="nav-wrapper">
+        <div class="col s12">
+          <a href="#administrator/super" class="breadcrumb">Users</a>
+          <a href="#administrator/super/users/{{ id }}" class="breadcrumb">{{ name }}</a>
         </div>
-      </nav>
-
-      <div class="wrapper">
-        <div class="card">
-
-          <div class="card-content">
-            <span class="card-title capitalize">{{ credentials }}</span>
-            <p>{{ name }}</p>
-            <p>{{ email }}</p>
-          </div>
-
-          <div class="card-content" style="text-align:left;">
-            <p>Created Services<span class="secondary-content" style="float:right"> {{servicesCounter coordinated_services}} </span></p>
-            <hr style="border:1px solid white;">
-            <p>Accepted Services<span class="secondary-content" style="float:right"> {{servicesCounter administered_services}} </span></p>
-          </div>
-
-          <div class="card-content" style="text-align:left;">
-            <p>Last Log in <span class="secondary-content" style="float:right"> {{dateHelper last_sign_in_at }} </span></p>
-          </div>
-
-          <div class="card-action">
-            <a href="#administrator/super/users/{{ id }}">Edit</a>
-            <a href="#administrator/super/users/{{ id }}" class="delete-btn", data-user-id="{{ id }}">Delete</a>
-          </div>
-        </div>
-
-
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title capitalize">Created Services</span>
-             <ul class="collection" style="text-align:left">
-              {{#each coordinated_services}}
-                <li class="collection-item">{{ client }} <div href="#!" class="secondary-content">$ {{ ammount }}</div></li>
-              {{/each}}
-             </ul>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title capitalize">Accepted Services</span>
-             <ul class="collection" style="text-align:left">
-              {{#each administered_services}}
-                <li class="collection-item">{{ client }} <div href="#!" class="secondary-content">$ {{ ammount }}</div></li>
-              {{/each}}
-             </ul>
-          </div>
-        </div>
-
       </div>
-    </script>
+    </nav>
 
-    <script id="create-user-tpl" type="text/template">
+    <div class="wrapper">
+      <div class="card">
 
-      <nav>
-        <div class="nav-wrapper">
-          <div class="col s12">
-            <a href="#administrator/super" class="breadcrumb">Users</a>
-            <a href="#administrator/super/users/create" class="breadcrumb">Create User</a>
-          </div>
+        <div class="card-content">
+          <span class="card-title capitalize">{{ credentials }}</span>
+          <p>{{ name }}</p>
+          <p>{{ email }}</p>
         </div>
-        <div class="progress hidden">
-          <div class="indeterminate"></div>
+
+        <div class="card-content" style="text-align:left;">
+          <p>Created Services<span class="secondary-content" style="float:right"> {{servicesCounter coordinated_services}} </span></p>
+          <hr style="border:1px solid white;">
+          <p>Accepted Services<span class="secondary-content" style="float:right"> {{servicesCounter administered_services}} </span></p>
         </div>
-      </nav>
 
-     <div class="row">
-        <form class="col s12">
-          <div class="row">          
+        <div class="card-content" style="text-align:left;">
+          <p>Last Log in <span class="secondary-content" style="float:right"> {{dateHelper last_sign_in_at }} </span></p>
+        </div>
 
-            <div class="input-field col s12">
-              <i class="material-icons prefix">account_circle</i>
-              <input id="user-name" type="text" class="validate">
-              <label for="user-name">Name</label>
-            </div>
-
-            <div class="input-field col s12">
-              <i class="material-icons prefix">email</i>
-              <input id="email" type="text" class="validate">
-              <label for="email">email</label>
-            </div>
-
-            <div class="input-field col s12">
-              <i class="material-icons prefix">lock</i>
-              <input id="password" type="password" class="validate">
-              <label for="password">Password</label>
-            </div>
-
-            <div class="input-field col s12">
-              <i class="material-icons prefix">lock_outline</i>
-              <input id="password-confirmation" type="password" class="validate">
-              <label for="password-confirmation">Password Confirmation</label>
-            </div>
-
-
-
-            <div class="input-field col s12">
-              <p>
-                <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
-                <label for="administrator-radio">Administrator</label>
-              </p>
-              <p>
-                <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
-                <label for="coordinator-radio">Coordinator</label>
-              </p>
-            </div>
-            
-        </form>
-
-            <div class="submit-btn btn waves-effect waves-light" >Submit
-              <i class="material-icons right">send</i>
-            </div>
+        <div class="card-action">
+          <a href="#administrator/super/users/{{ id }}">Edit</a>
+          <a href="#administrator/super/users/{{ id }}" class="delete-btn", data-user-id="{{ id }}">Delete</a>
+        </div>
       </div>
 
-    </script>
+
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title capitalize">Created Services</span>
+           <ul class="collection" style="text-align:left">
+            {{#each coordinated_services}}
+              <li class="collection-item">{{ client }} <div href="#!" class="secondary-content">$ {{ ammount }}</div></li>
+            {{/each}}
+           </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title capitalize">Accepted Services</span>
+           <ul class="collection" style="text-align:left">
+            {{#each administered_services}}
+              <li class="collection-item">{{ client }} <div href="#!" class="secondary-content">$ {{ ammount }}</div></li>
+            {{/each}}
+           </ul>
+        </div>
+      </div>
+
+    </div>
+  </script>
+
+  <script id="create-user-tpl" type="text/template">
+    <nav>
+      <div class="nav-wrapper">
+        <div class="col s12">
+          <a href="#administrator/super" class="breadcrumb">Users</a>
+          <a href="#administrator/super/users/create" class="breadcrumb">Create User</a>
+        </div>
+      </div>
+      <div class="progress hidden">
+        <div class="indeterminate"></div>
+      </div>
+    </nav>
+
+   <div class="row">
+      <form class="col s12">
+        <div class="row">          
+
+          <div class="input-field col s12">
+            <i class="material-icons prefix">account_circle</i>
+            <input id="user-name" type="text" class="validate">
+            <label for="user-name">Name</label>
+          </div>
+
+          <div class="input-field col s12">
+            <i class="material-icons prefix">email</i>
+            <input id="email" type="text" class="validate">
+            <label for="email">email</label>
+          </div>
+
+          <div class="input-field col s12">
+            <i class="material-icons prefix">lock</i>
+            <input id="password" type="password" class="validate">
+            <label for="password">Password</label>
+          </div>
+
+          <div class="input-field col s12">
+            <i class="material-icons prefix">lock_outline</i>
+            <input id="password-confirmation" type="password" class="validate">
+            <label for="password-confirmation">Password Confirmation</label>
+          </div>
 
 
 
+          <div class="input-field col s12">
+            <p>
+              <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
+              <label for="administrator-radio">Administrator</label>
+            </p>
+            <p>
+              <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
+              <label for="coordinator-radio">Coordinator</label>
+            </p>
+          </div>
+          
+      </form>
 
-
-
-    
-
-
-
-
-
+          <div class="submit-btn btn waves-effect waves-light" >Submit
+            <i class="material-icons right">send</i>
+          </div>
+    </div>
+  </script>
 
     <!-- <script src="cordova.js"></script> -->
     <script src="cordova.js"></script>

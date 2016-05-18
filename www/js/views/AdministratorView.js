@@ -30,7 +30,6 @@ var AdministratorView = function (communication) {
 	 } 
 
 	this.render = function () {
-	
 		const credentials = {isSuper: communication.currentCredentials() === "super"};
 
 	 	this.$el.html(this.template(credentials));
@@ -95,7 +94,7 @@ var AdministratorView = function (communication) {
 
 		communication.destroyService(serviceId).done(function () {
 			 updateView();
-			 events.emit('toastRequest', "Service Destroyed"); 
+			 events.emit('toastRequest', "Service Canceled"); 
 		})
 	}
 
