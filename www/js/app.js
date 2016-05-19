@@ -139,7 +139,7 @@
         var returnText = "";
         if (text === "pending") {
             returnText = new Handlebars.SafeString(
-            ''
+            '<i class="material-icons">query_builder</i>'
             );
         } else if(text === "accepted"){
             returnText = new Handlebars.SafeString(
@@ -151,7 +151,7 @@
             );
         } else if(text === "seated") {
             returnText = new Handlebars.SafeString(
-            '<i class="material-icons">all_done</i>'
+            '<i class="material-icons">done_all</i>'
             );
         }
         return returnText;
@@ -185,7 +185,7 @@
         var returnText = "";
         if(status === "accepted" || status === "rejected") {
             returnText = new Handlebars.SafeString(
-            'class="hidden"'
+            // 'class="hidden"' Removed temporarily
             );
         } 
         return returnText;
