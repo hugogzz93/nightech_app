@@ -271,7 +271,7 @@
 
 <script id="service-collapsible-li-tpl" type="text/template">
   <li>
-     <div class="collapsible-header {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">TABLE {{ table_number }}  {{ client }}{{serviceIcon this}}</div>
+     <div class="collapsible-header {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">{{ table_number }}  {{ client }}{{serviceIcon this}}</div>
      <div class="collapsible-body">
        <div class="row">
          <form class="col s12">
@@ -321,7 +321,7 @@
 
 <script id="create-service-li-tpl" type="text/template">
   <li>
-   <div class="collapsible-header collapse-btn"><i class="material-icons">library_add</i>TABLE {{ number }}</div>
+   <div class="collapsible-header collapse-btn"><i class="material-icons">library_add</i>{{ number }}</div>
    <div class="collapsible-body">
      <form class="col s11">
        <div class="row">
@@ -371,9 +371,13 @@
 <script id="superAdministrator-menu-tpl" type="text/template">
   <nav>
     <div class="nav-wrapper">
-      <a href="Users" class="brand-logo">Users</a>
+      <div class="col s12">
+        <a href="#administrator" class="breadcrumb">Reservations</a>
+        <a href="#administrator/super" class="breadcrumb">Users</a>
+      </div>
     </div>
   </nav>
+
   <div class="administratorsList"></div>
   <div class="coordinatorsList"></div>
 
