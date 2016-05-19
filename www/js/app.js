@@ -14,6 +14,8 @@
     UserListView.prototype.template = Handlebars.compile($('#user-list-tpl').html());
     UserView.prototype.template = Handlebars.compile($('#show-user-tpl').html());
     CreateUserView.prototype.template = Handlebars.compile($('#create-user-tpl').html());
+    RepresentativesListView.prototype.template = Handlebars.compile($('#representatives-list-view').html());
+    RepresentativesView.prototype.template = Handlebars.compile($('#representatives-view').html());
     
     
     const communication = new Communication();
@@ -66,13 +68,16 @@
             communication.getUserById(id).done(function (response) {
                  slider.slidePage(new UserView(communication, response.user).render().$el) ;
             })
-             
+        })
+
+        // representatives list
+        router.addRoute('representatives', function () {
+            slider.slidePage(new RepresentativesView(communication).render().$el) ;
         })
 
 
         router.start();
-
-    } );
+    });
 
 
     /* --------------------------------- Event Registration -------------------------------- */
@@ -91,11 +96,16 @@
     }, false);
 
     events.on('navigationRequest', function (url) {
-             router.load(url);
-        })
+        router.load(url);
+    })
 
     events.on('logInSuccess', function (user) {
-         router.load(user.credentials === "coordinator" ? 'reservations' : 'administrator' );
+        router.load(user.credentials === "coordinator" ? 'reservations' : 'administrator' );
+    })
+
+    events.on('logOutSuccess', function (user) {
+        router.load('');
+        events.emit('toastRequest', 'Signed Out');
     })
 
     events.on('reservationCreated', function () {
@@ -104,18 +114,18 @@
     })
 
     events.on('userDeleted', function () {
-         router.load('administrator/super');
-         events.emit('toastRequest', "User Deleted");
+        router.load('administrator/super');
+        events.emit('toastRequest', "User Deleted");
     })
 
     events.on('userCreated', function (response) {
-         router.load('administrator/super');
-         events.emit('toastRequest', "User Created!");
+        router.load('administrator/super');
+        events.emit('toastRequest', "User Created!");
     })
 
     events.on('toastRequest', function (message) {
-         var $toastContent = $('<span>' + message + '</span>');
-          Materialize.toast($toastContent, 2500);
+        var $toastContent = $('<span>' + message + '</span>');
+        Materialize.toast($toastContent, 2500);
     })
 
     /* ---------------------------------- Local Functions ---------------------------------- */
@@ -123,67 +133,70 @@
 
     Handlebars.registerPartial('serviceCollapsible', $('#service-collapsible-li-tpl').html());
     Handlebars.registerPartial('createTable', $('#create-service-li-tpl').html());
-    // Handlebars.registerPartial('recentReservations', $('#recent-reservations-card-tpl').html());
 
     Handlebars.registerHelper('reservationIcon', function (text) {
          // const text = Handlebars.escapeExpression(text);
-         var returnText = "";
-         if (text === "pending") {
+        var returnText = "";
+        if (text === "pending") {
             returnText = new Handlebars.SafeString(
-            ''
+            '<i class="material-icons">query_builder</i>'
             );
-         } else if(text === "accepted"){
+        } else if(text === "accepted"){
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">done</i>'
             );
-         } else if(text === "rejected"){
+        } else if(text === "rejected"){
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">not_interested</i>'
             );
-         } else if(text === "seated") {
+        } else if(text === "seated") {
             returnText = new Handlebars.SafeString(
-            '<i class="material-icons">all_done</i>'
+            '<i class="material-icons">done_all</i>'
             );
-         }
-         return returnText;
+        }
+        return returnText;
     })
 
     Handlebars.registerHelper('serviceIcon', function (service) {
          // const text = Handlebars.escapeExpression(text);
-         status = service.status
-         var returnText = "";
-         if (status === "incomplete") {
+        status = service.status
+        var returnText = "";
+        if (status === "incomplete") {
             returnText = new Handlebars.SafeString(
             '<i class="material-icons service-btn" data-service-status="' + service.status + '" data-service-id="' + service.id + '">done</i>'
             );
-         } else if(status === "seated") {
+        } else if(status === "seated") {
             returnText = new Handlebars.SafeString(
             '<i class="material-icons service-btn" data-service-status="' + service.status + '" data-service-id="' + service.id + '">done_all</i>'
             );
-         } else if(status === "complete"){
+        } else if(status === "complete"){
             returnText = new Handlebars.SafeString(
             '<i class="material-icons service-btn" data-service-status="' + service.status + '" data-service-id="' + service.id + '">receipt</i>'
             );
-         }
-         return returnText;
+        }
+        return returnText;
+    })
+
+    Handlebars.registerHelper('visibilityStatusIcon', function (service) {
+        const visibility = service.visible
     })
 
     Handlebars.registerHelper('showPending', function (status) {
-         var returnText = "";
-         if(status === "accepted" || status === "rejected") {
+        var returnText = "";
+        if(status === "accepted" || status === "rejected") {
             returnText = new Handlebars.SafeString(
-            'class="hidden"'
+            // 'class="hidden"' Removed temporarily
             );
-         }
-         return returnText;
+        } 
+        return returnText;
     })
 
     Handlebars.registerHelper('serviceStatusColor', function (status) {
-         var returnText = "";
-         if(status === "complete") {
+        var returnText = "";
+        if(status === "complete") {
             returnText = Handlebars.SafeString("orange accent-1");
-         }
-         return returnText;
+        }
+        return returnText;
     })
 
     Handlebars.registerHelper('ifnot', function(conditional, options) {
@@ -194,8 +207,6 @@
       }
     });
 
-
-
     Handlebars.registerHelper('partial', function(name, ctx, hash) {
         var ps = Handlebars.partials;
         if(typeof ps[name] !== 'function')
@@ -203,7 +214,6 @@
         debugger
         return ps[name](ctx, hash);
     });
-
 
     // if the table has at least one service in status incomplete or accepted, it will show that service, else 
     // it will show the option to create a new service
@@ -222,7 +232,6 @@
         return ps["createTable"](table);
     })
 
-
     Handlebars.registerHelper('serviceHelper', function (service) {
          var ps = Handlebars.partials;
 
@@ -234,8 +243,6 @@
     })
 
     Handlebars.registerHelper('servicesCounter', function (services) {
-// a = new Date(services[0].date
-
         var currentDate = new Date();
         var month = new Array();
         var serviceCount = 0;
@@ -263,7 +270,7 @@
     })
 
     Handlebars.registerHelper('dateHelper', function (date) {
-         return moment(new Date(date)).format('MMMM Do YYYY, h:mm:ss a');
+        return moment(new Date(date)).format('MMMM Do YYYY, h:mm:ss a');
     })
 
 

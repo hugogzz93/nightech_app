@@ -4,10 +4,10 @@ var ReservationsView = function (communication) {
 	 
 	 this.initialize = function () {
 	 	 this.$el = $('<div/>') ;
-         reservationsListView = new ReservationsListView();
+         reservationsListView = new ReservationsListView(false);
 	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
-	 	 this.$el.on('click', 'a[href="#modal1"]', function () {
-	 	 	 $('#modal1').openModal(); 
+ 	 	 this.$el.on('click', '.btn', function () {
+	 	 	 console.log('deleted - missing implementation');
 	 	 });
 	 	 this.findByDate(new Date());
 	 	 this.render();
@@ -16,6 +16,7 @@ var ReservationsView = function (communication) {
 	this.render = function () {
 	 	this.$el.html(this.template());
 	    $('.content', this.$el).html(reservationsListView.$el);
+	 	
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	$datepicker.pickadate({});
 		$datepicker.val( $datepicker.val() === "" ? new Date().toDateString() : $datepicker.val());
@@ -29,6 +30,7 @@ var ReservationsView = function (communication) {
 	}
 
 	this.findByDate = function(date) {
+		date.setHours(0,0,0,0);
 		communication.getReservationsByDate(date).done(function(response) {
 	        reservationsListView.setReservations(response.reservations);
 	    });

@@ -26,13 +26,13 @@ const Communication = function () {
 
 /* ---------------------------------- Session Handling ---------------------------------- */
 
-	 this.startSession = function (user) {
+	this.startSession = function (user) {
 	 	 auth_token = user.auth_token;
 	 	 credentials = user.credentials; 
 	 	 console.log(credentials);
-	 }
+	}
 
-	 this.logIn = function (parameters) {
+	this.logIn = function (parameters) {
 	 	const logIn = $.proxy(this.startSession, this);
 
 	 	$.ajax({
@@ -46,8 +46,11 @@ const Communication = function () {
 	 	 }).fail(function (response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 	 	 });
+	}
 
-	 }
+	this.currentCredentials = function () {
+		return credentials;
+	}
 
 /* ---------------------------------- Reservations Handling ---------------------------------- */
 
@@ -214,6 +217,38 @@ const Communication = function () {
 		 });	  
 	}
 
+	this.createRepresentative = function (repJson) {
+		 return $.ajax({
+		 	url: url + '/representatives',
+		 	type: 'POST',
+		 	dataType: 'json',
+		 	data: {representative: repJson},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+		 	console.log("error");
+		 });
+	}
+
+	this.destroyRepresentative = function (id) {
+		 return $.ajax({
+		 	url: url + '/representatives/' + id,
+		 	type: 'DELETE',
+		 	dataType: 'json',
+		 	data: {id: id},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+		 	console.log("error");
+		 }); 
+	}
+
 /* ---------------------------------- Users Handling ---------------------------------- */
 	
 	this.getUsers = function () {
@@ -246,10 +281,6 @@ const Communication = function () {
 		 .fail(function() {
 	 		alert("Connection Error 006");
 		 });
-	}
-
-	this.currentCredentials = function () {
-		 return credentials;
 	}
 
 	this.createUser = function (userJson) {

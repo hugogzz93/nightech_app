@@ -703,7 +703,7 @@ if ($) {
       $overlay.attr('id', overlayID).css('z-index', 1000 + lStack * 2);
       $modal.data('overlay-id', overlayID).css('z-index', 1000 + lStack * 2 + 1);
 
-      $("body").append($overlay);
+      $(".page.transition.center").append($overlay);
 
       // Override defaults
       options = $.extend(defaults, options);

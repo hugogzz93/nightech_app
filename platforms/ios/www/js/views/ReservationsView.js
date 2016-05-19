@@ -6,12 +6,8 @@ var ReservationsView = function (communication) {
 	 	 this.$el = $('<div/>') ;
          reservationsListView = new ReservationsListView(false);
 	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
-	 	 this.$el.on('click', '.mod-btn', function () {
-			 window.scrollTo(0) //else the modal will not be always viewable
-	 	 	 $('#modal1').openModal(); 
-	 	 });
  	 	 this.$el.on('click', '.btn', function () {
-	 	 	 console.log('deleted') 
+	 	 	 console.log('deleted - missing implementation');
 	 	 });
 	 	 this.findByDate(new Date());
 	 	 this.render();
@@ -20,6 +16,7 @@ var ReservationsView = function (communication) {
 	this.render = function () {
 	 	this.$el.html(this.template());
 	    $('.content', this.$el).html(reservationsListView.$el);
+	 	
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	$datepicker.pickadate({});
 		$datepicker.val( $datepicker.val() === "" ? new Date().toDateString() : $datepicker.val());

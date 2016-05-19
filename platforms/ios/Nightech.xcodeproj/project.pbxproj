@@ -44,6 +44,7 @@
 		51409C0A100D4FDEA5412E4F /* CDVNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B2CD011B46487EA94626AF /* CDVNotification.m */; };
 		1E80CC144E344A2291E73538 /* CDVNotification.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C04F8214AE34C4C83F2A917 /* CDVNotification.bundle */; };
 		63D6D4D250974CCE80097496 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E52B3E92BD4F401EA13543E6 /* AudioToolbox.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0C1B9D4F2EEA49D59CE589B1 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 801973AB79574BCF8E3BA763 /* CDVStatusBar.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +118,8 @@
 		9BD8AB9D6E56486BA9751D16 /* CDVNotification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVNotification.h"; path = "cordova-plugin-dialogs/CDVNotification.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		9C04F8214AE34C4C83F2A917 /* CDVNotification.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "CDVNotification.bundle"; path = "CDVNotification.bundle"; sourceTree = "<group>"; };
 		E52B3E92BD4F401EA13543E6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "AudioToolbox.framework"; path = "System/Library/Frameworks/AudioToolbox.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		801973AB79574BCF8E3BA763 /* CDVStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVStatusBar.m"; path = "cordova-plugin-statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		BA26BCA8C4274AA48CDDB0FE /* CDVStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVStatusBar.h"; path = "cordova-plugin-statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,6 +227,8 @@
 				8EE5A3E5510A44FC978B85C7 /* CDVDevice.h */,
 				00B2CD011B46487EA94626AF /* CDVNotification.m */,
 				9BD8AB9D6E56486BA9751D16 /* CDVNotification.h */,
+				801973AB79574BCF8E3BA763 /* CDVStatusBar.m */,
+				BA26BCA8C4274AA48CDDB0FE /* CDVStatusBar.h */,
 			);
 			name = Plugins;
 			path = "Nightech/Plugins";
@@ -412,6 +417,7 @@
 				010BCFE3494241808A21AD60 /* CDVLogger.m in Sources */,
 				17E3869121A2418EAD4E95DB /* CDVDevice.m in Sources */,
 				51409C0A100D4FDEA5412E4F /* CDVNotification.m in Sources */,
+				0C1B9D4F2EEA49D59CE589B1 /* CDVStatusBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

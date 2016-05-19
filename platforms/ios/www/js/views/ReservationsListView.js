@@ -12,14 +12,14 @@ var ReservationsListView = function (adminBool) {
 	 	 this.render();
 	 }
 
-	 this.render = function () {
-	 	templateData = { isAdmin: adminBool, reservations: reservations }
-	 	 this.$el.html(this.template(templateData));
-		 	$('.collapsible').collapsible({
-		      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-		    });
-	 	 return this ;
-	 }
+	this.render = function () {
+ 		templateData = { isAdmin: adminBool, reservations: reservations }
+ 	 	this.$el.html(this.template(templateData));
+	 	$('.collapsible').collapsible({
+	      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+	    });
+ 	 	return this ;
+	}
 
 	 this.initialize();
 }

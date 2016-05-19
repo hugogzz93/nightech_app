@@ -19,14 +19,20 @@ const Communication = function () {
 	 		 this.logIn(parameters);
 	 	}.bind(this));
 
+	 	events.on("reservationSubmitted", function (parameters) {
+	 		 this.submitReservation(parameters);
+	 	}.bind(this));
 
-	 this.startSession = function (user) {
+
+/* ---------------------------------- Session Handling ---------------------------------- */
+
+	this.startSession = function (user) {
 	 	 auth_token = user.auth_token;
 	 	 credentials = user.credentials; 
 	 	 console.log(credentials);
-	 }
+	}
 
-	 this.logIn = function (parameters) {
+	this.logIn = function (parameters) {
 	 	const logIn = $.proxy(this.startSession, this);
 
 	 	$.ajax({
@@ -38,10 +44,15 @@ const Communication = function () {
 	 	 	 events.emit("logInSuccess", response.user);
 	 	 	 logIn(response.user);
 	 	 }).fail(function (response) {
-	 		alert(JSON.parse(response.responseText).errors);
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 	 	 });
+	}
 
-	 }
+	this.currentCredentials = function () {
+		return credentials;
+	}
+
+/* ---------------------------------- Reservations Handling ---------------------------------- */
 
 	 this.getReservationsByDate = function (date) {
 	 	 const dateString = date.toISOString();
@@ -61,9 +72,252 @@ const Communication = function () {
 	 	   
 	 }
 
+ 	this.submitReservation = function (reservationJson) {
+	 	$.ajax({
+	 	 	url: url + '/reservations',
+	 	 	type: 'POST',
+	 	 	dataType: 'json',
+	 	 	data: {reservation: reservationJson},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).done(function (response) {
+	 		 events.emit('reservationCreated', response);
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
+	}
+
+	this.acceptReservation = function (reservationId, table_number) {
+		 return $.ajax({
+	 	 	url: url + '/reservations/' + reservationId,
+	 	 	type: 'PATCH',
+	 	 	dataType: 'json',
+	 	 	data: {id: reservationId, table_number: table_number, reservation: { status: "accepted" }},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
+	}
 
 
+/* ---------------------------------- Service Handling ---------------------------------- */
 
+	 this.getServicesByDate = function (date) {
+	 	 const dateString = date.toISOString();
+	 	 return $.ajax({
+	 	  	url: url + '/services',
+	 	  	type: 'GET',
+	 	  	dataType: 'json',
+	 	  	data: {date : dateString},
+	 	  	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	  })
+	 	  .fail(function() {
+	 		alert("Connection Error 003");
+	 	  });
+	 }
+
+	this.getTablesByDate = function (date) {
+		const dateString = date.toISOString();
+		 return $.ajax({
+	 	 	url: url + '/tables',
+	 	 	type: 'GET',
+	 	 	dataType: 'json',
+	 	 	data: {date : dateString},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
+	}
+
+	this.submitService = function (serviceJson) {
+		 return $.ajax({
+	 	 	url: url + '/services',
+	 	 	type: 'POST',
+	 	 	dataType: 'json',
+	 	 	data: {service: serviceJson},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
+	}
+
+	this.destroyService = function (serviceId) {
+		 return $.ajax({
+	 	 	url: url + '/services/' + serviceId,
+	 	 	type: 'DELETE',
+	 	 	dataType: 'json',
+	 	 	data: {service: { id: serviceId }},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
+	}
+
+	this.completeService = function (serviceId) {
+		 return $.ajax({
+	 	 	url: url + '/services/' + serviceId,
+	 	 	type: 'PATCH',
+	 	 	dataType: 'json',
+	 	 	data: {id: serviceId, service: { status: "complete" }},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
+	}
+
+	this.updateService = function (serviceId, serviceJson) {
+		return $.ajax({
+	 	 	url: url + '/services/' + serviceId,
+	 	 	type: 'PATCH',
+	 	 	dataType: 'json',
+	 	 	data: {id: serviceId, service: serviceJson},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });	  
+	}
+
+/* ---------------------------------- Representatives Handling ---------------------------------- */
+
+	this.getRepresentatives = function () {
+		 return $.ajax({
+		 	url: url + '/representatives',
+		 	type: 'GET',
+		 	dataType: 'json',
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+	 		alert("Connection Error 002");
+		 });	  
+	}
+
+	this.createRepresentative = function (repJson) {
+		 return $.ajax({
+		 	url: url + '/representatives',
+		 	type: 'POST',
+		 	dataType: 'json',
+		 	data: {representative: repJson},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+		 	console.log("error");
+		 });
+	}
+
+	this.destroyRepresentative = function (id) {
+		 return $.ajax({
+		 	url: url + '/representatives/' + id,
+		 	type: 'DELETE',
+		 	dataType: 'json',
+		 	data: {id: id},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+		 	console.log("error");
+		 }); 
+	}
+
+/* ---------------------------------- Users Handling ---------------------------------- */
+	
+	this.getUsers = function () {
+		 return $.ajax({
+		 	url: url + '/users',
+		 	type: 'GET',
+		 	dataType: 'json',
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+	 		alert("Connection Error 005");
+		 });
+	}
+
+	this.getUserById = function (id) {
+
+		 return $.ajax({
+		 	url: url + '/users/' + id,
+		 	type: 'GET',
+		 	dataType: 'json',
+	 	 	data: {id: id},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .fail(function() {
+	 		alert("Connection Error 006");
+		 });
+	}
+
+	this.createUser = function (userJson) {
+		 $.ajax({
+		 	url: url + '/users',
+		 	type: 'POST',
+		 	dataType: 'json',
+	 	 	data: {user: userJson },
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 }).done(function (response) {
+	 	 	 events.emit('userCreated', response);
+	 	 }).fail(function(response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+		 });	 
+	}
+
+	this.deleteUser = function (userId) {
+		 return $.ajax({
+		 	url: url + '/users/' + userId,
+		 	type: 'DELETE',
+	 	 	dataType: 'json',
+	 	 	data: {id: userId},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		 })
+		 .done(function (response) {
+		 	 events.emit('userDeleted', null);
+		 })
+		 .fail(function() {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+		 });
+	}
 
 
 
