@@ -174,6 +174,10 @@
          return returnText;
     })
 
+    Handlebars.registerHelper('visibilityStatusIcon', function (service) {
+        const visibility = service.visible
+    })
+
     Handlebars.registerHelper('showPending', function (status) {
          var returnText = "";
          if(status === "accepted" || status === "rejected") {
