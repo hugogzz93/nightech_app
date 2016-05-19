@@ -3,25 +3,29 @@ const Communication = function () {
 	 var url;
 	 var auth_token;
 	 var credentials;
+	 var user_id;
 
 	 this.initialize = function (nightech_url) {
 	 	url = nightech_url ? nightech_url : "http://api.nightech_api.dev";
-	 	auth_token = null;
-	 	credentials = null;
+	 	this.clearSessionTokens();
 
 
 	 	var deferred = $.Deferred();
         deferred.resolve();
         return deferred.promise();
 	 }
-	 	// event registration
-	 	events.on("logInAttempt", function (parameters) {
-	 		 this.logIn(parameters);
-	 	}.bind(this));
+ 	// event registration
+ 	events.on("logInAttempt", function (parameters) {
+ 		this.logIn(parameters);
+ 	}.bind(this));
 
-	 	events.on("reservationSubmitted", function (parameters) {
-	 		 this.submitReservation(parameters);
-	 	}.bind(this));
+ 	events.on("reservationSubmitted", function (parameters) {
+ 		this.submitReservation(parameters);
+ 	}.bind(this));
+
+ 	this.getUserId = function () {
+ 		 return user_id; 
+ 	}
 
 
 /* ---------------------------------- Session Handling ---------------------------------- */
@@ -29,7 +33,28 @@ const Communication = function () {
 	this.startSession = function (user) {
 	 	 auth_token = user.auth_token;
 	 	 credentials = user.credentials; 
+	 	 user_id = user.id;
 	 	 console.log(credentials);
+	}
+
+	this.clearSessionTokens = function () {
+		auth_token = null;
+		credentials = null;
+		user_id = null; 
+	}
+
+	this.terminateSession = function () {
+		$.ajax({
+	 	 	url: url + '/sessions/' + auth_token,
+	 	 	type: 'DELETE',
+	 	 	dataType: 'json',
+	 	 	data: {id: auth_token},
+	 	 }).done(function (response) {
+			events.emit("logOutSuccess");
+			this.clearSessionTokens();
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
 	}
 
 	this.logIn = function (parameters) {

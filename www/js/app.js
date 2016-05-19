@@ -103,6 +103,11 @@
         router.load(user.credentials === "coordinator" ? 'reservations' : 'administrator' );
     })
 
+    events.on('logOutSuccess', function (user) {
+        router.load('');
+        events.emit('toastRequest', 'Signed Out');
+    })
+
     events.on('reservationCreated', function () {
         router.load("reservations"); 
         events.emit('toastRequest', "Reservation Created!");
