@@ -19,6 +19,18 @@
                         {
                             "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"StatusBar\"><param name=\"ios-package\" value=\"CDVStatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"StatusBarOverlaysWebView\" value=\"true\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"StatusBarStyle\" value=\"lightcontent\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -36,6 +48,9 @@
             "PACKAGE_NAME": "com.hugo.nightech"
         },
         "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.hugo.nightech"
+        },
+        "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.hugo.nightech"
         }
     },
@@ -72,12 +87,21 @@
             "merges": [
                 "navigator.notification"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+            "id": "cordova-plugin-statusbar.statusbar",
+            "pluginId": "cordova-plugin-statusbar",
+            "clobbers": [
+                "window.StatusBar"
+            ]
         }
     ],
     "plugin_metadata": {
         "cordova-plugin-whitelist": "1.2.1",
         "cordova-plugin-console": "1.0.2",
         "cordova-plugin-device": "1.1.1",
-        "cordova-plugin-dialogs": "1.2.0"
+        "cordova-plugin-dialogs": "1.2.0",
+        "cordova-plugin-statusbar": "2.1.3"
     }
 }

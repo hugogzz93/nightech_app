@@ -1,4 +1,4 @@
-var ReservationsListView = function (reservationList) {
+var ReservationsListView = function (adminBool) {
 	 
 	 var reservations;
 
@@ -12,13 +12,14 @@ var ReservationsListView = function (reservationList) {
 	 	 this.render();
 	 }
 
-	 this.render = function () {
-	 	 this.$el.html(this.template(reservations));
-		 	$('.collapsible').collapsible({
-		      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-		    });
-	 	 return this ;
-	 }
+	this.render = function () {
+ 		templateData = { isAdmin: adminBool, reservations: reservations }
+ 	 	this.$el.html(this.template(templateData));
+	 	$('.collapsible').collapsible({
+	      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+	    });
+ 	 	return this ;
+	}
 
 	 this.initialize();
 }

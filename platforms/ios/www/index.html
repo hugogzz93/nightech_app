@@ -40,51 +40,23 @@
 </script>
 
 <script id="coordinator-menu-tpl" type="text/template">
-  <ul id="dropdown1" class="dropdown-content">
-    <li><a href="#!">one</a></li>
-    <li><a href="#!">two</a></li>
-    <li class="divider"></li>
-    <li><a href="#!">three</a></li>
-  </ul>
-
   <nav>
     <div class="nav-wrapper">
       <a href="#reservations" class="brand-logo">Reservation</a>
       <ul class="right hide-on-med-and-down">
-        <li><a class="dropdown-button" href="#reservations" data-activates="dropdown1"><i class="material-icons right">arrow_drop_down</i></a></li>
+        <li><a href="#representatives"><i class="material-icons">supervisor_account</i></a></li>
       </ul>
     </div>
   </nav>
 
   <input type="date" class="datepicker">
 
-  <div class="content">
-    
-  </div>
+  <div class="content"></div>
 
-  <div class="fixed-action-btn click-to-toggle" style="bottom: 45px; right: 24px;">
-    <a class="btn-floating btn-large red">
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a href="#reservations/create" class="btn-floating btn-large red add-rep-btn">
       <i class="large material-icons">add</i>
     </a>
-    <ul>
-      <li><a class="btn-floating green" href="#reservations/create"><i class="material-icons">receipt</i></a></li>
-      <li class="btn-floating blue mod-btn" ><i class="material-icons">perm_identity</i></li>
-    </ul>
-  </div>
-
-  <!--Representative Modal  -->
-  <div id="modal1" class="modal">
-    <div class="modal-content">
-      <h4>New Representative</h4>
-      <div class="input-field">
-        <i class="material-icons prefix">account_circle</i>
-        <input id="icon_prefix" type="text" class="validate">
-        <label for="icon_prefix">Representative Name</label>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Create</a>
-    </div>
   </div>
 </script>
 
@@ -280,7 +252,7 @@
 
 <script id="service-collapsible-li-tpl" type="text/template">
   <li>
-     <div class="collapsible-header {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">TABLE {{ table_number }}  {{ client }}{{serviceIcon this}}</div>
+     <div class="collapsible-header {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">{{ table_number }}  {{ client }}{{serviceIcon this}}</div>
      <div class="collapsible-body">
        <div class="row">
          <form class="col s12">
@@ -330,7 +302,7 @@
 
 <script id="create-service-li-tpl" type="text/template">
   <li>
-   <div class="collapsible-header collapse-btn"><i class="material-icons">library_add</i>TABLE {{ number }}</div>
+   <div class="collapsible-header collapse-btn"><i class="material-icons">library_add</i>{{ number }}</div>
    <div class="collapsible-body">
      <form class="col s11">
        <div class="row">
@@ -380,17 +352,21 @@
 <script id="superAdministrator-menu-tpl" type="text/template">
   <nav>
     <div class="nav-wrapper">
-      <a href="Users" class="brand-logo">Users</a>
+      <div class="col s12">
+        <a href="#administrator" class="breadcrumb">Reservations</a>
+        <a href="#administrator/super" class="breadcrumb">Users</a>
+      </div>
     </div>
   </nav>
+
   <div class="administratorsList"></div>
   <div class="coordinatorsList"></div>
 
-   <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-      <a href="#administrator/super/users/new"class="btn-floating btn-large red">
-        <i class="large material-icons">add</i>
-      </a>
-    </div>
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a href="#administrator/super/users/new"class="btn-floating btn-large red">
+      <i class="large material-icons">add</i>
+    </a>
+  </div>
 </script>
 
 <script id="show-user-tpl" type="text/template">
@@ -519,7 +495,7 @@
 <script id="representatives-list-view" type="text/template">
   <ul class="collection">
       {{#each this}}
-        <a href="#representatives/{{ id }}" class="collection-item" data-representative-id="{{ id }}">{{ name }}</a>
+        <li class="collection-item" data-representative-id="{{ id }}"><a href="#representatives">{{ name }}</a></li>
       {{/each}}
   </ul>
 </script>
@@ -535,7 +511,29 @@
   </nav>
 
   <div class="content"></div>
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a href="#representatives" class="btn-floating btn-large red add-rep-btn">
+      <i class="large material-icons">add</i>
+    </a>
+  </div>
+
+  <!--Representative Modal  -->
+  <div id="add-rep-modal" class="modal">
+    <div class="modal-content">
+      <h4>New Representative</h4>
+      <div class="input-field">
+        <i class="material-icons prefix">account_circle</i>
+        <input id="representative-name" type="text" class="validate">
+        <label for="representative-name">Representative Name</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#representatives" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+      <a href="#representatives" class=" modal-action modal-close waves-effect waves-green btn-flat confirm-btn">Create</a>
+    </div>
+  </div>
 </script>
+
   <!-- <script src="cordova.js"></script> -->
   <script src="cordova.js"></script>
   <script src="lib/fastclick.js"></script>
@@ -543,6 +541,7 @@
   <script src="lib/jquery.js"></script>
   <script src="lib/pageslider.js"></script>
   <script src="lib/router.js"></script>
+  <script src="lib/jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
   <script src="js/services/events.js"></script>
   <!-- // <script src="js/services/ErrorHandler.js"></script> -->
   <script src="js/services/CommunicationService.js"></script>

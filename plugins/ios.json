@@ -18,6 +18,9 @@
         },
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.hugo.nightech"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.hugo.nightech"
         }
     },
     "dependent_plugins": {}
