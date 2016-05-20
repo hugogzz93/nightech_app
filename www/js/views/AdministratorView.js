@@ -1,6 +1,7 @@
  var AdministratorView = function (communication) {
 
-	var reservationsListView
+	var pendingReservationsListView
+	var acceptedReservationsListView
 	var servicesListView
 	var tableChooseModalView
 	var tables
@@ -8,7 +9,8 @@
 	 
 	 this.initialize = function () {
 	 	 this.$el = $('<div/>') ;
-         reservationsListView = new ReservationsListView(true);
+         pendingReservationsListView = new ReservationsListView(true);
+         acceptedReservationsListView = new ReservationsListView(true);
          servicesListView = new ServicesListView();
          tableChooseModalView = new TableChooseModalView();
 
@@ -35,8 +37,9 @@
 	 	this.$el.html(this.template(credentials));
 	 	this.$el.append(tableChooseModalView.$el);
 
-	    $('#reservationsTabCol', this.$el).html(reservationsListView.$el);
-	    $('#servicesTabCol', this.$el).html(servicesListView.$el);
+	    $('#pendingTab', this.$el).html(pendingReservationsListView.$el);
+	    $('#acceptedTab', this.$el).html(acceptedReservationsListView.$el);
+	    $('#servicesTab', this.$el).html(servicesListView.$el);
 
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	const $tabs = this.$el.find('ul.tabs');
@@ -64,7 +67,8 @@
 			const acceptedReservations = response.reservations.filter(function (e) {
 				 return e.status === "accepted";
 			});
-	        reservationsListView.setReservations(pendingReservations);
+	        pendingReservationsListView.setReservations(pendingReservations);
+	        acceptedReservationsListView.setReservations(acceptedReservations);
 	    });
 
 	    communication.getTablesByDate(date).done(function(response) {

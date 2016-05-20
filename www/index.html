@@ -75,14 +75,16 @@
   <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s3" id="reservationTab" data-tab-id="reservationsTabCol"><a class="active" >Pending</a></li>
-        <li class="tab col s3" id="serviceTab" data-tab-id="servicesTabCol"><a>Confirmed</a></li>
+        <li class="tab col s3" data-tab-id="pendingTab"><a class="active" >Pending</a></li>
+        <li class="tab col s3" data-tab-id="acceptedTab"><a>Accepted</a></li>
+        <li class="tab col s3" data-tab-id="servicesTab"><a>Tables</a></li>
       </ul>
     </div>
   </div>
 
-  <div id="reservationsTabCol" class="col s12  tab-data"></div>
-  <div id="servicesTabCol" class="col s12  tab-data"></div>
+  <div id="pendingTab" class="col s12  tab-data"></div>
+  <div id="acceptedTab" class="col s12  tab-data"></div>
+  <div id="servicesTab" class="col s12  tab-data"></div>
 
   <!-- Set service ammount Modal -->
   <div id="service-ammount-modal" class="modal">
