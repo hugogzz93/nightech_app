@@ -45,8 +45,11 @@
 
         // create reservation
         router.addRoute('reservations/create', function () {
-            communication.getRepresentatives().done(function (representatives) {
-                 slider.slidePage(new CreateReservationView(communication, representatives).render().$el) ;
+            communication.getRepresentatives().done(function (response) {
+                const filteredRepresentatives = response.representatives.filter(function (e) {
+                     return e.user_id == communication.getUserId(); 
+                })
+                slider.slidePage(new CreateReservationView(communication, filteredRepresentatives).render().$el) ;
             })
         })
 

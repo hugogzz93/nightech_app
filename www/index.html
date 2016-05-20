@@ -185,7 +185,7 @@
         <div class="input-field col s12">
           <select class="browser-default">
             <option value="" disabled selected>Representative</option>
-              {{#each representatives}}
+              {{#each this}}
                 <option value="{{ id }}">{{ name }}</option>
               {{/each}}
           </select>
@@ -212,9 +212,9 @@
       </div>
     </form>
 
-        <button class="btn waves-effect waves-light" >Submit
-          <i class="material-icons right">send</i>
-        </button>
+    <button class="btn waves-effect waves-light" >Submit
+      <i class="material-icons right">send</i>
+    </button>
   </div>
 </script>
 
