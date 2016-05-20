@@ -58,7 +58,13 @@
 		date.setHours(0,0,0,0);
 
 		communication.getReservationsByDate(date).done(function(response) {
-	        reservationsListView.setReservations(response.reservations);
+			const pendingReservations = response.reservations.filter(function (e) {
+				 return e.status === "pending";
+			});
+			const acceptedReservations = response.reservations.filter(function (e) {
+				 return e.status === "accepted";
+			});
+	        reservationsListView.setReservations(pendingReservations);
 	    });
 
 	    communication.getTablesByDate(date).done(function(response) {
