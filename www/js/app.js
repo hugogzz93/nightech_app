@@ -139,26 +139,36 @@
     Handlebars.registerPartial('serviceCollapsible', $('#service-collapsible-li-tpl').html());
     Handlebars.registerPartial('createTable', $('#create-service-li-tpl').html());
 
-    Handlebars.registerHelper('reservationIcon', function (text) {
+    Handlebars.registerHelper('reservationIcon', function (status) {
          // const text = Handlebars.escapeExpression(text);
         var returnText = "";
-        if (text === "pending") {
+        if (status === "pending") {
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">query_builder</i>'
             );
-        } else if(text === "accepted"){
+        } else if(status === "accepted"){
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">done</i>'
             );
-        } else if(text === "rejected"){
+        } else if(status === "rejected"){
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">not_interested</i>'
             );
-        } else if(text === "seated") {
+        } else if(status === "seated") {
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">done_all</i>'
             );
         }
+        return returnText;
+    })
+
+    Handlebars.registerHelper('tableNumberHelper', function (tableNumber) {
+        var returnText = "";
+        if (tableNumber) {
+            returnText = new Handlebars.SafeString(
+                '<div class="table_number"> #' + tableNumber + '</div>'
+            );
+        };
         return returnText;
     })
 
@@ -170,11 +180,12 @@
     */
     Handlebars.registerHelper('visibilityIcon', function (reservation) {
         var returnText = "";
-        if (reservation.visible && reservation.status === "accepted") {
+        const validStatus = reservation.status === "accepted" || reservation.status === "seated"
+        if (reservation.visible && validStatus) {
             returnText = new Handlebars.SafeString(
                 '<i class="visibility-btn material-icons prefix" data-reservation-id="' + reservation.id + '" data-visibility="' + reservation.visible + '">visibility</i>'
             );
-        } else if(reservation.status === "accepted"){
+        } else if(validStatus){
             returnText = new Handlebars.SafeString(
                 '<i class="visibility-btn material-icons prefix" data-reservation-id="' + reservation.id + '" data-visibility="' + reservation.visible + '">visibility_off</i>'
             );
@@ -236,7 +247,6 @@
         var ps = Handlebars.partials;
         if(typeof ps[name] !== 'function')
             ps[name] = Handlebars.compile(ps[name]);
-        debugger
         return ps[name](ctx, hash);
     });
 

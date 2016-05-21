@@ -108,7 +108,7 @@
       <div class="collapsible-header">
         {{ client }}
         {{reservationIcon status}}
-        {{#if ../isAdmin}}  {{visibilityIcon this}} {{/if}}
+        {{#if ../isAdmin}}  {{visibilityIcon this}} {{else}} {{ tableNumberHelper table_number }} {{/if}}
       </div>
       <div class="collapsible-body">
         <div class="row">
