@@ -21,6 +21,8 @@
     const communication = new Communication();
     const slider = new PageSlider($('body'));
     const mainUrl = "http://api.localhost:3000";
+    $.event.special.swipe.horizontalDistanceThreshold = 300;
+
 
 
     communication.initialize(mainUrl).done( function () {
@@ -45,8 +47,11 @@
 
         // create reservation
         router.addRoute('reservations/create', function () {
-            communication.getRepresentatives().done(function (representatives) {
-                 slider.slidePage(new CreateReservationView(communication, representatives).render().$el) ;
+            communication.getRepresentatives().done(function (response) {
+                const filteredRepresentatives = response.representatives.filter(function (e) {
+                     return e.user_id == communication.getUserId(); 
+                })
+                slider.slidePage(new CreateReservationView(communication, filteredRepresentatives).render().$el) ;
             })
         })
 
@@ -103,6 +108,11 @@
         router.load(user.credentials === "coordinator" ? 'reservations' : 'administrator' );
     })
 
+    events.on('logOutSuccess', function (user) {
+        router.load('');
+        events.emit('toastRequest', 'Signed Out');
+    })
+
     events.on('reservationCreated', function () {
         router.load("reservations"); 
         events.emit('toastRequest', "Reservation Created!");
@@ -134,7 +144,7 @@
         var returnText = "";
         if (text === "pending") {
             returnText = new Handlebars.SafeString(
-            ''
+            '<i class="material-icons">query_builder</i>'
             );
         } else if(text === "accepted"){
             returnText = new Handlebars.SafeString(
@@ -146,7 +156,27 @@
             );
         } else if(text === "seated") {
             returnText = new Handlebars.SafeString(
-            '<i class="material-icons">all_done</i>'
+            '<i class="material-icons">done_all</i>'
+            );
+        }
+        return returnText;
+    })
+
+    /**
+     * Shows an icon indicating whether the coordinator 
+     * can see the table number or not.
+     * @param {Reservation} reservation
+     * @return {Number} div containing an appropriate icon
+    */
+    Handlebars.registerHelper('visibilityIcon', function (reservation) {
+        var returnText = "";
+        if (reservation.visible && reservation.status === "accepted") {
+            returnText = new Handlebars.SafeString(
+                '<i class="material-icons prefix">visibility</i>'
+            );
+        } else if(reservation.status === "accepted"){
+            returnText = new Handlebars.SafeString(
+                '<i class="material-icons prefix">visibility_off</i>'
             );
         }
         return returnText;
@@ -180,7 +210,7 @@
         var returnText = "";
         if(status === "accepted" || status === "rejected") {
             returnText = new Handlebars.SafeString(
-            'class="hidden"'
+            // 'class="hidden"' Removed temporarily
             );
         } 
         return returnText;

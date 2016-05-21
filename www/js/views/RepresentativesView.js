@@ -24,8 +24,8 @@ var RepresentativesView = function (communication) {
 	this.updateRepresentatives = function() {		
 		communication.getRepresentatives().done(function (response) {
 			const representatives = response.representatives.filter(function(e) { 
-				return e.user_id == communication.getUserId()} 
-			)
+				return e.user_id == communication.getUserId();
+			})
 			listView.setRepresentatives(representatives);
 		})
 	}

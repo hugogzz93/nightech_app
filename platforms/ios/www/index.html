@@ -20,7 +20,7 @@
     <div class="col s12 valign">
       <div class="row">
         <div class="input-field col s12">
-          <input placeholder="Email" id="email-field" type="text" class="validate" value="mohammed@ruecker.ca">
+          <input placeholder="Email" id="email-field" type="text" class="validate" value="frederique.kautzer@thiel.biz">
           <label for="email-field">Email</label>
         </div>
       </div>
@@ -75,14 +75,16 @@
   <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s3" id="reservationTab" data-tab-id="reservationsTabCol"><a class="active" >Pending</a></li>
-        <li class="tab col s3" id="serviceTab" data-tab-id="servicesTabCol"><a>Confirmed</a></li>
+        <li class="tab col s3" data-tab-id="pendingTab"><a class="active" >Pending</a></li>
+        <li class="tab col s3" data-tab-id="acceptedTab"><a>Accepted</a></li>
+        <li class="tab col s3" data-tab-id="servicesTab"><a>Confirmed</a></li>
       </ul>
     </div>
   </div>
 
-  <div id="reservationsTabCol" class="col s12  tab-data"></div>
-  <div id="servicesTabCol" class="col s12  tab-data"></div>
+  <div id="pendingTab" class="col s12  tab-data"></div>
+  <div id="acceptedTab" class="col s12  tab-data"></div>
+  <div id="servicesTab" class="col s12  tab-data"></div>
 
   <!-- Set service ammount Modal -->
   <div id="service-ammount-modal" class="modal">
@@ -103,7 +105,11 @@
   <ul class="collapsible popout" data-collapsible="accordion">
     {{#each reservations}}
     <li {{showPending status}}>
-      <div class="collapsible-header">{{ client }}{{reservationIcon status}}</div>
+      <div class="collapsible-header">
+        {{ client }}
+        {{reservationIcon status}}
+        {{#if ../isAdmin}}  {{visibilityIcon this}} {{/if}}
+      </div>
       <div class="collapsible-body">
         <div class="row">
           <form class="col s12">
@@ -185,7 +191,7 @@
         <div class="input-field col s12">
           <select class="browser-default">
             <option value="" disabled selected>Representative</option>
-              {{#each representatives}}
+              {{#each this}}
                 <option value="{{ id }}">{{ name }}</option>
               {{/each}}
           </select>
@@ -212,9 +218,9 @@
       </div>
     </form>
 
-        <button class="btn waves-effect waves-light" >Submit
-          <i class="material-icons right">send</i>
-        </button>
+    <button class="btn waves-effect waves-light" >Submit
+      <i class="material-icons right">send</i>
+    </button>
   </div>
 </script>
 
@@ -534,35 +540,31 @@
   </div>
 </script>
 
-  <!-- <script src="cordova.js"></script> -->
-  <script src="cordova.js"></script>
-  <script src="lib/fastclick.js"></script>
-  <script src="lib/handlebars.js"></script>
-  <script src="lib/jquery.js"></script>
-  <script src="lib/pageslider.js"></script>
-  <script src="lib/router.js"></script>
-  <script src="lib/jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
-  <script src="js/services/events.js"></script>
-  <!-- // <script src="js/services/ErrorHandler.js"></script> -->
-  <script src="js/services/CommunicationService.js"></script>
-  <script src="js/views/LogInView.js"></script>
-  <script src="js/views/ReservationsListView.js"></script>
-  <script src="js/views/ServicesListView.js"></script>
-  <script src="js/views/ReservationsView.js"></script>
-  <script src="js/views/CreateReservationView.js"></script>
-  <script src="js/views/TableChooseModalView.js"></script>
-  <script src="js/views/AdministratorView.js"></script>
-  <script src="js/views/SuperAdministratorView.js"></script>
-  <script src="js/views/UserListView.js"></script>
-  <script src="js/views/UserView.js"></script>
-  <script src="js/views/CreateUserView.js"></script>
-  <script src="js/views/RepresentativesListView.js"></script>
-  <script src="js/views/RepresentativesView.js"></script>
-  <script src="js/app.js"></script>
-  <script type="text/javascript" src="assets/materialize/js/materialize.min.js"></script>
-  <script type="text/javascript" src="assets/moment.js"></script>
-
-
+<script src="cordova.js"></script>
+<script src="lib/fastclick.js"></script>
+<script src="lib/handlebars.js"></script>
+<script src="lib/jquery.js"></script>
+<script src="lib/pageslider.js"></script>
+<script src="lib/router.js"></script>
+<script src="lib/jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
+<script src="js/services/events.js"></script>
+<script src="js/services/CommunicationService.js"></script>
+<script src="js/views/LogInView.js"></script>
+<script src="js/views/ReservationsListView.js"></script>
+<script src="js/views/ServicesListView.js"></script>
+<script src="js/views/ReservationsView.js"></script>
+<script src="js/views/CreateReservationView.js"></script>
+<script src="js/views/TableChooseModalView.js"></script>
+<script src="js/views/AdministratorView.js"></script>
+<script src="js/views/SuperAdministratorView.js"></script>
+<script src="js/views/UserListView.js"></script>
+<script src="js/views/UserView.js"></script>
+<script src="js/views/CreateUserView.js"></script>
+<script src="js/views/RepresentativesListView.js"></script>
+<script src="js/views/RepresentativesView.js"></script>
+<script src="js/app.js"></script>
+<script type="text/javascript" src="assets/materialize/js/materialize.min.js"></script>
+<script type="text/javascript" src="assets/moment.js"></script>
 
 </body>
 </html>

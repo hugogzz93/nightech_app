@@ -1,6 +1,7 @@
  var AdministratorView = function (communication) {
 
-	var reservationsListView
+	var pendingReservationsListView
+	var acceptedReservationsListView
 	var servicesListView
 	var tableChooseModalView
 	var tables
@@ -8,7 +9,8 @@
 	 
 	 this.initialize = function () {
 	 	 this.$el = $('<div/>') ;
-         reservationsListView = new ReservationsListView(true);
+         pendingReservationsListView = new ReservationsListView(true);
+         acceptedReservationsListView = new ReservationsListView(true);
          servicesListView = new ServicesListView();
          tableChooseModalView = new TableChooseModalView();
 
@@ -24,6 +26,7 @@
 	 	 this.$el.on('click', '.modal-content .table-option.blue', $.proxy(this.acceptReservation, this));
 	 	 this.$el.on('click', '.service-btn', $.proxy(this.handleServiceAction, this));
 	 	 this.$el.on('click', '#ammount-submit-btn', $.proxy(this.submitAmmount, this));
+	 	 this.$el.on('click', '.visibility-btn', $.proxy(this.toggleReservationVisibility, this));
 
 	 	 this.findByDate(new Date());
 	 	 this.render();
@@ -35,8 +38,9 @@
 	 	this.$el.html(this.template(credentials));
 	 	this.$el.append(tableChooseModalView.$el);
 
-	    $('#reservationsTabCol', this.$el).html(reservationsListView.$el);
-	    $('#servicesTabCol', this.$el).html(servicesListView.$el);
+	    $('#pendingTab', this.$el).html(pendingReservationsListView.$el);
+	    $('#acceptedTab', this.$el).html(acceptedReservationsListView.$el);
+	    $('#servicesTab', this.$el).html(servicesListView.$el);
 
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	const $tabs = this.$el.find('ul.tabs');
@@ -58,7 +62,14 @@
 		date.setHours(0,0,0,0);
 
 		communication.getReservationsByDate(date).done(function(response) {
-	        reservationsListView.setReservations(response.reservations);
+			const pendingReservations = response.reservations.filter(function (e) {
+				 return e.status === "pending";
+			});
+			const acceptedReservations = response.reservations.filter(function (e) {
+				 return e.status === "accepted";
+			});
+	        pendingReservationsListView.setReservations(pendingReservations);
+	        acceptedReservationsListView.setReservations(acceptedReservations);
 	    });
 
 	    communication.getTablesByDate(date).done(function(response) {
@@ -171,6 +182,15 @@
 		$('#chooseTableModal .table-option', this.$el).attr('data-reservation-id', reservationId);
 
 		this.$el.find('#chooseTableModal').openModal();
+	}
+
+	this.toggleReservationVisibility = function (event) {
+		const $target = $(event.target);
+		const id = $target.attr('data-reservation-id');
+		const json = {visible: $target.attr('data-visibility') === "true" ? "false" : "true"};
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+
+		communication.updateReservation(id, json).done(updateView);
 	}
 
 	// ---------------------------Other functionality------------------------------
