@@ -26,6 +26,7 @@
 	 	 this.$el.on('click', '.modal-content .table-option.blue', $.proxy(this.acceptReservation, this));
 	 	 this.$el.on('click', '.service-btn', $.proxy(this.handleServiceAction, this));
 	 	 this.$el.on('click', '#ammount-submit-btn', $.proxy(this.submitAmmount, this));
+	 	 this.$el.on('click', '.visibility-btn', $.proxy(this.toggleReservationVisibility, this));
 
 	 	 this.findByDate(new Date());
 	 	 this.render();
@@ -181,6 +182,15 @@
 		$('#chooseTableModal .table-option', this.$el).attr('data-reservation-id', reservationId);
 
 		this.$el.find('#chooseTableModal').openModal();
+	}
+
+	this.toggleReservationVisibility = function (event) {
+		const $target = $(event.target);
+		const id = $target.attr('data-reservation-id');
+		const json = {visible: $target.attr('data-visibility') === "true" ? "false" : "true"};
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+
+		communication.updateReservation(id, json).done(updateView);
 	}
 
 	// ---------------------------Other functionality------------------------------

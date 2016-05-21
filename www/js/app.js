@@ -172,11 +172,11 @@
         var returnText = "";
         if (reservation.visible && reservation.status === "accepted") {
             returnText = new Handlebars.SafeString(
-                '<i class="material-icons prefix">visibility</i>'
+                '<i class="visibility-btn material-icons prefix" data-reservation-id="' + reservation.id + '" data-visibility="' + reservation.visible + '">visibility</i>'
             );
         } else if(reservation.status === "accepted"){
             returnText = new Handlebars.SafeString(
-                '<i class="material-icons prefix">visibility_off</i>'
+                '<i class="visibility-btn material-icons prefix" data-reservation-id="' + reservation.id + '" data-visibility="' + reservation.visible + '">visibility_off</i>'
             );
         }
         return returnText;
