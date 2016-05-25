@@ -14,19 +14,7 @@
          servicesListView = new ServicesListView();
          tableChooseModalView = new TableChooseModalView();
 
-	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
-	 	 this.$el.on('click', '.tab', function () {
-	 	 	$('.tab-data').addClass('hidden')
-	 	 	$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
-	 	 })
-
-	 	 this.$el.on('click', '.service-submit', $.proxy(this.submitService, this));
-	 	 this.$el.on('click', '.delete-btn', $.proxy(this.destroyService, this));
-	 	 this.$el.on('click', '.accept-btn', $.proxy(this.displayTablesModal, this));
-	 	 this.$el.on('click', '.modal-content .table-option.blue', $.proxy(this.acceptReservation, this));
-	 	 this.$el.on('click', '.service-btn', $.proxy(this.handleServiceAction, this));
-	 	 this.$el.on('click', '#ammount-submit-btn', $.proxy(this.submitAmmount, this));
-
+         this.setEventHandlers()
 	 	 this.findByDate(new Date());
 	 	 this.render();
 	 } 
@@ -65,7 +53,7 @@
 				 return e.status === "pending";
 			});
 			const acceptedReservations = response.reservations.filter(function (e) {
-				 return e.status === "accepted";
+				 return e.status === "accepted" || e.status === "seated";
 			});
 	        pendingReservationsListView.setReservations(pendingReservations);
 	        acceptedReservationsListView.setReservations(acceptedReservations);
@@ -183,6 +171,31 @@
 		this.$el.find('#chooseTableModal').openModal();
 	}
 
+	this.toggleReservationVisibility = function (event) {
+		const $target = $(event.target);
+		const id = $target.attr('data-reservation-id');
+		const json = {visible: $target.attr('data-visibility') === "true" ? "false" : "true"};
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+
+		communication.updateReservation(id, json).done(updateView);
+	}
+
 	// ---------------------------Other functionality------------------------------
+
+	this.setEventHandlers = function () {
+		this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
+	 	this.$el.on('click', '.tab', function () {
+	 	 	$('.tab-data').addClass('hidden')
+	 	 	$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
+	 	})
+
+	 	this.$el.on('click', '.service-submit', $.proxy(this.submitService, this));
+	 	this.$el.on('click', '.delete-btn', $.proxy(this.destroyService, this));
+	 	this.$el.on('click', '.accept-btn', $.proxy(this.displayTablesModal, this));
+	 	this.$el.on('click', '.modal-content .table-option.blue', $.proxy(this.acceptReservation, this));
+	 	this.$el.on('click', '.service-btn', $.proxy(this.handleServiceAction, this));
+	 	this.$el.on('click', '#ammount-submit-btn', $.proxy(this.submitAmmount, this));
+	 	this.$el.on('click', '.visibility-btn', $.proxy(this.toggleReservationVisibility, this));
+	}
 	this.initialize();
 }

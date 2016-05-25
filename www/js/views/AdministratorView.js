@@ -7,17 +7,17 @@
 	var tables
 	var currentUser
 	 
-	 this.initialize = function () {
-	 	 this.$el = $('<div/>') ;
-         pendingReservationsListView = new ReservationsListView(true);
-         acceptedReservationsListView = new ReservationsListView(true);
-         servicesListView = new ServicesListView();
-         tableChooseModalView = new TableChooseModalView();
+	this.initialize = function () {
+	 	this.$el = $('<div/>') ;
+        this.setEventHandlers()
+        pendingReservationsListView = new ReservationsListView(true);
+        acceptedReservationsListView = new ReservationsListView(true);
+        servicesListView = new ServicesListView();
+        tableChooseModalView = new TableChooseModalView();
 
-         this.setEventHandlers()
-	 	 this.findByDate(new Date());
-	 	 this.render();
-	 } 
+	 	this.findByDate(new Date());
+	 	this.render();
+	} 
 
 	this.render = function () {
 		const credentials = {isSuper: communication.currentCredentials() === "super"};
@@ -120,7 +120,7 @@
 	 	const serviceJson = { status: "complete" };
 
 		communication.updateService(serviceId, serviceJson).done(function () {
-		 	updateView(); 
+		 	// updateView(); 
 			events.emit('toastRequest', "Reservation Accepted!"); 
 		});
 	}
@@ -130,7 +130,7 @@
 	 	const serviceJson = { status: "seated" };
 
 		communication.updateService(serviceId, serviceJson).done(function () {
-		 	updateView(); 
+		 	// updateView(); 
 			events.emit('toastRequest', "Seated!"); 
 		});
 	}
@@ -189,13 +189,37 @@
 	 	 	$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
 	 	})
 
-	 	this.$el.on('click', '.service-submit', $.proxy(this.submitService, this));
-	 	this.$el.on('click', '.delete-btn', $.proxy(this.destroyService, this));
-	 	this.$el.on('click', '.accept-btn', $.proxy(this.displayTablesModal, this));
-	 	this.$el.on('click', '.modal-content .table-option.blue', $.proxy(this.acceptReservation, this));
-	 	this.$el.on('click', '.service-btn', $.proxy(this.handleServiceAction, this));
-	 	this.$el.on('click', '#ammount-submit-btn', $.proxy(this.submitAmmount, this));
-	 	this.$el.on('click', '.visibility-btn', $.proxy(this.toggleReservationVisibility, this));
+	 	const submitService =  $.proxy(this.submitService, this)
+		const destroyService =  $.proxy(this.destroyService, this)
+		const displayTablesModal =  $.proxy(this.displayTablesModal, this)
+		const acceptReservation =  $.proxy(this.acceptReservation, this)
+		const handleServiceAction =  $.proxy(this.handleServiceAction, this)
+		const submitAmmount =  $.proxy(this.submitAmmount, this)
+		const toggleReservationVisibility =  $.proxy(this.toggleReservationVisibility, this)
+
+	 	this.$el.on('click', '.service-submit', function (e) {
+	 		 submitService(e);
+	 	});
+	 	this.$el.on('click', '.delete-btn', function (e) {
+	 		 destroyService(e);
+	 	});
+	 	this.$el.on('click', '.accept-btn', function (e) {
+	 		 displayTablesModal(e);
+	 	});
+	 	this.$el.on('click', '.modal-content .table-option.blue', function (e) {
+	 		 acceptReservation(e);
+	 	});
+	 	this.$el.on('click', '.service-btn', function (e) {
+	 		debugger
+	 		e.stopPropagation();
+	 		 handleServiceAction(e);
+	 	});
+	 	this.$el.on('click', '#ammount-submit-btn', function (e) {
+	 		 submitAmmount(e);
+	 	});
+	 	this.$el.on('click', '.visibility-btn', function (e) {
+	 		 toggleReservationVisibility(e);
+	 	});
 	}
 	this.initialize();
 }

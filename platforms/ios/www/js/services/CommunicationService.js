@@ -115,7 +115,7 @@ const Communication = function () {
 	}
 
 	this.acceptReservation = function (reservationId, table_number) {
-		 return $.ajax({
+		return $.ajax({
 	 	 	url: url + '/reservations/' + reservationId,
 	 	 	type: 'PATCH',
 	 	 	dataType: 'json',
@@ -124,9 +124,24 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-	 	 }).fail(function (response) {
+	 	}).fail(function (response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
-	 	 });
+	 	});
+	}
+
+	this.updateReservation = function (reservationId, reservationJson) {
+		return $.ajax({
+	 	 	url: url + '/reservations/' + reservationId,
+	 	 	type: 'PATCH',
+	 	 	dataType: 'json',
+	 	 	data: {reservation: reservationJson},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	}).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	});
 	}
 
 
@@ -166,7 +181,7 @@ const Communication = function () {
 	}
 
 	this.submitService = function (serviceJson) {
-		 return $.ajax({
+		return $.ajax({
 	 	 	url: url + '/services',
 	 	 	type: 'POST',
 	 	 	dataType: 'json',
@@ -175,13 +190,13 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-	 	 }).fail(function (response) {
+	 	}).fail(function (response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
-	 	 });
+	 	});
 	}
 
 	this.destroyService = function (serviceId) {
-		 return $.ajax({
+		return $.ajax({
 	 	 	url: url + '/services/' + serviceId,
 	 	 	type: 'DELETE',
 	 	 	dataType: 'json',
@@ -190,13 +205,13 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-	 	 }).fail(function (response) {
+	 	}).fail(function (response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
-	 	 });
+	 	});
 	}
 
 	this.completeService = function (serviceId) {
-		 return $.ajax({
+		return $.ajax({
 	 	 	url: url + '/services/' + serviceId,
 	 	 	type: 'PATCH',
 	 	 	dataType: 'json',
@@ -205,9 +220,9 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-	 	 }).fail(function (response) {
+	 	}).fail(function (response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
-	 	 });
+	 	});
 	}
 
 	this.updateService = function (serviceId, serviceJson) {
@@ -228,7 +243,7 @@ const Communication = function () {
 /* ---------------------------------- Representatives Handling ---------------------------------- */
 
 	this.getRepresentatives = function () {
-		 return $.ajax({
+		return $.ajax({
 		 	url: url + '/representatives',
 		 	type: 'GET',
 		 	dataType: 'json',
@@ -236,14 +251,14 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-		 })
+		})
 		 .fail(function() {
 	 		alert("Connection Error 002");
-		 });	  
+		});	  
 	}
 
 	this.createRepresentative = function (repJson) {
-		 return $.ajax({
+		return $.ajax({
 		 	url: url + '/representatives',
 		 	type: 'POST',
 		 	dataType: 'json',
@@ -252,14 +267,14 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-		 })
+		})
 		 .fail(function() {
 		 	console.log("error");
-		 });
+		});
 	}
 
 	this.destroyRepresentative = function (id) {
-		 return $.ajax({
+		return $.ajax({
 		 	url: url + '/representatives/' + id,
 		 	type: 'DELETE',
 		 	dataType: 'json',
@@ -268,10 +283,10 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-		 })
+		})
 		 .fail(function() {
 		 	console.log("error");
-		 }); 
+		}); 
 	}
 
 /* ---------------------------------- Users Handling ---------------------------------- */

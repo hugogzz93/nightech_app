@@ -20,7 +20,7 @@
     <div class="col s12 valign">
       <div class="row">
         <div class="input-field col s12">
-          <input placeholder="Email" id="email-field" type="text" class="validate" value="frederique.kautzer@thiel.biz">
+          <input placeholder="Email" id="email-field" type="text" class="validate" value="mohammed@ruecker.ca">
           <label for="email-field">Email</label>
         </div>
       </div>
@@ -77,7 +77,7 @@
       <ul class="tabs">
         <li class="tab col s3" data-tab-id="pendingTab"><a class="active" >Pending</a></li>
         <li class="tab col s3" data-tab-id="acceptedTab"><a>Accepted</a></li>
-        <li class="tab col s3" data-tab-id="servicesTab"><a>Confirmed</a></li>
+        <li class="tab col s3" data-tab-id="servicesTab"><a>Tables</a></li>
       </ul>
     </div>
   </div>
@@ -108,7 +108,7 @@
       <div class="collapsible-header">
         {{ client }}
         {{reservationIcon status}}
-        {{#if ../isAdmin}}  {{visibilityIcon this}} {{/if}}
+        {{#if ../isAdmin}}  {{visibilityIcon this}} {{else}} {{ tableNumberHelper table_number }} {{/if}}
       </div>
       <div class="collapsible-body">
         <div class="row">
