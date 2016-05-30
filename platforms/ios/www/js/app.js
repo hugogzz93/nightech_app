@@ -21,7 +21,6 @@
     const communication = new Communication();
     const slider = new PageSlider($('body'));
     const mainUrl = "http://api.localhost:3000";
-    $.event.special.swipe.horizontalDistanceThreshold = 300;
 
 
 

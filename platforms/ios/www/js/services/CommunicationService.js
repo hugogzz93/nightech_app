@@ -31,10 +31,10 @@ const Communication = function () {
 /* ---------------------------------- Session Handling ---------------------------------- */
 
 	this.startSession = function (user) {
-	 	 auth_token = user.auth_token;
-	 	 credentials = user.credentials; 
-	 	 user_id = user.id;
-	 	 console.log(credentials);
+	 	auth_token = user.auth_token;
+	 	credentials = user.credentials; 
+	 	user_id = user.id;
+	 	console.log(credentials);
 	}
 
 	this.clearSessionTokens = function () {

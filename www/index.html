@@ -20,13 +20,13 @@
     <div class="col s12 valign">
       <div class="row">
         <div class="input-field col s12">
-          <input placeholder="Email" id="email-field" type="text" class="validate" value="frederique.kautzer@thiel.biz">
+          <input placeholder="" id="email-field" type="text" class="validate" value="frederique.kautzer@thiel.biz">
           <label for="email-field">Email</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <input placeholder="Placeholder" id="password-field" type="password" class="validate" value="12345678">
+          <input placeholder="" id="password-field" type="password" class="validate" value="12345678">
           <label for="password-field">Password</label>
         </div>
       </div>
@@ -42,10 +42,8 @@
 <script id="coordinator-menu-tpl" type="text/template">
   <nav>
     <div class="nav-wrapper">
-      <a href="#reservations" class="brand-logo">Reservation</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#representatives"><i class="material-icons">supervisor_account</i></a></li>
-      </ul>
+      <a href="reservations" class="brand-logo">Reservations</a>
+        <a href="#representatives"><i class="material-icons right">supervisor_account</i></a>
     </div>
   </nav>
 
@@ -477,9 +475,6 @@
           <label for="password-confirmation">Password Confirmation</label>
         </div>
 
-
-
-        <div class="input-field col s12">
           <p>
             <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
             <label for="administrator-radio">Administrator</label>
@@ -488,7 +483,6 @@
             <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
             <label for="coordinator-radio">Coordinator</label>
           </p>
-        </div>
         
     </form>
 

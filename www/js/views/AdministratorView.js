@@ -120,7 +120,7 @@
 	 	const serviceJson = { status: "complete" };
 
 		communication.updateService(serviceId, serviceJson).done(function () {
-		 	// updateView(); 
+		 	updateView(); 
 			events.emit('toastRequest', "Reservation Accepted!"); 
 		});
 	}
@@ -130,7 +130,7 @@
 	 	const serviceJson = { status: "seated" };
 
 		communication.updateService(serviceId, serviceJson).done(function () {
-		 	// updateView(); 
+		 	updateView(); 
 			events.emit('toastRequest', "Seated!"); 
 		});
 	}

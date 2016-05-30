@@ -1,6 +1,6 @@
 var UserListView = function () {
 	 
-	 var users;
+	 var users = [];
 
  	 this.initialize = function () {
 	 	 this.$el = $('<div/>');
@@ -13,8 +13,7 @@ var UserListView = function () {
 	 }
 
 	 this.render = function () {
-	
-	 	if (users) {
+	 	if (users.length > 0) {
 		 	const userDigest = { credentials: users[0].credentials + "s", users: users};
 	 	} else {
 	 		const userDigest = { credentials: "", users: []};
