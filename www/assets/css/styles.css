@@ -1,3 +1,9 @@
+.separator {
+	margin: 5px;
+	width: 1px;
+	height: 1px;
+}
+
 .table_number {
 	float: right;
 	margin-right: 5%;

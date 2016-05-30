@@ -83,6 +83,7 @@
   <div id="pendingTab" class="col s12  tab-data"></div>
   <div id="acceptedTab" class="col s12  tab-data"></div>
   <div id="servicesTab" class="col s12  tab-data"></div>
+  <div class="col s12  tab-data separator"></div>
 
   <!-- Set service ammount Modal -->
   <div id="service-ammount-modal" class="modal">
@@ -230,7 +231,7 @@
   </ul>
 
     <ul class="collapsible popout" data-collapsible="accordion">
-    <h4>Completed</h4>
+    <div class="section header">Completed</div>
     {{#each this}}
         {{#each services}}
               {{{serviceHelper this}}}
