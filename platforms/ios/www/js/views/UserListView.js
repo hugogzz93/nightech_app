@@ -14,7 +14,6 @@ var UserListView = function () {
 
 	 this.render = function () {
 	 	if (users.length > 0) {
-			debugger
 		 	const userDigest = { credentials: users[0].credentials + "s", users: users};
 	 	} else {
 	 		const userDigest = { credentials: "", users: []};

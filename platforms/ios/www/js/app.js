@@ -16,7 +16,8 @@
     CreateUserView.prototype.template = Handlebars.compile($('#create-user-tpl').html());
     RepresentativesListView.prototype.template = Handlebars.compile($('#representatives-list-view').html());
     RepresentativesView.prototype.template = Handlebars.compile($('#representatives-view').html());
-    
+    MapView.prototype.template = Handlebars.compile($('#map-view').html());
+    BigMapView.prototype.template = Handlebars.compile($('#big-map-view').html());
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
@@ -77,6 +78,10 @@
         // representatives list
         router.addRoute('representatives', function () {
             slider.slidePage(new RepresentativesView(communication).render().$el) ;
+        })
+
+        router.addRoute('administrator/map', function () {
+            slider.slidePage(new BigMapView(communication).render().$el) ;
         })
 
 

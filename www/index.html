@@ -62,6 +62,7 @@
   <nav>
     <div class="nav-wrapper">
       <a href="reservations" class="brand-logo">Reservations</a>
+          <a href="#administrator/map"><i class="material-icons right">location_on</i></a>
       {{#if isSuper}}
           <a href="#administrator/super"><i class="material-icons right">view_module</i></a>
       {{/if}}
@@ -535,13 +536,35 @@
   </div>
 </script>
 
+<script id="map-view" type="text/template">
+  <div class="mapCanvas"></div>
+</script>
+
+<script id="big-map-view" type="text/template">
+  <nav>
+    <div class="nav-wrapper">
+      <div class="col s12">
+        <a href="#administrator" class="breadcrumb">Reservations</a>
+        <a href="#administrator/map" class="breadcrumb">Map</a>
+      </div>
+    </div>
+  </nav>
+
+  <input type="date" class="datepicker">
+  
+
+  <div class="content"></div>
+</script>
+
 <script src="cordova.js"></script>
 <script src="lib/fastclick.js"></script>
 <script src="lib/handlebars.js"></script>
 <script src="lib/jquery.js"></script>
 <script src="lib/pageslider.js"></script>
 <script src="lib/router.js"></script>
+<script src="lib/raphael.js"></script>
 <script src="lib/jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
+<script src="js/services/Map.js"></script>
 <script src="js/services/events.js"></script>
 <script src="js/services/CommunicationService.js"></script>
 <script src="js/views/LogInView.js"></script>
@@ -549,6 +572,8 @@
 <script src="js/views/ServicesListView.js"></script>
 <script src="js/views/ReservationsView.js"></script>
 <script src="js/views/CreateReservationView.js"></script>
+<script src="js/views/MapView.js"></script>
+<script src="js/views/BigMapView.js"></script>
 <script src="js/views/TableChooseModalView.js"></script>
 <script src="js/views/AdministratorView.js"></script>
 <script src="js/views/SuperAdministratorView.js"></script>

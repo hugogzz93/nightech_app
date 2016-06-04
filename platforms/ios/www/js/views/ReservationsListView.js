@@ -8,6 +8,7 @@ var ReservationsListView = function (adminBool) {
 	 } 
 
 	 this.setReservations = function (list) {
+	 	
 	 	 reservations = list;
 	 	 this.render();
 	 }
