@@ -64,7 +64,7 @@
       <a href="reservations" class="brand-logo">Reservations</a>
           <a href="#administrator/map"><i class="material-icons right">location_on</i></a>
       {{#if isSuper}}
-          <a href="#administrator/super"><i class="material-icons right">view_module</i></a>
+          <a href="#administrator/super"><i class="material-icons left">view_module</i></a>
       {{/if}}
     </div>
   </nav>
@@ -89,7 +89,7 @@
   <!-- Set service ammount Modal -->
   <div id="service-ammount-modal" class="modal">
     <div class="modal-content">
-      <h4>Set Ammount</h4>
+      <h4>Set Amount</h4>
       <div class="input-field">
         <input id="service-ammount" type="number">
         <label for="service-ammount">Ammount: $</label>
@@ -117,32 +117,32 @@
 
               <div class="input-field col s12">
                 <i class="material-icons prefix">account_circle</i>
-                <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
-                <label for="icon_prefix">First Name</label>
+                <input disabled id="icon_prefix" type="text" class="validate" value="">
+                <label for="icon_prefix">{{ client }}</label>
               </div>
 
               <div class="input-field col s12">
                 <i class="material-icons prefix">person_pin</i>
-                <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
-                <label for="icon_rp">Representante</label>
+                <input disabled id="icon_rp" type="text" class="validate" value="">
+                <label for="icon_rp">{{ representative.name }}</label>
               </div>
 
               <div class="input-field col s4 offset-s2">
-                <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
-                  <label for="icon_quantity"># People</label>
+                <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="">
+                  <label for="icon_quantity"># People: {{ quantity }} </label>
                 </input>
               </div>
 
               <div class="input-field col s6">
-                <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
-                <label for="date" class="">Date</label>
+                <input disabled type="date" class="datepicker" id="date" value="">
+                <label for="date" class="">{{ dateParser date }}</label>
               </div>
 
               <div class="row">
                 <div class="input-field col s12">
                 <i class="material-icons prefix">message</i>
-                  <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
-                  <label for="comment-textarea">Comment</label>
+                  <textarea disabeld id="comment-textarea" class="materialize-textarea" value=""></textarea>
+                  <label for="comment-textarea">{{ comment }}</label>
                 </div>
               </div>
 
@@ -319,7 +319,7 @@
            <label for="client-name">Client Name</label>
          </div>
 
-         <div class="input-field col s4">
+         <div class="input-field col s6">
          <i class="material-icons prefix">supervisor_account</i>
            <input type="number" class="validate" id="quantity" min="1" max="15">
              <label for="quantity"># People</label>

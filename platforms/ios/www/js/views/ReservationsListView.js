@@ -10,6 +10,7 @@ var ReservationsListView = function (adminBool) {
 	 this.setReservations = function (list) {
 	 	
 	 	 reservations = list;
+	 	 debugger
 	 	 this.render();
 	 }
 

@@ -166,6 +166,11 @@
         return returnText;
     })
 
+    Handlebars.registerHelper('dateParser', function (date) {
+        var returnText = new Date(date).toDateString();
+        return returnText;
+    })
+
     Handlebars.registerHelper('tableNumberHelper', function (tableNumber) {
         var returnText = "";
         if (tableNumber) {

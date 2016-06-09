@@ -55,6 +55,7 @@
 			const acceptedReservations = response.reservations.filter(function (e) {
 				 return e.status === "accepted" || e.status === "seated";
 			});
+			debugger
 	        pendingReservationsListView.setReservations(pendingReservations);
 	        acceptedReservationsListView.setReservations(acceptedReservations);
 	    });
@@ -152,15 +153,23 @@
 	// ---------------------------Reservation functionality------------------------------
 
 	this.acceptReservation = function (event) {
-		const tableId = $(event.target).attr('data-table-number');
 		const reservationId = $(event.target).attr('data-reservation-id');
+		const tableId = $('#tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val();
 	 	const updateView = $.proxy(this.datePickerChange, this); 
+	 	debugger
 
 		communication.acceptReservation(reservationId, tableId).done(function () {
-			 $('#chooseTableModal').closeModal();
 			 updateView();
 			 events.emit('toastRequest', "Reservation Accepted!"); 
 		})
+	}
+
+	this.saveTableNumber = function (event) {
+		const tableId = $(event.target).attr('data-table-number');
+		const reservationId = $(event.target).attr('data-reservation-id');
+		$('#tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val(tableId);
+		$('#chooseTableModal').closeModal();
+		$('label[for="tableNumber"][data-reservation-id="' + reservationId + '"]').addClass('active')
 	}
 
 	this.displayTablesModal = function (event) {
@@ -196,6 +205,7 @@
 		const handleServiceAction =  $.proxy(this.handleServiceAction, this)
 		const submitAmmount =  $.proxy(this.submitAmmount, this)
 		const toggleReservationVisibility =  $.proxy(this.toggleReservationVisibility, this)
+		const saveTableNumber = $.proxy(this.saveTableNumber, this);
 
 	 	this.$el.on('click', '.service-submit', function (e) {
 	 		 submitService(e);
@@ -204,15 +214,17 @@
 	 		 destroyService(e);
 	 	});
 	 	this.$el.on('click', '.accept-btn', function (e) {
+	 		 acceptReservation(e);
+	 	});
+	 	this.$el.on('click', '#tableNumber.validate', function (e) {
 	 		 displayTablesModal(e);
 	 	});
 	 	this.$el.on('click', '.modal-content .table-option.blue', function (e) {
-	 		 acceptReservation(e);
+	 		 saveTableNumber(e);
 	 	});
 	 	this.$el.on('click', '.service-btn', function (e) {
-	 		debugger
 	 		e.stopPropagation();
-	 		 handleServiceAction(e);
+	 		handleServiceAction(e);
 	 	});
 	 	this.$el.on('click', '#ammount-submit-btn', function (e) {
 	 		 submitAmmount(e);
