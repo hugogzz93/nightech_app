@@ -1,4 +1,6 @@
-
+.grayText { 
+	color: #a6a6a6;
+}
 .mapCanvas {
     display: block;
 	border: 1px solid #ccc;

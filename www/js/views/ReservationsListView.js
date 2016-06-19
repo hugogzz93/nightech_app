@@ -13,6 +13,7 @@ var ReservationsListView = function (adminBool) {
 	 }
 
 	this.render = function () {
+		// var isAccepted = reservations.length > 0 ? 
  		templateData = { isAdmin: adminBool, reservations: reservations }
  	 	this.$el.html(this.template(templateData));
 	 	$('.collapsible').collapsible({

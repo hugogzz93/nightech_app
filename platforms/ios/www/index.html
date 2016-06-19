@@ -61,7 +61,7 @@
 <script id="administrator-menu-tpl" type="text/template">
   <nav>
     <div class="nav-wrapper">
-      <a href="reservations" class="brand-logo">Reservations</a>
+      <a href="#administrator" class="brand-logo">Reservations</a>
           <a href="#administrator/map"><i class="material-icons right">location_on</i></a>
       {{#if isSuper}}
           <a href="#administrator/super"><i class="material-icons left">view_module</i></a>
@@ -106,48 +106,62 @@
     {{#each reservations}}
     <li {{showPending status}}>
       <div class="collapsible-header">
-        {{ client }}
+        {{ client }} <span class="grayText">{{ coordinator_name }} </span>
         {{reservationIcon status}}
         {{#if ../isAdmin}}  {{visibilityIcon this}} {{else}} {{ tableNumberHelper table_number }} {{/if}}
       </div>
-      <div class="collapsible-body">
+      <div class="collapsible-body" data-reservation-id="{{id}}">
         <div class="row">
           <form class="col s12">
             <div class="row">
 
               <div class="input-field col s12">
                 <i class="material-icons prefix">account_circle</i>
-                <input disabled id="icon_prefix" type="text" class="validate" value="">
-                <label for="icon_prefix">{{ client }}</label>
+                <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }} ">
+                <label class="active" for="icon_prefix">Client</label>
+              </div>
+
+              <div class="input-field col s12">
+                <i class="material-icons prefix">perm_identity</i>
+                <input disabled id="icon_prefix" type="text" class="validate" value="{{ coordinator_name }} ">
+                <label class="active" for="icon_prefix">Coordinator</label>
               </div>
 
               <div class="input-field col s12">
                 <i class="material-icons prefix">person_pin</i>
                 <input disabled id="icon_rp" type="text" class="validate" value="">
-                <label for="icon_rp">{{ representative.name }}</label>
-              </div>
-
-              <div class="input-field col s4 offset-s2">
-                <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="">
-                  <label for="icon_quantity"># People: {{ quantity }} </label>
-                </input>
+                <label class="active" for="icon_rp">Representative</label>
               </div>
 
               <div class="input-field col s6">
-                <input disabled type="date" class="datepicker" id="date" value="">
-                <label for="date" class="">{{ dateParser date }}</label>
+                <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{quantity }}">
+                  <label class="active" for="icon_quantity"># People </label>
+                </input>
               </div>
+
+              {{#if ../isAdmin}}
+                <div class="input-field col s6">
+                  <input {{disableIfAccepted status }} type="number" class="validate" id="tableNumber" value="" data-reservation-id="{{id}}">
+                  <label class="active" for="tableNumber" data-reservation-id="{{id}}">Table</label>
+                </div>
+              {{/if}}
+
+              <div class="input-field col s6">
+                <input disabled type="date" class="datepicker" id="date" value="{{dateParser date}}">
+                <label class="active" for="date">Date</label>
+              </div>
+
 
               <div class="row">
                 <div class="input-field col s12">
                 <i class="material-icons prefix">message</i>
-                  <textarea disabeld id="comment-textarea" class="materialize-textarea" value=""></textarea>
-                  <label for="comment-textarea">{{ comment }}</label>
+                  <textarea disabled id="comment-textarea" class="materialize-textarea" value=""></textarea>
+                  <label for="comment-textarea">Comment</label>
                 </div>
               </div>
 
               {{#if ../isAdmin}}
-                  <div class="btn waves-effect waves-light accept-btn" type="submit" name="action" data-reservation-id="{{ id }}">Accept
+                  <div class="btn waves-effect waves-light {{reservationStatusHelper status}}" type="submit" name="action" data-reservation-id="{{ id }}">{{reservationStatusTextHelper status}}
                     <i class="material-icons right">send</i>
                   </div>
               {{ else }}
@@ -320,7 +334,7 @@
          </div>
 
          <div class="input-field col s6">
-         <i class="material-icons prefix">supervisor_account</i>
+           <i class="material-icons prefix">supervisor_account</i>
            <input type="number" class="validate" id="quantity" min="1" max="15">
              <label for="quantity"># People</label>
            </input>

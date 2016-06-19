@@ -4,6 +4,7 @@ var Map = function (el) {
 	 var ratioX, ratioY;
 	 const planeX = 100, planeY = 100;
 
+
 	 t = [
 	 	{
 	 		C: "M",
@@ -53,11 +54,18 @@ var Map = function (el) {
 	 	 // canvas.setViewBox(0,0, $(el).width(), $(el).height())
 	 } 
 
-	 this.addCircle = function (x, y, status) {
+	 this.addCircle = function (x, y, status, text) {
+	 	var red = "#ee6e73", blue = "#0000cc", green = "#2bbbad", black = "#000", white = "#fff"
 	 	 var circle = canvas.circle(x, y, 10);
-	 	 const color = status ? "#f00" : "#fff" ;
-	 	 circle.attr("fill", color);
+	 	 var text = canvas.text(x, y, text);
+	 	 const color = status == 0 ? green : status == 1 ? red : blue ;
+	 	 // const textColor = status == 2 ? white : black ;
+	 	 // circle.attr("fill", color);
+	 	 circle.attr("stroke", color);
+	 	 circle.attr("stroke-width", 3);
 	 	 circle.attr("class", "table");
+	 	 // text.attr("fill", textColor);
+
 	 }
 
 	 this.addLines = function (commands) {
@@ -66,7 +74,16 @@ var Map = function (el) {
 
 	 this.createFromList = function (list) {
 	 	 for (var i = list.length - 1; i >= 0; i--) {
-	 	 	this.addCircle(list[i].x/ratioX, list[i].y/ratioY, list[i].status); 
+	 	 	if (list[i].services.length == 0) {
+	 	 		var status = 0;
+	 	 	} else if (list[i].services[0].status == "incomplete") {
+	 	 		var status = 1;	
+	 	 	} else if (list[i].services[0].status == "seated") {
+	 	 		var status = 2;
+	 	 	} else if (list[i].services[0].status == "complete") {
+	 	 		var status = 0;
+	 	 	}
+	 	 	this.addCircle(list[i].x/ratioX, list[i].y/ratioY, status, list[i].id); 
 	 	 };
 	 }
 

@@ -56,6 +56,7 @@ function PageSlider(container) {
         currentPage.attr("class", "page transition " + (from === "left" ? "right" : "left"));
         currentPage = page;
         $('.page.transition.right').remove(); //work-around for bug causing previous pages to be visible
+        $('.page.transition.left').remove(); //work-around for bug causing previous pages to be visible
     }
 
 }

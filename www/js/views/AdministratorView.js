@@ -55,7 +55,6 @@
 			const acceptedReservations = response.reservations.filter(function (e) {
 				 return e.status === "accepted" || e.status === "seated";
 			});
-			debugger
 	        pendingReservationsListView.setReservations(pendingReservations);
 	        acceptedReservationsListView.setReservations(acceptedReservations);
 	    });
@@ -164,6 +163,17 @@
 		})
 	}
 
+	this.cancelReservation = function (event) {
+		const reservationId = $(event.target).attr('data-reservation-id');
+		const tableId = $('#tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val();
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+	 	debugger
+		communication.cancelReservation(reservationId, tableId).done(function () {
+			 updateView();
+			 events.emit('toastRequest', "Reservation Canceled!"); 
+		})
+	}
+
 	this.saveTableNumber = function (event) {
 		const tableId = $(event.target).attr('data-table-number');
 		const reservationId = $(event.target).attr('data-reservation-id');
@@ -194,6 +204,7 @@
 	this.setEventHandlers = function () {
 		this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
 	 	this.$el.on('click', '.tab', function () {
+	 		debugger
 	 	 	$('.tab-data').addClass('hidden')
 	 	 	$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
 	 	})
@@ -202,6 +213,7 @@
 		const destroyService =  $.proxy(this.destroyService, this)
 		const displayTablesModal =  $.proxy(this.displayTablesModal, this)
 		const acceptReservation =  $.proxy(this.acceptReservation, this)
+		const cancelReservation =  $.proxy(this.cancelReservation, this)
 		const handleServiceAction =  $.proxy(this.handleServiceAction, this)
 		const submitAmmount =  $.proxy(this.submitAmmount, this)
 		const toggleReservationVisibility =  $.proxy(this.toggleReservationVisibility, this)
@@ -212,6 +224,9 @@
 	 	});
 	 	this.$el.on('click', '.delete-btn', function (e) {
 	 		 destroyService(e);
+	 	});
+	 	this.$el.on('click', '.delete-res-btn', function (e) {
+	 		 cancelReservation(e);
 	 	});
 	 	this.$el.on('click', '.accept-btn', function (e) {
 	 		 acceptReservation(e);

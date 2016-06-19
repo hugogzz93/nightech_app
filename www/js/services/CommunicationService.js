@@ -129,6 +129,21 @@ const Communication = function () {
 	 	});
 	}
 
+	this.cancelReservation = function (reservationId, table_number) {
+		return $.ajax({
+	 	 	url: url + '/reservations/' + reservationId,
+	 	 	type: 'PATCH',
+	 	 	dataType: 'json',
+	 	 	data: {id: reservationId, table_number: table_number, reservation: { status: "pending" }},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	}).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	});
+	}
+
 	this.updateReservation = function (reservationId, reservationJson) {
 		return $.ajax({
 	 	 	url: url + '/reservations/' + reservationId,

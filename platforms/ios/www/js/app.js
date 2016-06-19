@@ -21,7 +21,9 @@
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
-    const mainUrl = "http://api.localhost:3000";
+    // const mainUrl = "http://localhost:3000";
+    const mainUrl = "http://boiling-mountain-93593.herokuapp.com"
+
 
 
 
@@ -284,6 +286,34 @@
          if (service.status === "complete") {
             return ps["serviceCollapsible"](service);
         };
+    })
+
+    Handlebars.registerHelper('reservationStatusHelper', function (status) {
+        var returnText = "";
+        if(status === "pending") {
+            returnText = new Handlebars.SafeString("accept-btn");
+        } else {
+            returnText = new Handlebars.SafeString("red delete-res-btn");
+        }
+        return returnText;
+    })
+
+    Handlebars.registerHelper('reservationStatusTextHelper', function (status) {
+        var returnText = "";
+        if(status === "pending") {
+            returnText = new Handlebars.SafeString("Accept");
+        } else {
+            returnText = new Handlebars.SafeString("Cancel");
+        }
+        return returnText;
+    })
+
+    Handlebars.registerHelper('disableIfAccepted', function (status) {
+        var returnText = "";
+        if(status === "accepted") {
+            returnText = new Handlebars.SafeString("disabled");
+        }
+        return returnText;
     })
 
     Handlebars.registerHelper('servicesCounter', function (services) {

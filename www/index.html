@@ -106,7 +106,7 @@
     {{#each reservations}}
     <li {{showPending status}}>
       <div class="collapsible-header">
-        {{ client }}
+        {{ client }} <span class="grayText">{{ coordinator_name }} </span>
         {{reservationIcon status}}
         {{#if ../isAdmin}}  {{visibilityIcon this}} {{else}} {{ tableNumberHelper table_number }} {{/if}}
       </div>
@@ -119,6 +119,12 @@
                 <i class="material-icons prefix">account_circle</i>
                 <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }} ">
                 <label class="active" for="icon_prefix">Client</label>
+              </div>
+
+              <div class="input-field col s12">
+                <i class="material-icons prefix">perm_identity</i>
+                <input disabled id="icon_prefix" type="text" class="validate" value="{{ coordinator_name }} ">
+                <label class="active" for="icon_prefix">Coordinator</label>
               </div>
 
               <div class="input-field col s12">
@@ -135,7 +141,7 @@
 
               {{#if ../isAdmin}}
                 <div class="input-field col s6">
-                  <input type="number" class="validate" id="tableNumber" value="" data-reservation-id="{{id}}">
+                  <input {{disableIfAccepted status }} type="number" class="validate" id="tableNumber" value="" data-reservation-id="{{id}}">
                   <label class="active" for="tableNumber" data-reservation-id="{{id}}">Table</label>
                 </div>
               {{/if}}
@@ -155,7 +161,7 @@
               </div>
 
               {{#if ../isAdmin}}
-                  <div class="btn waves-effect waves-light accept-btn" type="submit" name="action" data-reservation-id="{{ id }}">Accept
+                  <div class="btn waves-effect waves-light {{reservationStatusHelper status}}" type="submit" name="action" data-reservation-id="{{ id }}">{{reservationStatusTextHelper status}}
                     <i class="material-icons right">send</i>
                   </div>
               {{ else }}
