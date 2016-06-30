@@ -69,7 +69,8 @@ const Communication = function () {
 	 	 	 events.emit("logInSuccess", response.user);
 	 	 	 logIn(response.user);
 	 	 }).fail(function (response) {
-	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 		alert(JSON.parse(response.responseText).errors);
+	 		$(".progress").addClass('hidden');
 	 	 });
 	}
 

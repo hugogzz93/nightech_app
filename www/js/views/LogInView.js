@@ -14,10 +14,12 @@ var LogInView = function () {
 	 }
 
 	 this.logIn = function () {
+	 	const logInBar = $(".progress", this.$el);
 	 	const email = this.$el.find('#email-field').val();
 	 	const password = this.$el.find('#password-field').val();
 
 	 	events.emit("logInAttempt", { email: email, password: password });
+	 	logInBar.removeClass("hidden");
 	 }
 
 

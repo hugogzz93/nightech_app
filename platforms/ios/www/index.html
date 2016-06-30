@@ -16,6 +16,10 @@
 <!-- frederique.kautzer@thiel.biz -->
 
 <script id="log-in-tpl" type="text/template">
+  <div class="progress hidden">
+    <div class="indeterminate"></div>
+  </div>
+
   <div class="row valign-wrapper">
     <div class="col s12 valign">
       <div class="row">
@@ -45,6 +49,9 @@
       <a href="reservations" class="brand-logo">Reservations</a>
         <a href="#representatives"><i class="material-icons right">supervisor_account</i></a>
     </div>
+    <div class="progress">
+      <div class="indeterminate"></div>
+    </div>
   </nav>
 
   <input type="date" class="datepicker">
@@ -66,6 +73,9 @@
       {{#if isSuper}}
           <a href="#administrator/super"><i class="material-icons left">view_module</i></a>
       {{/if}}
+    </div>
+    <div class="progress">
+      <div class="indeterminate"></div>
     </div>
   </nav>
 
@@ -187,9 +197,9 @@
         <a href="#reservations/create" class="breadcrumb">Create Reservation</a>
       </div>
     </div>
-    <div class="progress hidden">
-      <div class="indeterminate"></div>
-    </div>
+      <div class="progress hidden">
+        <div class="indeterminate"></div>
+      </div>
   </nav>
 
  <div class="row">
@@ -376,6 +386,9 @@
         <a href="#administrator" class="breadcrumb">Reservations</a>
         <a href="#administrator/super" class="breadcrumb">Users</a>
       </div>
+    </div>
+    <div class="progress hidden">
+      <div class="indeterminate"></div>
     </div>
   </nav>
 

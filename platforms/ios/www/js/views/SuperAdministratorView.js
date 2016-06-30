@@ -21,6 +21,9 @@ var SuperAdministratorView = function (communication) {
 	 }
 
 	 this.updateUsers = function () {
+	 	const progressBar = $("progress", this.$el);
+
+	 	progressBar.removeClass('hidden');
 	 	 communication.getUsers().done(function (response) {
 	 	 	 var administrators = [];
 			 var coordinators = [];
@@ -35,6 +38,7 @@ var SuperAdministratorView = function (communication) {
  	 		 
  	 		 administratorsListView.setUsers(administrators);
 		 	 coordinatorsListView.setUsers(coordinators);	
+		 	 progressBar.addClass('hidden');
 	 	 })
 	 }
 

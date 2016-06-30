@@ -31,11 +31,16 @@ var RepresentativesView = function (communication) {
 	}
 
 	this.createRepresentative = function () {
+		const progressBar = $(".progress", this.$el);
 		const representativeName = $('#representative-name').val();
 		const repJson = { name: representativeName };
 		const updateRepresentatives = $.proxy(this.updateRepresentatives, this);
 
-		communication.createRepresentative(repJson).done(updateRepresentatives());
+		progressBar.removeClass('hidden');
+		communication.createRepresentative(repJson).done(function () {
+			 updateRepresentatives()
+			 progressBar.addClass('hidden');
+		});
 	}
 
 	this.deleteRepresentative = function (e) {
