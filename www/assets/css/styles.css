@@ -1,11 +1,4 @@
-#datepicker-container {
-  position: fixed;
-  z-index: 10000;
-}
 
-div.ui-datepicker{
- font-size: 7px;
-}
 
 .grayText { 
 	color: #a6a6a6;
@@ -89,4 +82,13 @@ ul.collection {
 
 .card-content:not(:first-child) {
     border-top: 1px solid rgba(160,160,160,0.2);
+}
+
+.picker {
+  position: fixed ;
+  z-index: 10000 ;
+}
+
+div.ui-datepicker{
+ font-size: 7px;
 }

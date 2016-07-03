@@ -190,6 +190,19 @@
 		})
 	}
 
+	this.rejectReservation = function (e) {
+		const id = $(e.target).attr('data-reservation-id');
+		const progressBar = $(".progress", this.$el);
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+
+		progressBar.removeClass('hidden');
+		communication.rejectReservation(id).done(function (response) {
+			progressBar.addClass('hidden');
+			updateView();
+			events.emit('toastRequest', "Reservation Rejected"); 
+		})
+	}
+
 	this.saveTableNumber = function (event) {
 		const tableId = $(event.target).attr('data-table-number');
 		const reservationId = $(event.target).attr('data-reservation-id');
@@ -233,6 +246,7 @@
 		const submitAmmount =  $.proxy(this.submitAmmount, this)
 		const toggleReservationVisibility =  $.proxy(this.toggleReservationVisibility, this)
 		const saveTableNumber = $.proxy(this.saveTableNumber, this);
+		const rejectReservation = $.proxy(this.rejectReservation, this);
 
 	 	this.$el.on('click', '.service-submit', function (e) {
  		 	submitService(e);
@@ -240,7 +254,10 @@
 	 	this.$el.on('click', '.delete-btn', function (e) {
 	 		destroyService(e);
 	 	});
+	 	this.$el.on('click', '.reject-res-btn', rejectReservation);
+
 	 	this.$el.on('click', '.delete-res-btn', function (e) {
+	 		debugger
 	 		cancelReservation(e);
 	 	});
 	 	this.$el.on('click', '.accept-btn', function (e) {
@@ -263,6 +280,7 @@
 	 	this.$el.on('click', '.visibility-btn', function (e) {
 	 		toggleReservationVisibility(e);
 	 	});
+
 	}
 	this.initialize();
 }

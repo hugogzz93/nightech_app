@@ -34,7 +34,7 @@
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	const $tabs = this.$el.find('ul.tabs');
 
-	 	$datepicker.pickadate({container: '.page.transition.center'});
+	 	$datepicker.pickadate({container: 'body'});
 		$datepicker.val( $datepicker.val() === "" ? new Date().toDateString() : $datepicker.val());
 	 	$tabs.tabs();
 
@@ -241,6 +241,7 @@
 	 		destroyService(e);
 	 	});
 	 	this.$el.on('click', '.delete-res-btn', function (e) {
+	 		debugger
 	 		cancelReservation(e);
 	 	});
 	 	this.$el.on('click', '.accept-btn', function (e) {

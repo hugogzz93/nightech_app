@@ -9,6 +9,7 @@ var ReservationsView = function (communication) {
  	 	 this.$el.on('click', '.add-rep-btn', function () {
 	 	 	 $(".progress", this.$el).removeClass("hidden");
 	 	 });
+	 	 this.$el.on('click', '.delete-res-btn', $.proxy(this.deleteReservation, this));
 	 	 this.findByDate(new Date());
 	 	 this.render();
 	 } 
@@ -34,6 +35,25 @@ var ReservationsView = function (communication) {
 		communication.getReservationsByDate(date).done(function(response) {
 	        reservationsListView.setReservations(response.reservations);
 	    });
+	}
+
+	this.deleteReservation = function (e) {
+		const id = $(e.target).attr('data-reservation-id');
+		const status = $(e.target).attr('data-reservation-status');
+		const updateViews = $.proxy(this.datePickerChange, this); 
+		const progressBar = $(".progress");
+
+		if (status === "pending") {
+			progressBar.removeClass("hidden");
+			communication.destroyReservation(id).done(function () {
+				updateViews();
+				progressBar.addClass("hidden");
+				events.emit('toastRequest', "Reservation Canceled"); 
+			})
+		} else {
+			alert("Contact your administrator to delete accepted reservations.");
+		}
+
 	}
 
 
