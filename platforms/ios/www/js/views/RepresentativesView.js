@@ -4,7 +4,7 @@ var RepresentativesView = function (communication) {
 	this.initialize = function () {
 	 	this.$el = $('<div/>') ;
 		listView = new RepresentativesListView();
-		this.$el.on('click', '.add-rep-btn', function () {
+		$('body').on('click', '.add-rep-btn', function () {
 			window.scrollTo(0) //else the modal will not be always viewable
 	 	 	$('#add-rep-modal').openModal(); 
 	 	});

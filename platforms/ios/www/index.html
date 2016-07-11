@@ -173,8 +173,13 @@
               </div>
 
               {{#if ../isAdmin}}
-                  <div class="btn waves-effect waves-light {{reservationStatusHelper status}}" type="submit" name="action" data-reservation-id="{{ id }}">{{reservationStatusTextHelper status}}
-                    <i class="material-icons right">send</i>
+                  <div class="row">
+                    <div class="btn waves-effect waves-light {{reservationStatusHelper status}}" type="submit" name="action" data-reservation-id="{{ id }}">{{reservationStatusTextHelper status}}
+                      <i class="material-icons right">send</i>
+                    </div>
+
+                    {{rejectButtonHelper this}}
+
                   </div>
               {{ else }}
                   <div class="delete-res-btn btn waves-effect waves-light red" type="submit" name="action" data-reservation-status="{{status}}" data-reservation-id="{{ id }}">Delete

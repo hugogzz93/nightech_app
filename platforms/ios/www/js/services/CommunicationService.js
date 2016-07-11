@@ -145,6 +145,11 @@ const Communication = function () {
 	 	});
 	}
 
+	this.rejectReservation = function (reservationId) {
+		const reservationJson = { status: "rejected" };
+		return this.updateReservation(reservationId, reservationJson);
+	}
+
 	this.updateReservation = function (reservationId, reservationJson) {
 		return $.ajax({
 	 	 	url: url + '/reservations/' + reservationId,

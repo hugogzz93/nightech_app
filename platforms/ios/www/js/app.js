@@ -21,8 +21,8 @@
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
-    // const mainUrl = "http://localhost:3000";
-    const mainUrl = "http://boiling-mountain-93593.herokuapp.com"
+    const mainUrl = "http://localhost:3000";
+    // const mainUrl = "http://boiling-mountain-93593.herokuapp.com"
 
 
 
@@ -178,6 +178,16 @@
         if (tableNumber) {
             returnText = new Handlebars.SafeString(
                 '<div class="table_number"> #' + tableNumber + '</div>'
+            );
+        };
+        return returnText;
+    })
+
+    Handlebars.registerHelper('rejectButtonHelper', function (reservation) {
+        var returnText = "";
+        if (reservation.status === "pending") {
+            returnText = new Handlebars.SafeString(
+                '<div class="reject-res-btn btn waves-effect waves-light red" type="submit" name="action" data-reservation-id="' + reservation.id + '">Reject <i class="material-icons right">no_sim</i> </div> '
             );
         };
         return returnText;

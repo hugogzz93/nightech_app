@@ -11,6 +11,11 @@ function PageSlider(container) {
 
     // Use this function if you want PageSlider to automatically determine the sliding direction based on the state history
     this.slidePage = function(page) {
+        debugger    
+        // >>>>>To fix fixed positioning issue
+        var fixedActBtn = $('.fixed-action-btn');
+        fixedActBtn.remove();
+        //<<<<<<
 
         var l = stateHistory.length,
             state = window.location.hash;
@@ -27,6 +32,11 @@ function PageSlider(container) {
             stateHistory.push(state);
             this.slidePageFrom(page, 'right');
         }
+
+        //>>> To fix fixed positioning issue
+        fixedActBtn = $('.fixed-action-btn');
+        fixedActBtn.appendTo($('body'));
+        //<<<
 
     }
 
