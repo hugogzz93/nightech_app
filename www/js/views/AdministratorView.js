@@ -43,7 +43,9 @@
 
 	this.datePickerChange = function () {
 		const date = new Date(this.$el.find('.datepicker').val());
+	 	const $tabs = this.$el.find('ul.tabs');
 		this.findByDate(date);
+		$tabs.tabs();
 	}
 
 	this.findByDate = function(date) {
@@ -167,7 +169,7 @@
 
 	this.acceptReservation = function (event) {
 		const reservationId = $(event.target).attr('data-reservation-id');
-		const tableId = $('#tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val();
+		const tableId = $('.tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val();
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 	 	progressBar.removeClass('hidden');
 
@@ -206,7 +208,8 @@
 	this.saveTableNumber = function (event) {
 		const tableId = $(event.target).attr('data-table-number');
 		const reservationId = $(event.target).attr('data-reservation-id');
-		$('#tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val(tableId);
+		debugger
+		$('.tableNumber[data-reservation-id=' + reservationId + ']').val(tableId);
 		$('#chooseTableModal').closeModal();
 		$('label[for="tableNumber"][data-reservation-id="' + reservationId + '"]').addClass('active')
 	}
@@ -247,6 +250,8 @@
 		const toggleReservationVisibility =  $.proxy(this.toggleReservationVisibility, this)
 		const saveTableNumber = $.proxy(this.saveTableNumber, this);
 		const rejectReservation = $.proxy(this.rejectReservation, this);
+	 	const datePickerChange = $.proxy(this.datePickerChange, this);
+
 
 	 	this.$el.on('click', '.service-submit', function (e) {
  		 	submitService(e);
@@ -257,15 +262,15 @@
 	 	this.$el.on('click', '.reject-res-btn', rejectReservation);
 
 	 	this.$el.on('click', '.delete-res-btn', function (e) {
-	 		debugger
 	 		cancelReservation(e);
 	 	});
 	 	this.$el.on('click', '.accept-btn', function (e) {
 	 		acceptReservation(e);
 	 	});
 	 	this.$el.on('click', '#tableNumber.validate', function (e) {
-	 		$('#tableNumber').blur();
+	 		$(e.target).blur();
 	 		displayTablesModal(e);
+	 		
 	 	});
 	 	this.$el.on('click', '.modal-content .table-option.blue', function (e) {
 	 		saveTableNumber(e);
@@ -280,6 +285,16 @@
 	 	this.$el.on('click', '.visibility-btn', function (e) {
 	 		toggleReservationVisibility(e);
 	 	});
+
+	 // 	this.$el.pullToRefresh()
+		// .on("move.pulltorefresh", function (evt, percentage){
+		//   if (percentage>20) {
+		//   	const progressBar = $(".progress");
+		//   	progressBar.removeClass("hidden");
+		//   	datePickerChange();
+		//   	progressBar.addClass("hidden");
+		//   }
+		// })
 
 	}
 	this.initialize();

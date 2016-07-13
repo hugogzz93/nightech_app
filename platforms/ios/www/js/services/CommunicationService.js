@@ -51,7 +51,6 @@ const Communication = function () {
 	 	 	data: {id: auth_token},
 	 	 }).done(function (response) {
 			events.emit("logOutSuccess");
-			this.clearSessionTokens();
 	 	 }).fail(function (response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 	 	 });
@@ -94,6 +93,7 @@ const Communication = function () {
 	 	  })
 	 	  .fail(function() {
 	 		alert("Connection Error 001");
+	 		events.emit("LogOut");
 	 	  });
 	 	   
 	 }
@@ -196,6 +196,7 @@ const Communication = function () {
 	 	  })
 	 	  .fail(function() {
 	 		alert("Connection Error 003");
+	 		events.emit("LogOut");
 	 	  });
 	 }
 
@@ -289,6 +290,7 @@ const Communication = function () {
 		})
 		 .fail(function() {
 	 		alert("Connection Error 002");
+	 		events.emit("LogOut");
 		});	  
 	}
 
@@ -338,6 +340,7 @@ const Communication = function () {
 		 })
 		 .fail(function() {
 	 		alert("Connection Error 005");
+	 		events.emit("LogOut");
 		 });
 	}
 
@@ -355,6 +358,7 @@ const Communication = function () {
 		 })
 		 .fail(function() {
 	 		alert("Connection Error 006");
+	 		events.emit("LogOut");
 		 });
 	}
 
@@ -375,6 +379,23 @@ const Communication = function () {
 		 });	 
 	}
 
+	this.updateUser = function (userId, userJson) {
+		  return $.ajax({
+		  	url: url + '/users/' + userId,
+		  	type: 'PATCH',
+		  	dataType: 'json',
+		  	data: {user: userJson},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		  })
+		  .fail(function(response) {
+		  	$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+		  })
+		  
+	}
+
 	this.deleteUser = function (userId) {
 		 return $.ajax({
 		 	url: url + '/users/' + userId,
@@ -389,7 +410,7 @@ const Communication = function () {
 		 .done(function (response) {
 		 	 events.emit('userDeleted', null);
 		 })
-		 .fail(function() {
+		 .fail(function(response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 		 });
 	}

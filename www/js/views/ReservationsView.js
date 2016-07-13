@@ -3,15 +3,23 @@ var ReservationsView = function (communication) {
 	var reservationsListView
 	 
 	 this.initialize = function () {
-	 	 this.$el = $('<div/>') ;
-         reservationsListView = new ReservationsListView(false);
-	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
- 	 	 this.$el.on('click', '.add-rep-btn', function () {
-	 	 	 $(".progress", this.$el).removeClass("hidden");
-	 	 });
-	 	 this.$el.on('click', '.delete-res-btn', $.proxy(this.deleteReservation, this));
-	 	 this.findByDate(new Date());
-	 	 this.render();
+	 	this.$el = $('<div/>') ;
+        reservationsListView = new ReservationsListView(false);
+	 	const datePickerChange = $.proxy(this.datePickerChange, this);
+	 	this.$el.on('change', '.datepicker', datePickerChange);
+ 	 	this.$el.on('click', '.add-rep-btn', function () { $(".progress", this.$el).removeClass("hidden"); });
+	 	this.$el.on('click', '.delete-res-btn', $.proxy(this.deleteReservation, this));
+		// this.$el.pullToRefresh()
+		// .on("move.pulltorefresh", function (evt, percentage){
+		//   if (percentage>20) {
+		//   	const progressBar = $(".progress");
+		//   	progressBar.removeClass("hidden");
+		//   	datePickerChange();
+		//   	progressBar.addClass("hidden");
+		//   }
+		// })
+	 	this.findByDate(new Date());
+	 	this.render();
 	 } 
 
 	this.render = function () {

@@ -1,4 +1,6 @@
-
+input {
+	color:black !important;
+}
 
 .grayText { 
 	color: #a6a6a6;

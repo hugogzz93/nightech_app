@@ -14,6 +14,7 @@
     UserListView.prototype.template = Handlebars.compile($('#user-list-tpl').html());
     UserView.prototype.template = Handlebars.compile($('#show-user-tpl').html());
     CreateUserView.prototype.template = Handlebars.compile($('#create-user-tpl').html());
+    UpdateUserView.prototype.template = Handlebars.compile($('#update-user-tpl').html());
     RepresentativesListView.prototype.template = Handlebars.compile($('#representatives-list-view').html());
     RepresentativesView.prototype.template = Handlebars.compile($('#representatives-view').html());
     MapView.prototype.template = Handlebars.compile($('#map-view').html());
@@ -21,8 +22,8 @@
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
-    const mainUrl = "http://localhost:3000";
-    // const mainUrl = "http://boiling-mountain-93593.herokuapp.com"
+    // const mainUrl = "http://localhost:3000";
+    const mainUrl = "http://boiling-mountain-93593.herokuapp.com"
 
 
 
@@ -68,6 +69,12 @@
 
         router.addRoute('administrator/super/users/new', function () {
             slider.slidePage(new CreateUserView(communication).render().$el);
+        })
+
+        router.addRoute('administrator/super/users/:id/edit', function (id) {
+            communication.getUserById(id).done(function (response) {
+                slider.slidePage(new UpdateUserView(communication, response.user).render().$el);
+            })
         })
 
         // user index
@@ -117,6 +124,7 @@
     events.on('logOutSuccess', function (user) {
         router.load('');
         events.emit('toastRequest', 'Signed Out');
+        communication.clearSessionTokens();
     })
 
     events.on('reservationCreated', function () {
@@ -137,6 +145,10 @@
     events.on('toastRequest', function (message) {
         var $toastContent = $('<span>' + message + '</span>');
         Materialize.toast($toastContent, 2500);
+    })
+
+    events.on('LogOut', function () {
+         communication.terminateSession(); 
     })
 
     /* ---------------------------------- Local Functions ---------------------------------- */

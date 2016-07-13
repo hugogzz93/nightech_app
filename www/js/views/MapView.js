@@ -14,7 +14,6 @@ var MapView = function () {
 
 	this.render = function () {
 		this.$el.html(this.template());
-		debugger
 		const map = $('.mapCanvas', this.$el)
 		var canvas = new Map(map[0]);
 		canvas.createFromList(tables);

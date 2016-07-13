@@ -5,12 +5,23 @@ var BigMapView = function (communication) {
 	this.initialize = function () {
 	  	this.$el = $('<div/>');
 	  	mapView = new MapView();
+	 	const datePickerChange = $.proxy(this.datePickerChange, this);
 
 		this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
  	 	this.$el.on('click', '.tab', function () {
  	 		$('.tab-data').addClass('hidden')
  	 		$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
  	 	})
+ 	//  	this.$el.pullToRefresh()
+		// .on("move.pulltorefresh", function (evt, percentage){
+		//   if (percentage>20) {
+		//   	const progressBar = $(".progress");
+		//   	progressBar.removeClass("hidden");
+		//   	datePickerChange();
+		//   	progressBar.addClass("hidden");
+		//   }
+		// })
+ 	 	
  	 	
 		this.findByDate(new Date());
 	  	this.render();

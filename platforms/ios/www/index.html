@@ -115,7 +115,7 @@
   <ul class="collapsible popout" data-collapsible="accordion">
     {{#each reservations}}
     <li {{showPending status}}>
-      <div class="collapsible-header">
+      <div class="collapsible-header truncate">
         {{ client }} <span class="grayText">{{ coordinator_name }} </span>
         {{reservationIcon status}}
         {{#if ../isAdmin}}  {{visibilityIcon this}} {{else}} {{ tableNumberHelper table_number }} {{/if}}
@@ -151,7 +151,7 @@
 
               {{#if ../isAdmin}}
                 <div class="input-field col s6">
-                  <input {{disableIfAccepted status }} type="number" class="validate" id="tableNumber" value="" data-reservation-id="{{id}}">
+                  <input {{disableIfAccepted status }} type="number" class="validate tableNumber" id="tableNumber" value="" data-reservation-id="{{id}}">
                   <label class="active" for="tableNumber" data-reservation-id="{{id}}">Table</label>
                 </div>
               {{/if}}
@@ -289,7 +289,7 @@
 
 <script id="service-collapsible-li-tpl" type="text/template">
   <li>
-     <div class="collapsible-header {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">{{ table_number }}  {{ client }}{{serviceIcon this}}</div>
+     <div class="collapsible-header truncate {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">{{ table_number }}  {{ client }}{{serviceIcon this}}</div>
      <div class="collapsible-body">
        <div class="row">
          <form class="col s12">
@@ -298,31 +298,31 @@
              <div class="input-field col s12">
                <i class="material-icons prefix">account_circle</i>
                <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
-               <label for="icon_prefix">First Name</label>
+               <label class="active" for="icon_prefix">First Name</label>
              </div>
 
              <div class="input-field col s12">
                <i class="material-icons prefix">person_pin</i>
                <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
-               <label for="icon_rp">Representante</label>
+               <label class="active" for="icon_rp">Representante</label>
              </div>
 
              <div class="input-field col s4 offset-s2">
                <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
-                 <label for="icon_quantity"># People</label>
+                 <label class="active" for="icon_quantity"># People</label>
                </input>
              </div>
 
              <div class="input-field col s6">
                <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
-               <label for="date" class="">Date</label>
+               <label class="active" for="date" class="">Date</label>
              </div>
 
              <div class="row">
                <div class="input-field col s12">
                <i class="material-icons prefix">message</i>
                  <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
-                 <label for="comment-textarea">Comment</label>
+                 <label class="active" for="comment-textarea">Comment</label>
                </div>
              </div>
 
@@ -339,7 +339,7 @@
 
 <script id="create-service-li-tpl" type="text/template">
   <li>
-   <div class="collapsible-header collapse-btn"><i class="material-icons">library_add</i>{{ number }}</div>
+   <div class="collapsible-header truncate collapse-btn"><i class="material-icons">library_add</i>{{ number }}</div>
    <div class="collapsible-body">
      <form class="col s11">
        <div class="row">
@@ -439,7 +439,7 @@
       </div>
 
       <div class="card-action">
-        <a href="#administrator/super/users/{{ id }}">Edit</a>
+        <a href="#administrator/super/users/{{ id }}/edit">Edit</a>
         <a href="#administrator/super/users/{{ id }}" class="delete-btn", data-user-id="{{ id }}">Delete</a>
       </div>
     </div>
@@ -528,6 +528,84 @@
   </div>
 </script>
 
+<script id="update-user-tpl" type="text/template">
+
+        <nav>
+          <div class="nav-wrapper">
+            <div class="col s12">
+              <a href="#administrator/super" class="breadcrumb">Users</a>
+              <a href="#administrator/super/users/{{id}}/edit" class="breadcrumb">Edit</a>
+            </div>
+          </div>
+          <div class="progress hidden">
+            <div class="indeterminate"></div>
+          </div>
+        </nav>
+
+        <div class="wrapper">
+
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">General</span>
+
+              <div class="input-field col s12">
+                <i class="material-icons prefix">account_circle</i>
+                <input id="user-name" type="text" class="validate" value="{{name}}">
+                <label class="active" for="user-name">name</label>
+              </div>
+
+              <div class="input-field col s12">
+                <i class="material-icons prefix">email</i>
+                <input id="email" type="text" class="validate" value="{{email}}">
+                <label class="active" for="email">email</label>
+              </div>
+            </div>
+
+            <div class="card-action">
+              <a href="#administrator/super/users/{{id}}/edit" class="update-info-btn">Update Information</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">Password</span>
+
+              <div class="input-field col s12">
+                <i class="material-icons prefix">lock</i>
+                <input id="password" type="password" class="validate">
+                <label for="password">Password</label>
+              </div>
+
+              <div class="input-field col s12">
+                <i class="material-icons prefix">lock_outline</i>
+                <input id="password-confirmation" type="password" class="validate">
+                <label for="password-confirmation">Password Confirmation</label>
+              </div>
+            </div>
+
+            <div class="card-action">
+              <a href="#administrator/super/users/{{id}}/edit" class="update-password-btn">Update Password</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">Credentials</span>
+                <div class="row">
+                  <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
+                  <label class="active" for="administrator-radio">Administrator</label>
+                  <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
+                  <label class="active" for="coordinator-radio">Coordinator</label>
+                </div>
+
+            <div class="card-action">
+              <a href="#administrator/super/users/{{id}}/edit" class="update-cred-btn">Update Credentials</a>
+            </div>
+          </div>
+
+        </div>
+</script>
+
 <script id="representatives-list-view" type="text/template">
   <ul class="collection">
       {{#each this}}
@@ -582,6 +660,10 @@
         <a href="#administrator/map" class="breadcrumb">Map</a>
       </div>
     </div>
+    
+    <div class="progress hidden">
+      <div class="indeterminate"></div>
+    </div>
   </nav>
 
   <input type="date" class="datepicker">
@@ -598,6 +680,7 @@
 <script src="lib/router.js"></script>
 <script src="lib/raphael.js"></script>
 <script src="lib/jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
+<script src="lib/jquery.p2r.min.js"></script>
 <script src="js/services/Map.js"></script>
 <script src="js/services/events.js"></script>
 <script src="js/services/CommunicationService.js"></script>
@@ -614,6 +697,7 @@
 <script src="js/views/UserListView.js"></script>
 <script src="js/views/UserView.js"></script>
 <script src="js/views/CreateUserView.js"></script>
+<script src="js/views/UpdateUserView.js"></script>
 <script src="js/views/RepresentativesListView.js"></script>
 <script src="js/views/RepresentativesView.js"></script>
 <script src="js/app.js"></script>
