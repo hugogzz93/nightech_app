@@ -1,6 +1,7 @@
 var LogInView = function () {
 	 
 	 this.initialize = function () {
+	 	events.emit('LogOut');
 	 	this.$el = $('<div/>');
 	 	this.$email = this.$el.find('#email-field');
 	 	this.$password = this.$el.find('#password-field');

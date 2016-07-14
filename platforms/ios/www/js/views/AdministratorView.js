@@ -286,6 +286,15 @@
 	 		toggleReservationVisibility(e);
 	 	});
 
+	 	this.$el.on('click', '.button-collapse', function (e) {
+	 		if ($('.button-collapse').attr('data-triggered') == undefined) {
+		 		$('.button-collapse').attr('data-triggered', 1);
+				$('.button-collapse').sideNav();
+	 		};
+			$('.button-collapse').sideNav('show');
+	 	});
+
+
 	 // 	this.$el.pullToRefresh()
 		// .on("move.pulltorefresh", function (evt, percentage){
 		//   if (percentage>20) {

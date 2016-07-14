@@ -83,7 +83,7 @@ var Map = function (el) {
 	 	 	} else if (list[i].services[0].status == "complete") {
 	 	 		var status = 0;
 	 	 	}
-	 	 	this.addCircle(list[i].x/ratioX, list[i].y/ratioY, status, list[i].id); 
+	 	 	this.addCircle(list[i].x/ratioX, list[i].y/ratioY, status, list[i].number); 
 	 	 };
 	 }
 

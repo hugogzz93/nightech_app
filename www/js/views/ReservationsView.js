@@ -9,6 +9,13 @@ var ReservationsView = function (communication) {
 	 	this.$el.on('change', '.datepicker', datePickerChange);
  	 	this.$el.on('click', '.add-rep-btn', function () { $(".progress", this.$el).removeClass("hidden"); });
 	 	this.$el.on('click', '.delete-res-btn', $.proxy(this.deleteReservation, this));
+ 	 	this.$el.on('click', '.button-collapse', function (e) {
+ 	 		if ($('.button-collapse').attr('data-triggered') == undefined) {
+ 		 		$('.button-collapse').attr('data-triggered', 1);
+ 				$('.button-collapse').sideNav();
+ 	 		};
+ 			$('.button-collapse').sideNav('show');
+ 	 	});
 		// this.$el.pullToRefresh()
 		// .on("move.pulltorefresh", function (evt, percentage){
 		//   if (percentage>20) {
@@ -51,7 +58,7 @@ var ReservationsView = function (communication) {
 		const updateViews = $.proxy(this.datePickerChange, this); 
 		const progressBar = $(".progress");
 
-		if (status === "pending") {
+		if (status === "pending" ||  status === "rejected") {
 			progressBar.removeClass("hidden");
 			communication.destroyReservation(id).done(function () {
 				updateViews();

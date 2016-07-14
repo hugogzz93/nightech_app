@@ -51,7 +51,7 @@ var ReservationsView = function (communication) {
 		const updateViews = $.proxy(this.datePickerChange, this); 
 		const progressBar = $(".progress");
 
-		if (status === "pending") {
+		if (status === "pending" ||  status === "rejected") {
 			progressBar.removeClass("hidden");
 			communication.destroyReservation(id).done(function () {
 				updateViews();

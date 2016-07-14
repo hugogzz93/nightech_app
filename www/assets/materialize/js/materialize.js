@@ -2132,7 +2132,7 @@ $(document).ready(function(){
               overlay.css('opacity', 0).click( function(){
                 removeMenu();
               });
-              $('body').append(overlay);
+              $('.page.transition.center').append(overlay);
             }
 
             // Keep within boundaries
@@ -2262,7 +2262,7 @@ $(document).ready(function(){
                   } });
 
               });
-              $('body').append(overlay);
+              $('.page.transition.center').append(overlay);
               overlay.velocity({opacity: 1}, {duration: 300, queue: false, easing: 'easeOutQuad',
                 complete: function () {
                   menuOut = true;
