@@ -71,7 +71,7 @@
             slider.slidePage(new CreateUserView(communication).render().$el);
         })
 
-        router.addRoute('administrator/super/users/:id/edit', function (id) {
+        router.addRoute('users/:id/edit', function (id) {
             communication.getUserById(id).done(function (response) {
                 slider.slidePage(new UpdateUserView(communication, response.user).render().$el);
             })

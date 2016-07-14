@@ -45,10 +45,19 @@
 
 <script id="coordinator-menu-tpl" type="text/template">
   <nav>
+
+    <ul id="slide-out" class="side-nav">
+      <li><a href="#users/{{id}}/edit">Account</a></li>
+      <li><a href="#administrator/super/users/:id/">Finance</a></li>
+      <li><a href="#">Log Out</a></li>
+    </ul>
+
     <div class="nav-wrapper">
-      <a href="reservations" class="brand-logo">Reservations</a>
+        <a href="#reservations/" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
+        <a href="reservations" class="brand-logo">Reservations</a>
         <a href="#representatives"><i class="material-icons right">supervisor_account</i></a>
     </div>
+    
     <div class="progress hidden">
       <div class="indeterminate"></div>
     </div>
@@ -68,6 +77,7 @@
 <script id="administrator-menu-tpl" type="text/template">
   <nav>
     <ul id="slide-out" class="side-nav">
+      <li><a href="#users/{{id}}/edit">Account</a></li>
       {{#if isSuper}}
         <li><a href="#administrator/super">Users</a></li>
         <li><a href="#administrator/super">Finance</a></li>
@@ -444,7 +454,7 @@
       </div>
 
       <div class="card-action">
-        <a href="#administrator/super/users/{{ id }}/edit">Edit</a>
+        <a href="#users/{{ id }}/edit">Edit</a>
         <a href="#administrator/super/users/{{ id }}" class="delete-btn", data-user-id="{{ id }}">Delete</a>
       </div>
     </div>
@@ -538,8 +548,12 @@
         <nav>
           <div class="nav-wrapper">
             <div class="col s12">
-              <a href="#administrator/super" class="breadcrumb">Users</a>
-              <a href="#administrator/super/users/{{id}}/edit" class="breadcrumb">Edit</a>
+              {{#if isAdmin}}
+                <a href="#administrator" class="breadcrumb">Menu</a>
+              {{else}}
+                <a href="#reservations" class="breadcrumb">Reservations</a>
+              {{/if}}
+              <a href="#users/{{id}}/edit" class="breadcrumb">Edit</a>
             </div>
           </div>
           <div class="progress hidden">
@@ -567,7 +581,7 @@
             </div>
 
             <div class="card-action">
-              <a href="#administrator/super/users/{{id}}/edit" class="update-info-btn">Update Information</a>
+              <a href="#users/{{id}}/edit" class="update-info-btn">Update Information</a>
             </div>
           </div>
 
@@ -589,24 +603,27 @@
             </div>
 
             <div class="card-action">
-              <a href="#administrator/super/users/{{id}}/edit" class="update-password-btn">Update Password</a>
+              <a href="#users/{{id}}/edit" class="update-password-btn">Update Password</a>
             </div>
           </div>
 
-          <div class="card">
-            <div class="card-content">
-              <span class="card-title">Credentials</span>
-                <div class="row">
-                  <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
-                  <label class="active" for="administrator-radio">Administrator</label>
-                  <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
-                  <label class="active" for="coordinator-radio">Coordinator</label>
-                </div>
+          {{#if selfUpdate}}
+          {{else}}
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Credentials</span>
+                  <div class="row">
+                    <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
+                    <label class="active" for="administrator-radio">Administrator</label>
+                    <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
+                    <label class="active" for="coordinator-radio">Coordinator</label>
+                  </div>
 
-            <div class="card-action">
-              <a href="#administrator/super/users/{{id}}/edit" class="update-cred-btn">Update Credentials</a>
+              <div class="card-action">
+                <a href="#users/{{id}}/edit" class="update-cred-btn">Update Credentials</a>
+              </div>
             </div>
-          </div>
+          {{/if}}
 
         </div>
 </script>

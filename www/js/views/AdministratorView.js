@@ -21,7 +21,7 @@
 	} 
 
 	this.render = function () {
-		const credentials = {isSuper: communication.currentCredentials() === "super"};
+		const credentials = {isSuper: communication.currentCredentials() === "super", id: communication.getUserId()};
 
 	 	this.$el.html(this.template(credentials));
 	 	this.$el.append(tableChooseModalView.$el);

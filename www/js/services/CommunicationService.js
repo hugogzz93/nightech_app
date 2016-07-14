@@ -27,6 +27,9 @@ const Communication = function () {
  		 return user_id; 
  	}
 
+ 	this.currentCredentials = function () {
+		return credentials;
+	}
 
 /* ---------------------------------- Session Handling ---------------------------------- */
 
@@ -71,10 +74,6 @@ const Communication = function () {
 	 		alert(JSON.parse(response.responseText).errors);
 	 		$(".progress").addClass('hidden');
 	 	 });
-	}
-
-	this.currentCredentials = function () {
-		return credentials;
 	}
 
 /* ---------------------------------- Reservations Handling ---------------------------------- */

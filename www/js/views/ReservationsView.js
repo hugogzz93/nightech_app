@@ -30,7 +30,7 @@ var ReservationsView = function (communication) {
 	 } 
 
 	this.render = function () {
-	 	this.$el.html(this.template());
+	 	this.$el.html(this.template({id: communication.getUserId() }));
 	    $('.content', this.$el).html(reservationsListView.$el);
 	 	
 	 	const $datepicker = this.$el.find('.datepicker');
