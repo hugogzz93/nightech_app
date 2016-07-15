@@ -9,7 +9,13 @@ var CreateReservationView = function (communication, representatives) {
 	this.render = function () {
 	 	this.$el.html(this.template(representatives));
 	 	const $datepicker = this.$el.find('.datepicker');
-	 	$datepicker.pickadate({});
+	 	
+	 	const date = new Date();
+	 	date.setHours(0,0,0);
+	 	date.setDate(date.getDate() - 1);
+	 	$datepicker.pickadate({
+	 	  min: date
+	 	})
 	 	return this;
 	}
 

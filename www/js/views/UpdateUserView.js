@@ -3,7 +3,6 @@ var UpdateUserView = function (communication, user) {
 	 this.initialize = function () {
 	 	 user.isAdmin = communication.currentCredentials() == "administrator" ? true : communication.currentCredentials() == "super" ? true : false;
 	 	 user.selfUpdate = user.id == communication.getUserId();
-	 	 debugger
 	 	 this.$el = $('<div/>') ;
 	 	 this.$el.on('click', '.update-info-btn', $.proxy(this.updateInformation, this));
 	 	 this.$el.on('click', '.update-password-btn', $.proxy(this.updatePassword, this));
