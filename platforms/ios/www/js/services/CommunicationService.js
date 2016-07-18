@@ -179,7 +179,7 @@ const Communication = function () {
   	 	});
 	}
 
-/* ---------------------------------- Service Handling ---------------------------------- */
+/* -------------------\--------------- Service Handling ---------------------------------- */
 
 	 this.getServicesByDate = function (date) {
 	 	 const dateString = date.toISOString();
@@ -199,13 +199,31 @@ const Communication = function () {
 	 	  });
 	 }
 
-	this.getTablesByDate = function (date) {
+	this.getTablesByDate = function (date, scope) {
+		scope = scope || "day"
 		const dateString = date.toISOString();
 		 return $.ajax({
 	 	 	url: url + '/tables',
 	 	 	type: 'GET',
 	 	 	dataType: 'json',
-	 	 	data: {date : dateString},
+	 	 	data: {date : dateString, scope: scope},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
+	}
+
+	this.getServices = function (date, scope) {
+		scope = scope || "day"
+		const dateString = date.toISOString();
+		 return $.ajax({
+	 	 	url: url + '/services',
+	 	 	type: 'GET',
+	 	 	dataType: 'json',
+	 	 	data: {date : dateString, scope: scope},
 	 	 	beforeSend: function (request)
             {
                 request.setRequestHeader("Authorization", auth_token);

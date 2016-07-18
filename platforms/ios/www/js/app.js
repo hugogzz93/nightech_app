@@ -19,6 +19,7 @@
     RepresentativesView.prototype.template = Handlebars.compile($('#representatives-view').html());
     MapView.prototype.template = Handlebars.compile($('#map-view').html());
     BigMapView.prototype.template = Handlebars.compile($('#big-map-view').html());
+    ChartView.prototype.template = Handlebars.compile($('#chart-tpl').html());
     FinanceView.prototype.template = Handlebars.compile($('#finance-tpl').html());
     
     const communication = new Communication();
@@ -95,7 +96,7 @@
         })
 
         router.addRoute('administrator/super/finance', function () {
-             slider.slidePage(new FinanceView().render().$el) ;
+             slider.slidePage(new FinanceView(communication).render().$el) ;
         })
 
 

@@ -115,7 +115,7 @@
     <div class="modal-content">
       <h4>Set Amount</h4>
       <div class="input-field">
-        <input id="service-ammount" type="number">
+        <input id="service-ammount" type="text" pattern="[0-9]+(\.|\,)?[0-9]+" data-error="Not a number">
         <label for="service-ammount">Ammount: $</label>
       </div>
     </div>
@@ -243,13 +243,13 @@
         </div>
 
         <div class="input-field col s4 offset-s2">
-          <input type="number" class="validate" id="quantity" min="1" max="15">
+          <input type="number" class="validate" id="quantity" min="1" data-error="Numbers only">
             <label for="quantity"># People</label>
           </input>
         </div>
 
         <div class="input-field col s6">
-          <input type="date" class="datepicker" id="date">
+          <input type="date" class="datepicker" id="date" data-error="Not a date">
           <label for="date" class="">Date</label>
         </div>
 
@@ -306,46 +306,53 @@
      <div class="collapsible-header truncate {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">{{ table_number }}  {{ client }}{{serviceIcon this}}</div>
      <div class="collapsible-body">
        <div class="row">
-         <form class="col s12">
-           <div class="row">
+          <form class="col s12">
+            <div class="row">
 
-             <div class="input-field col s12">
-               <i class="material-icons prefix">account_circle</i>
-               <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
-               <label class="active" for="icon_prefix">First Name</label>
-             </div>
+              <div class="input-field col s12">
+                <i class="material-icons prefix">account_circle</i>
+                <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
+                <label class="active" for="icon_prefix">First Name</label>
+              </div>
 
-             <div class="input-field col s12">
-               <i class="material-icons prefix">person_pin</i>
-               <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
-               <label class="active" for="icon_rp">Representante</label>
-             </div>
+              <div class="input-field col s12">
+                <i class="material-icons prefix">perm_identity</i>
+                <input disabled id="icon_prefix" type="text" class="validate" value="{{ coordinator_name }} ">
+                <label class="active" for="icon_prefix">Coordinator</label>
+              </div>
 
-             <div class="input-field col s4 offset-s2">
-               <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
-                 <label class="active" for="icon_quantity"># People</label>
-               </input>
-             </div>
+              <div class="input-field col s12">
+                <i class="material-icons prefix">person_pin</i>
+                <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
+                <label class="active" for="icon_rp">Representante</label>
+              </div>
 
-             <div class="input-field col s6">
-               <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
-               <label class="active" for="date" class="">Date</label>
-             </div>
+              <div class="input-field col s4 offset-s2">
+                <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
+                <label class="active" for="icon_quantity"># People</label>
+                </input>
+              </div>
 
-             <div class="row">
-               <div class="input-field col s12">
-               <i class="material-icons prefix">message</i>
-                 <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
-                 <label class="active" for="comment-textarea">Comment</label>
-               </div>
-             </div>
+              <div class="input-field col s6">
+                <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
+                <label class="active" for="date" class="">Date</label>
+              </div>
 
-             <div class="btn waves-effect waves-light red delete-btn" type="submit" name="action" data-service-id="{{ id }}">Delete
-               <i class="material-icons right">send</i>
-             </div>
+              {{ammountDisplayHelper this}}
 
-           </div>
-         </form>
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">message</i>
+                  <textarea disabled id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
+                  <label class="active" for="comment-textarea">Comment</label>
+                </div>
+              </div>
+
+              <div class="btn waves-effect waves-light red delete-btn" type="submit" name="action" data-service-id="{{ id }}">Delete
+                <i class="material-icons right">send</i>
+              </div>
+          </div>
+        </form>
        </div>
      </div>
  </li>
@@ -366,7 +373,7 @@
 
          <div class="input-field col s6">
            <i class="material-icons prefix">supervisor_account</i>
-           <input type="number" class="validate" id="quantity" min="1" max="15">
+           <input type="number" class="validate" id="quantity" min="1" data-error="Numbers only">
              <label for="quantity"># People</label>
            </input>
          </div>
@@ -509,7 +516,7 @@
 
         <div class="input-field col s12">
           <i class="material-icons prefix">email</i>
-          <input id="email" type="text" class="validate">
+          <input id="email" type="email" class="validate" data-error="Not a valid Email">
           <label for="email">email</label>
         </div>
 
@@ -694,8 +701,20 @@
 </script>
 
 <script id="chart-tpl" type="text/template">
-      <canvas id="canvas"></canvas>
-  <button id="randomizeData">Randomize Data</button>
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Tables</span>
+          <canvas id="canvas"></canvas>  
+        </div>
+        <div class="card-action">
+          <a href="#">This is a link</a>
+          <a href="#">This is a link</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </script>
 
 <script id="finance-tpl" type="text/template">
@@ -719,8 +738,8 @@
   </nav>
 
   <input type="date" class="datepicker">
+  <div class="chartContent"></div>
 </script>
-
 
 
 

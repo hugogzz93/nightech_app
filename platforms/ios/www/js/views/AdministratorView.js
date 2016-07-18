@@ -154,6 +154,7 @@
 	this.submitAmmount = function (event) {
 		const field = $('#service-ammount', this.$el);
 		const ammount = field.val();
+		debugger
 		const serviceId = field.attr('data-service-id');
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 

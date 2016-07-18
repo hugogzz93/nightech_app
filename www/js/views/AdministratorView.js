@@ -153,7 +153,13 @@
 
 	this.submitAmmount = function (event) {
 		const field = $('#service-ammount', this.$el);
-		const ammount = field.val();
+		const ammount = field.val().replace(',', '');
+		debugger
+		if (field.val().match(/[^0-9,.]/g)) {
+			// if it is not a number
+			alert('Must be a number').
+			return
+		};
 		const serviceId = field.attr('data-service-id');
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 
@@ -163,6 +169,8 @@
 			 updateView(); 
 			 events.emit('toastRequest', "Ammount Updated!"); 
 		})
+
+		field.val('');
 	}
 
 	// ---------------------------Reservation functionality------------------------------
