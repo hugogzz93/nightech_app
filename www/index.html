@@ -701,20 +701,7 @@
 </script>
 
 <script id="chart-tpl" type="text/template">
-  <div class="row">
-    <div class="col s12 m6">
-      <div class="card">
-        <div class="card-content">
-          <span class="card-title">Tables</span>
-          <canvas id="canvas"></canvas>  
-        </div>
-        <div class="card-action">
-          <a href="#">This is a link</a>
-          <a href="#">This is a link</a>
-        </div>
-      </div>
-    </div>
-  </div>
+  <canvas id="canvas"/>
 </script>
 
 <script id="finance-tpl" type="text/template">
@@ -723,7 +710,6 @@
       <li><a href="#users/{{id}}/edit">Account</a></li>
       {{#if isSuper}}
         <li><a href="#administrator/super">Users</a></li>
-        <li><a href="#administrator/super/finance">Finance</a></li>
       {{/if}}
       <li><a href="#">Log Out</a></li>
     </ul>
@@ -736,10 +722,15 @@
       <div class="indeterminate"></div>
     </div>
   </nav>
-
   <input type="date" class="datepicker">
+
   <div class="chartContent"></div>
 </script>
+
+<div class="row">
+  <div class="chartContent"/>
+
+</div>
 
 
 

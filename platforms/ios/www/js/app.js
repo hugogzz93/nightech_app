@@ -211,6 +211,22 @@
         return returnText;
     })
 
+    Handlebars.registerHelper('ammountDisplayHelper', function (service) {
+        var returnText = "";
+        if (service.status === "complete") {
+            returnText = new Handlebars.SafeString(
+                '<div class="row">'
+                +' <div class="input-field col s10">' 
+                +'   <i class="material-icons prefix">shopping_basket</i>'
+                +'   <input disabled type="number" id="ammount"class="validate" value="'+ service.ammount + '">' 
+                +'   <label class="active" for="ammount">$</label>' 
+                +' </div>'
+                +'</div>'
+            );
+        };
+        return returnText;
+    })
+
     /**
      * Shows an icon indicating whether the coordinator 
      * can see the table number or not.

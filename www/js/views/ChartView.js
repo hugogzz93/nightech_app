@@ -1,45 +1,19 @@
 var ChartView = function (communication) {
 
+	var data, type, labels;
+	var active = false
+	const options = { 
+ 		         	responsive: true,
+ 		        	maintainAspectRatio: false
+ 		    	}
+
+
+
 	var randomScalingFactor = function() {
 	    return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
 	};
 	var randomColorFactor = function() {
 	    return Math.round(Math.random() * 255);
-	};
-
-	// var barChartData = {
-	//     labels: ["January", "February", "March", "April", "May", "June", "July"],
-	//     datasets: [{
-	//         type: 'bar',
-	//         label: 'Dataset 1',
-	//         backgroundColor: "rgba(151,187,205,0.5)",
-	//         data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
-	//         borderColor: 'white',
-	//         borderWidth: 2
-	//     }, {
-	//         type: 'line',
-	//         label: 'Dataset 2',
-	//         backgroundColor: "rgba(151,187,205,0.5)",
-	//         data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
-	//         borderColor: 'white',
-	//         borderWidth: 2
-	//     }, {
-	//         type: 'bar',
-	//         label: 'Dataset 3',
-	//         backgroundColor: "rgba(220,220,220,0.5)",
-	//         data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()]
-	//     }, ]
-
-	// };
-
-	var data = {
-		labels: [".", ".", "."],
-		datasets: [{
-			type: "bar",
-			data: [ 0,0,0 ],
-			borderWidth: 0,
-			backgroundColor: "rgba(151,187,205,0.5)"
-		}]
 	};
 
 	this.initialize = function () {
@@ -49,33 +23,62 @@ var ChartView = function (communication) {
 
 	this.render = function () {
 		 this.$el.html(this.template());
-		 this.showChart();
+		 if (active) {
+		 	this.showChart();
+		 };
 		 return this;
 	}
 
-	this.setData = function (data, labels, type) {
-		 data = {
-		 	labels: labels,
-		 	datasets: [{
-		 		type: type,
-		 		data: data,
-		 		borderWidth: 2
-		 	}]
-		 }
-		 this.render();
+	this.setData = function (data, labels, type, labelString) {
+		active = true;
+	 	chartData = {
+	 		labels: labels,
+	 		datasets: [{
+	 			type: type,
+	 			label: labelString,
+		        data: data,
+		        borderWidth: 1,
+		        borderColor: '#10d09f',
+		        pointBackgroundColor: '#10d09f'
+	 		}]
+	 	}
+		this.render();
 	}
 
 	this.showChart = function () {
-		debugger
-		 var ctx = this.$el.find('canvas')[0].getContext('2d')
- 		 window.myBar = new Chart(ctx, {
- 		     type: 'bar',
- 		     data: data,
- 		     options: {
- 		         responsive: true,
- 		         maintainAspectRatio: false
- 		     }
- 		 }); 
+		var ctx = this.$el.find('canvas')[0].getContext('2d')
+		var height = $('canvas', this.$el).height()
+		var max = Math.max(...chartData.datasets[0].data);
+		var gradient = ctx.createLinearGradient(0, 0, 0, height + height*.05);
+		gradient.addColorStop(0, 'rgba(208,251,241,1)');
+		gradient.addColorStop(1, 'rgba(208,251,241,0)');
+		chartData.datasets[0].backgroundColor = gradient;
+ 		window.myBar = new Chart(ctx, {
+ 		 	type: 'line',
+ 		 	data: chartData,
+ 		 	options: { 
+ 		         	responsive: true,
+ 		        	maintainAspectRatio: false,
+ 		        	scales: {
+        	            xAxes: [{
+                            display: false
+                        }],
+    	                yAxes: [{
+    	                	display: false,
+                            gridLines: {
+                                display:false
+                            },
+                            ticks: {
+                            	display: false,
+                            	max: max + max*.25
+                            }   
+                        }]
+	                },
+        	        legend: {
+	                    display: false
+	                }
+		    	}
+ 		}); 
 	}
 
 	this.initialize();
