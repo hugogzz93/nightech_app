@@ -1,6 +1,6 @@
 var FinanceView = function (communication) {
 
-	var data
+	var data = {}
 	var chartView
 	var scope = "month";
 	var credentials;
@@ -26,30 +26,14 @@ var FinanceView = function (communication) {
 	}
 
 	this.render = function () {
-		this.$el.html(this.template(credentials));
+		data.credentials = credentials;
+		this.$el.html(this.template(data));
 		$('.chartContent', this.$el).html(chartView.$el);
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	$datepicker.pickadate({container: 'body'});
 		$datepicker.val( $datepicker.val() === "" ? new Date().toDateString() : $datepicker.val());
 		return this; 
 	}
-
-	this.daysInScope = function (scope) {
-		 var days;
-		 if (scope === "month") {
-		 	var currentDate = new Date();
-		 	days = new Date(currentDate.getYear(), currentDate.getMonth() + 1, 0).getDate();
-		 } else if(scope === "week") {
-		 	days = 7;
-		 } else if(scope === "day") {
-		 	days = 1;
-		 }
-
-		 return days;
-
-	}
-
-
 
 	this.dataHandler = function (users, services, rps, tables) {
 		data = this.digestData(users, services, rps, tables);
@@ -62,6 +46,7 @@ var FinanceView = function (communication) {
 		};
 		activeTables = data.tables.map(function(e){return e.totalAmmount}).filter(function(a) {return a > 0})
 		chartView.setData(activeTables, labels, 'line', "$");
+		this.render();
 	}
 
 	//takes a list of services
@@ -126,7 +111,7 @@ var FinanceView = function (communication) {
 	  		if (service.ammount) {
 	  			var date = new Date(service.date)
 
-	  			data.totalAmmount += service.ammount;
+	  			data.totalAmmount += parseInt(service.ammount);
 	  			// add stats to administrator
 	  			data.administrators[index.users[service.administrator_id]].totalAmmount += parseInt(service.ammount);
 	  			data.administrators[index.users[service.administrator_id]].totalServices++;
@@ -143,7 +128,7 @@ var FinanceView = function (communication) {
 	  			data.tables[index.tables[service.table_id]].totalAmmount += parseInt(service.ammount);
 	  			data.tables[index.tables[service.table_id]].totalServices ++;
 	  			// add day stats
-	  			data.days[date.getDate()] += service.ammount
+	  			data.days[date.getDate()] += parseInt(service.ammount)
 
 
 	  		} else {
@@ -159,13 +144,6 @@ var FinanceView = function (communication) {
 		this.findByDate(date);
 	}
 
-	this.toggleLoading = function () {
-		const progressBar =  $('.progress', this.$el);
-		if (progressBar) {
-			progressBar.toggleClass('hidden');
-		};
-	}
-
 	this.findByDate = function(date, def) {
 		const dataHandler = $.proxy(this.dataHandler, this);
 		const digestUsers = $.proxy(this.digestUsers, this);
@@ -178,6 +156,28 @@ var FinanceView = function (communication) {
 		toggleLoading();
 		$.when(getUsers(), getServices(date, scope), getRps(), getTables(date)).done(dataHandler)
 		.always(toggleLoading);
+	}
+
+	// ----------------------------------- helpers -----------------------------------
+	this.daysInScope = function (scope) {
+		 var days;
+		 if (scope === "month") {
+		 	var currentDate = new Date();
+		 	days = new Date(currentDate.getYear(), currentDate.getMonth() + 1, 0).getDate();
+		 } else if(scope === "week") {
+		 	days = 7;
+		 } else if(scope === "day") {
+		 	days = 1;
+		 }
+
+		 return days;
+	}
+
+	this.toggleLoading = function () {
+		const progressBar =  $('.progress', this.$el);
+		if (progressBar) {
+			progressBar.toggleClass('hidden');
+		};
 	}
 	
 	this.initialize();

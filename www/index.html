@@ -550,88 +550,87 @@
 </script>
 
 <script id="update-user-tpl" type="text/template">
+  <nav>
+    <div class="nav-wrapper">
+      <div class="col s12">
+        {{#if isAdmin}}
+          <a href="#administrator" class="breadcrumb">Menu</a>
+        {{else}}
+          <a href="#reservations" class="breadcrumb">Reservations</a>
+        {{/if}}
+        <a href="#users/{{id}}/edit" class="breadcrumb">Edit</a>
+      </div>
+    </div>
+    <div class="progress hidden">
+      <div class="indeterminate"></div>
+    </div>
+  </nav>
 
-        <nav>
-          <div class="nav-wrapper">
-            <div class="col s12">
-              {{#if isAdmin}}
-                <a href="#administrator" class="breadcrumb">Menu</a>
-              {{else}}
-                <a href="#reservations" class="breadcrumb">Reservations</a>
-              {{/if}}
-              <a href="#users/{{id}}/edit" class="breadcrumb">Edit</a>
-            </div>
-          </div>
-          <div class="progress hidden">
-            <div class="indeterminate"></div>
-          </div>
-        </nav>
+  <div class="wrapper">
 
-        <div class="wrapper">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">General</span>
 
-          <div class="card">
-            <div class="card-content">
-              <span class="card-title">General</span>
-
-              <div class="input-field col s12">
-                <i class="material-icons prefix">account_circle</i>
-                <input id="user-name" type="text" class="validate" value="{{name}}">
-                <label class="active" for="user-name">name</label>
-              </div>
-
-              <div class="input-field col s12">
-                <i class="material-icons prefix">email</i>
-                <input id="email" type="text" class="validate" value="{{email}}">
-                <label class="active" for="email">email</label>
-              </div>
-            </div>
-
-            <div class="card-action">
-              <a href="#users/{{id}}/edit" class="update-info-btn">Update Information</a>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-content">
-              <span class="card-title">Password</span>
-
-              <div class="input-field col s12">
-                <i class="material-icons prefix">lock</i>
-                <input id="password" type="password" class="validate">
-                <label for="password">Password</label>
-              </div>
-
-              <div class="input-field col s12">
-                <i class="material-icons prefix">lock_outline</i>
-                <input id="password-confirmation" type="password" class="validate">
-                <label for="password-confirmation">Password Confirmation</label>
-              </div>
-            </div>
-
-            <div class="card-action">
-              <a href="#users/{{id}}/edit" class="update-password-btn">Update Password</a>
-            </div>
-          </div>
-
-          {{#if selfUpdate}}
-          {{else}}
-            <div class="card">
-              <div class="card-content">
-                <span class="card-title">Credentials</span>
-                  <div class="row">
-                    <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
-                    <label class="active" for="administrator-radio">Administrator</label>
-                    <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
-                    <label class="active" for="coordinator-radio">Coordinator</label>
-                  </div>
-
-              <div class="card-action">
-                <a href="#users/{{id}}/edit" class="update-cred-btn">Update Credentials</a>
-              </div>
-            </div>
-          {{/if}}
-
+        <div class="input-field col s12">
+          <i class="material-icons prefix">account_circle</i>
+          <input id="user-name" type="text" class="validate" value="{{name}}">
+          <label class="active" for="user-name">name</label>
         </div>
+
+        <div class="input-field col s12">
+          <i class="material-icons prefix">email</i>
+          <input id="email" type="text" class="validate" value="{{email}}">
+          <label class="active" for="email">email</label>
+        </div>
+      </div>
+
+      <div class="card-action">
+        <a href="#users/{{id}}/edit" class="update-info-btn">Update Information</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Password</span>
+
+        <div class="input-field col s12">
+          <i class="material-icons prefix">lock</i>
+          <input id="password" type="password" class="validate">
+          <label for="password">Password</label>
+        </div>
+
+        <div class="input-field col s12">
+          <i class="material-icons prefix">lock_outline</i>
+          <input id="password-confirmation" type="password" class="validate">
+          <label for="password-confirmation">Password Confirmation</label>
+        </div>
+      </div>
+
+      <div class="card-action">
+        <a href="#users/{{id}}/edit" class="update-password-btn">Update Password</a>
+      </div>
+    </div>
+
+    {{#if selfUpdate}}
+    {{else}}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Credentials</span>
+            <div class="row">
+              <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
+              <label class="active" for="administrator-radio">Administrator</label>
+              <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
+              <label class="active" for="coordinator-radio">Coordinator</label>
+            </div>
+
+        <div class="card-action">
+          <a href="#users/{{id}}/edit" class="update-cred-btn">Update Credentials</a>
+        </div>
+      </div>
+    {{/if}}
+
+  </div>
 </script>
 
 <script id="representatives-list-view" type="text/template">
@@ -708,7 +707,7 @@
   <nav>
     <ul id="slide-out" class="side-nav">
       <li><a href="#users/{{id}}/edit">Account</a></li>
-      {{#if isSuper}}
+      {{#if credentials.isSuper}}
         <li><a href="#administrator/super">Users</a></li>
       {{/if}}
       <li><a href="#">Log Out</a></li>
@@ -724,14 +723,24 @@
   </nav>
   <input type="date" class="datepicker">
 
+  <div class="row">
+    <h5 class="center-align">$ {{numberWithCommas totalAmmount}}</h5>
+  </div>
+  <div class="row">
+    <div class="center-align semi-thin subtext uppercase">Earnings</div>
+  </div>
+  <div class="row">
+    <div class="col s5 offset-s1">{{total}}</div>
+    <div class="col s5">{{missingAmmount}}</div>
+  </div>
+  <div class="row">
+    <div class="col s5 offset-s1 center-align semi-thin subtext uppercase">Tables Served</div>
+    <div class="col s5 center-align semi-thin subtext uppercase">Incomplete</div>
+  </div>
+
+
   <div class="chartContent"></div>
 </script>
-
-<div class="row">
-  <div class="chartContent"/>
-
-</div>
-
 
 
 <script src="cordova.js"></script>

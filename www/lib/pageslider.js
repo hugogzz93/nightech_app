@@ -16,6 +16,15 @@ function PageSlider(container) {
         fixedActBtn.remove();
         //<<<<<<
 
+        //>>To prevent pickers being added perpetually
+        var pickers = $('.picker');
+        pickers.filter(function (x) {
+             return x < pickers.size() - 1; 
+        }).remove();
+
+        $('.drag-target').remove();
+        //<<
+
         var l = stateHistory.length,
             state = window.location.hash;
 
@@ -35,6 +44,10 @@ function PageSlider(container) {
         //>>> To fix fixed positioning issue
         fixedActBtn = $('.fixed-action-btn');
         fixedActBtn.appendTo($('body'));
+        //<<<
+
+        //>>> fixes issue with overlay persisting between views
+        $('#sidenav-overlay').remove();
         //<<<
 
     }
