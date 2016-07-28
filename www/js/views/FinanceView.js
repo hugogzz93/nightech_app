@@ -2,7 +2,7 @@ var FinanceView = function (communication) {
 
 	var data = {}
 	var chartView
-	var scope = "month";
+	var scope = "day";
 	var credentials;
 	const administratorCred = "administrator"
 	const superCred = "super"
@@ -13,6 +13,7 @@ var FinanceView = function (communication) {
 		credentials = {isSuper: communication.currentCredentials() === "super", id: communication.getUserId()};
 		chartView = new ChartView(communication);
 		this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
+		this.$el.on('click', '.tab', $.proxy(this.tabPicked, this));
 		this.$el.on('click', '.button-collapse', function (e) {
  	 		if ($('.button-collapse').attr('data-triggered') == undefined) {
  		 		$('.button-collapse').attr('data-triggered', 1);
@@ -27,25 +28,46 @@ var FinanceView = function (communication) {
 
 	this.render = function () {
 		data.credentials = credentials;
+		data.id = communication.getUserId;
 		this.$el.html(this.template(data));
 		$('.chartContent', this.$el).html(chartView.$el);
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	$datepicker.pickadate({container: 'body'});
 		$datepicker.val( $datepicker.val() === "" ? new Date().toDateString() : $datepicker.val());
+		const $tabs = this.$el.find('ul.tabs');
+		$tabs.tabs();
+
+		debugger
+		$('.tab a', this.$el).removeClass('active');
+		if(scope === "day") 		{ $('#day-a', this.$el).addClass('active'); }
+		else if(scope === "week") 	{ $('#week-a', this.$el).addClass('active'); }
+		else if(scope === "month") 	{ $('#month-a', this.$el).addClass('active'); }
+
 		return this; 
 	}
 
 	this.dataHandler = function (users, services, rps, tables) {
 		data = this.digestData(users, services, rps, tables);
 		labels = [];
-		for (var i = 0; i < data.tables.length; i++) {
-			table = data.tables[i];
-			if (table.totalAmmount > 0) {
-				labels.push(table.number);
+		
+		if(scope === "month" || scope === "week") {
+			ticks = data.days.filter(function(a) {return a > 0})
+			for (var i = 0; i < Object.keys(data.days).length; i++) {
+				day = Object.keys(data.days)[i];
+				if (day > 0) {
+					labels.push("Day: " + Object.keys(data.days)[i]);
+				};
 			};
-		};
-		activeTables = data.tables.map(function(e){return e.totalAmmount}).filter(function(a) {return a > 0})
-		chartView.setData(activeTables, labels, 'line', "$");
+		} else {
+			ticks = data.tables.map(function(e){return e.totalAmmount}).filter(function(a) {return a > 0})
+			for (var i = 0; i < data.tables.length; i++) {
+				table = data.tables[i];
+				if (table.totalAmmount > 0) {
+					labels.push("Table: " + table.number);
+				};
+			};
+		}
+		chartView.setData(ticks, labels, 'line', "$");
 		this.render();
 	}
 
@@ -71,7 +93,7 @@ var FinanceView = function (communication) {
 			coordinators: [],
 			reps: [],
 			tables: [],
-			days: Array.apply(null, Array(daysInScope(scope))).map(function() {return 0})
+			days: []
 		}
 
 		for (var i = 0; i < users.length; i++) {
@@ -128,7 +150,8 @@ var FinanceView = function (communication) {
 	  			data.tables[index.tables[service.table_id]].totalAmmount += parseInt(service.ammount);
 	  			data.tables[index.tables[service.table_id]].totalServices ++;
 	  			// add day stats
-	  			data.days[date.getDate()] += parseInt(service.ammount)
+	  			if(data.days[date.getDate()]) { data.days[date.getDate()] += parseInt(service.ammount); }
+	  				else {  data.days[date.getDate()] = parseInt(service.ammount); }
 
 
 	  		} else {
@@ -142,6 +165,8 @@ var FinanceView = function (communication) {
 		const date = new Date(this.$el.find('.datepicker').val());
 		date.setHours(0,0,0,0);
 		this.findByDate(date);
+		const $tabs = this.$el.find('ul.tabs');
+		$tabs.tabs();
 	}
 
 	this.findByDate = function(date, def) {
@@ -153,6 +178,7 @@ var FinanceView = function (communication) {
 		const getServices = communication.getServices;
 		const getRps = communication.getRepresentatives;
 		const getTables = communication.getTablesByDate;
+		debugger
 		toggleLoading();
 		$.when(getUsers(), getServices(date, scope), getRps(), getTables(date)).done(dataHandler)
 		.always(toggleLoading);
@@ -160,17 +186,17 @@ var FinanceView = function (communication) {
 
 	// ----------------------------------- helpers -----------------------------------
 	this.daysInScope = function (scope) {
-		 var days;
-		 if (scope === "month") {
+		var days;
+		if (scope === "month") {
 		 	var currentDate = new Date();
 		 	days = new Date(currentDate.getYear(), currentDate.getMonth() + 1, 0).getDate();
-		 } else if(scope === "week") {
+		} else if(scope === "week") {
 		 	days = 7;
-		 } else if(scope === "day") {
+		} else if(scope === "day") {
 		 	days = 1;
-		 }
+		}
 
-		 return days;
+		return days;
 	}
 
 	this.toggleLoading = function () {
@@ -178,6 +204,11 @@ var FinanceView = function (communication) {
 		if (progressBar) {
 			progressBar.toggleClass('hidden');
 		};
+	}
+
+	this.tabPicked = function (e) {
+		scope = $(e.target).attr('data-scope');
+		this.datePickerChange();
 	}
 	
 	this.initialize();

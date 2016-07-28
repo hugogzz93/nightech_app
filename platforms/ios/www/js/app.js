@@ -391,6 +391,10 @@
         return moment(new Date(date)).format('MMMM Do YYYY, h:mm:ss a');
     })
 
+    Handlebars.registerHelper('numberWithCommas', function (x) {
+         return x ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0 ;
+    })
+
 
 
 }());

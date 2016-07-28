@@ -1,3 +1,42 @@
+#finance-nav-wrapper {
+	background: #1fe5bd;
+}
+
+#finance-tab {
+    background: #64edd1; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left top, #64edd1, #aff2d6); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(bottom right, #64edd1, #aff2d6); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom right, #64edd1, #aff2d6); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom right, #64edd1, #aff2d6); /* Standard syntax (must be last) */
+}
+
+#finance-tab a {
+	color: green;
+}
+
+#finance-tab a.active {
+	font-weight: bold;
+}
+
+#finance-tab  .indicator {
+	background-color: green;
+}
+
+.thin {
+	font-weight: 100;
+}
+
+.semi-thin {
+	font-weight: 300;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.subtext {
+	color: gray;
+}
 input {
 	color:black !important;
 }

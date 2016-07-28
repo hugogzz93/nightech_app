@@ -706,6 +706,7 @@
 <script id="finance-tpl" type="text/template">
   <nav>
     <ul id="slide-out" class="side-nav">
+      <li><a href="#administrator">Reservations</a></li>
       <li><a href="#users/{{id}}/edit">Account</a></li>
       {{#if credentials.isSuper}}
         <li><a href="#administrator/super">Users</a></li>
@@ -713,14 +714,22 @@
       <li><a href="#">Log Out</a></li>
     </ul>
 
-    <div class="nav-wrapper">
+    <div class="nav-wrapper" id="finance-nav-wrapper">
       <a href="#administrator" class="brand-logo">Finance</a>
           <a href="#administrator/" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
     </div>
-    <div class="progress">
-      <div class="indeterminate"></div>
-    </div>
   </nav>
+  <div class="progress">
+    <div class="indeterminate"></div>
+  </div>
+  
+  <ul class="tabs" id="finance-tab">
+    <li class="tab col s3" data-tab-id="DailyTab" data-scope="day"><a id="day-a" data-scope="day">Daily</a></li>
+    <li class="tab col s3" data-tab-id="WeeklyTab" data-scope="week"><a id="week-a" data-scope="week">Weekly</a></li>
+    <li class="tab col s3" data-tab-id="MonthlyTab"data-scope="month"><a id="month-a" data-scope="month">Monthly</a></li>
+  </ul>
+
+
   <input type="date" class="datepicker">
 
   <div class="row">
@@ -740,7 +749,18 @@
 
 
   <div class="chartContent"></div>
+
+
+  <div id="DailyTab" class="col s12  tab-data"></div>
+  <div id="WeeklyTab" class="col s12  tab-data"></div>
+  <div id="MonthlyTab" class="col s12  tab-data"></div>
+
+
+
 </script>
+
+
+
 
 
 <script src="cordova.js"></script>
