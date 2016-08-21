@@ -42,7 +42,15 @@
 	}
 
 	this.datePickerChange = function () {
-		const date = new Date(this.$el.find('.datepicker').val());
+		const dateVal = this.$el.find('.datepicker').val();
+		var date;
+		if(dateVal === "") {
+			this.$el.find('.datepicker').val(new Date().toDateString());
+			date = new Date(this.$el.find('.datepicker').val());
+		} else {
+			date = new Date(dateVal);
+			
+		}
 	 	const $tabs = this.$el.find('ul.tabs');
 		this.findByDate(date);
 		$tabs.tabs();
@@ -75,7 +83,7 @@
 
 	// ---------------------------Service functionality------------------------------
 
-	this.submitService = function () {
+	this.submitService = function (e) {
 		const form = this.$el.find('.active form');
 	 	const clientName = form.find('#client-name').val();
 	 	const quantity = form.find('#quantity').val();
@@ -89,7 +97,9 @@
 	 	communication.submitService(serviceJson).done(function () {
 	 	 	updateView();
 	 	 	events.emit("toastRequest", "Service Created!");
-		 	progressBar.addClass('hidden');
+		 	
+	 	}).always(function () {
+	 		 progressBar.addClass('hidden'); 
 	 	}); 
 	}
 
@@ -121,7 +131,7 @@
 	}
 
 	this.displayAmmountModal = function (serviceId) {
-		window.scrollTo(0) //else the modal will not be always viewable
+		window.scrollTo(0,0) //else the modal will not be always viewable
 		const modal = $('#service-ammount-modal', this.$el);
 		$('#service-ammount', modal).attr('data-service-id', serviceId);
 		modal.openModal();
@@ -154,7 +164,6 @@
 	this.submitAmmount = function (event) {
 		const field = $('#service-ammount', this.$el);
 		const ammount = field.val().replace(',', '');
-		debugger
 		if (field.val().match(/[^0-9,.]/g)) {
 			// if it is not a number
 			alert('Must be a number').
@@ -216,14 +225,13 @@
 	this.saveTableNumber = function (event) {
 		const tableId = $(event.target).attr('data-table-number');
 		const reservationId = $(event.target).attr('data-reservation-id');
-		debugger
 		$('.tableNumber[data-reservation-id=' + reservationId + ']').val(tableId);
 		$('#chooseTableModal').closeModal();
 		$('label[for="tableNumber"][data-reservation-id="' + reservationId + '"]').addClass('active')
 	}
 
 	this.displayTablesModal = function (event) {
-		window.scrollTo(0) //else the modal will not be always viewable
+		window.scrollTo(0,0) //else the modal will not be always viewable
    		const reservationId = $(event.target).attr('data-reservation-id');
 		$('#chooseTableModal .table-option', this.$el).attr('data-reservation-id', reservationId);
 
@@ -262,8 +270,13 @@
 
 
 	 	this.$el.on('click', '.service-submit', function (e) {
- 		 	submitService(e);
+	 		const target = $(e.target);
+	 		if(!target.attr('disabled')) {
+	 			target.attr('disabled', true);
+	 		 	submitService(e);
+	 		}
 	 	});
+
 	 	this.$el.on('click', '.delete-btn', function (e) {
 	 		destroyService(e);
 	 	});
@@ -302,17 +315,7 @@
 			$('.button-collapse').sideNav('show');
 	 	});
 
-
-	 // 	this.$el.pullToRefresh()
-		// .on("move.pulltorefresh", function (evt, percentage){
-		//   if (percentage>20) {
-		//   	const progressBar = $(".progress");
-		//   	progressBar.removeClass("hidden");
-		//   	datePickerChange();
-		//   	progressBar.addClass("hidden");
-		//   }
-		// })
-
 	}
+
 	this.initialize();
 }

@@ -1,6 +1,7 @@
 var LogInView = function () {
 	 
 	 this.initialize = function () {
+	 	events.emit('LogOut');
 	 	this.$el = $('<div/>');
 	 	this.$email = this.$el.find('#email-field');
 	 	this.$password = this.$el.find('#password-field');
@@ -14,10 +15,12 @@ var LogInView = function () {
 	 }
 
 	 this.logIn = function () {
+	 	const logInBar = $(".progress", this.$el);
 	 	const email = this.$el.find('#email-field').val();
 	 	const password = this.$el.find('#password-field').val();
 
 	 	events.emit("logInAttempt", { email: email, password: password });
+	 	logInBar.removeClass("hidden");
 	 }
 
 

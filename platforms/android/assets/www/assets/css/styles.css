@@ -1,3 +1,90 @@
+.pseudo-table {
+	border-bottom: 1px solid #f2f2f6;
+	margin-bottom: 1%;
+	font-size: 1.1em;
+}
+
+.no-marign-botton {
+	margin-bottom: 0px;
+}
+.blue-gray{
+	color: #315e83;
+}
+.finance-headers {
+	margin-bottom: 0px;
+}
+#finance-nav-wrapper {
+	background: #46e3c5;
+}
+
+#finance-tab {
+    background: #64edd1; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left top, #64edd1, #aff2d6); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(bottom right, #64edd1, #aff2d6); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom right, #64edd1, #aff2d6); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom right, #64edd1, #aff2d6); /* Standard syntax (must be last) */
+}
+
+#finance-tab a {
+	color: green;
+}
+
+#finance-tab a.active {
+	font-weight: bold;
+	border-bottom: 2px solid green;
+}
+
+#finance-tab  .indicator {
+	display: none;
+}
+
+.thin {
+	font-weight: 100;
+}
+
+.semi-thin {
+	font-weight: 300;
+}
+
+.normal-weight {
+	font-weight: 500;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.subtext {
+	font-size: 0.6em;
+	color: #a2bacc;
+}
+input {
+	color:black !important;
+}
+
+.grayText { 
+	color: #a6a6a6;
+}
+.mapCanvas {
+    display: block;
+	border: 1px solid #ccc;
+	margin: 3%;
+	width: 95vw;
+	height: 95vh;
+	background: #fff;
+}
+
+.separator {
+	margin: 5px;
+	width: 1px;
+	height: 1px;
+}
+
+.table_number {
+	float: right;
+	margin-right: 5%;
+}
+
 .page.transition.center {
 	background-color: #FCFCFC;
 }
@@ -57,4 +144,13 @@ ul.collection {
 
 .card-content:not(:first-child) {
     border-top: 1px solid rgba(160,160,160,0.2);
+}
+
+.picker {
+  position: fixed ;
+  z-index: 10000 ;
+}
+
+div.ui-datepicker{
+ font-size: 7px;
 }

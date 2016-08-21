@@ -23,6 +23,7 @@ function PageSlider(container) {
         }).remove();
 
         $('.drag-target').remove();
+        $('.modal').remove();
         //<<
 
         var l = stateHistory.length,

@@ -1,3 +1,22 @@
+body {
+    overflow: auto !important; 
+}
+
+.pseudo-table {
+	border-bottom: 1px solid #f2f2f6;
+	margin-bottom: 1%;
+	font-size: 1.1em;
+}
+
+.no-marign-botton {
+	margin-bottom: 0px;
+}
+.blue-gray{
+	color: #315e83;
+}
+.finance-headers {
+	margin-bottom: 0px;
+}
 #finance-nav-wrapper {
 	background: #46e3c5;
 }
@@ -16,10 +35,11 @@
 
 #finance-tab a.active {
 	font-weight: bold;
+	border-bottom: 2px solid green;
 }
 
 #finance-tab  .indicator {
-	background-color: green;
+	display: none;
 }
 
 .thin {
@@ -30,12 +50,17 @@
 	font-weight: 300;
 }
 
+.normal-weight {
+	font-weight: 500;
+}
+
 .uppercase {
     text-transform: uppercase;
 }
 
 .subtext {
-	color: gray;
+	font-size: 0.6em;
+	color: #a2bacc;
 }
 input {
 	color:black !important;

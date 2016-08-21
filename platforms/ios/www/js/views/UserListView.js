@@ -13,10 +13,11 @@ var UserListView = function () {
 	 }
 
 	 this.render = function () {
+	 	var userDigest
 	 	if (users.length > 0) {
-		 	const userDigest = { credentials: users[0].credentials + "s", users: users};
+		 	userDigest = { credentials: users[0].credentials + "s", users: users};
 	 	} else {
-	 		const userDigest = { credentials: "", users: []};
+	 		userDigest = { credentials: "", users: []};
 	 	} ;
 
 	 	 this.$el.html(this.template(userDigest));

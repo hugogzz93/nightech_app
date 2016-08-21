@@ -11,6 +11,20 @@ function PageSlider(container) {
 
     // Use this function if you want PageSlider to automatically determine the sliding direction based on the state history
     this.slidePage = function(page) {
+        // >>>>>To fix fixed positioning issue
+        var fixedActBtn = $('.fixed-action-btn');
+        fixedActBtn.remove();
+        //<<<<<<
+
+        //>>To prevent pickers being added perpetually
+        var pickers = $('.picker');
+        pickers.filter(function (x) {
+             return x < pickers.size() - 1; 
+        }).remove();
+
+        $('.drag-target').remove();
+        $('.modal').remove();
+        //<<
 
         var l = stateHistory.length,
             state = window.location.hash;
@@ -27,6 +41,15 @@ function PageSlider(container) {
             stateHistory.push(state);
             this.slidePageFrom(page, 'right');
         }
+
+        //>>> To fix fixed positioning issue
+        fixedActBtn = $('.fixed-action-btn');
+        fixedActBtn.appendTo($('body'));
+        //<<<
+
+        //>>> fixes issue with overlay persisting between views
+        $('#sidenav-overlay').remove();
+        //<<<
 
     }
 
@@ -55,6 +78,8 @@ function PageSlider(container) {
         page.attr("class", "page transition center");
         currentPage.attr("class", "page transition " + (from === "left" ? "right" : "left"));
         currentPage = page;
+        $('.page.transition.right').remove(); //work-around for bug causing previous pages to be visible
+        $('.page.transition.left').remove(); //work-around for bug causing previous pages to be visible
     }
 
 }

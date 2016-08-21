@@ -41,7 +41,15 @@ var ReservationsView = function (communication) {
 	}
 
 	this.datePickerChange = function () {
-		 const date = new Date(this.$el.find('.datepicker').val());
+		const dateVal = this.$el.find('.datepicker').val();
+		var date;
+		if(dateVal === "") {
+			this.$el.find('.datepicker').val(new Date().toDateString());
+			date = new Date(this.$el.find('.datepicker').val());
+		} else {
+			date = new Date(dateVal);
+			
+		}
 		 this.findByDate(date);
 	}
 

@@ -14,13 +14,20 @@
     UserListView.prototype.template = Handlebars.compile($('#user-list-tpl').html());
     UserView.prototype.template = Handlebars.compile($('#show-user-tpl').html());
     CreateUserView.prototype.template = Handlebars.compile($('#create-user-tpl').html());
+    UpdateUserView.prototype.template = Handlebars.compile($('#update-user-tpl').html());
     RepresentativesListView.prototype.template = Handlebars.compile($('#representatives-list-view').html());
     RepresentativesView.prototype.template = Handlebars.compile($('#representatives-view').html());
-    
+    MapView.prototype.template = Handlebars.compile($('#map-view').html());
+    BigMapView.prototype.template = Handlebars.compile($('#big-map-view').html());
+    ChartView.prototype.template = Handlebars.compile($('#chart-tpl').html());
+    FinanceView.prototype.template = Handlebars.compile($('#finance-tpl').html());
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
-    const mainUrl = "http://api.localhost:3000";
+    // const mainUrl = "http://localhost:3000";
+    const mainUrl = "http://boiling-mountain-93593.herokuapp.com"
+
+
 
 
     communication.initialize(mainUrl).done( function () {
@@ -45,8 +52,11 @@
 
         // create reservation
         router.addRoute('reservations/create', function () {
-            communication.getRepresentatives().done(function (representatives) {
-                 slider.slidePage(new CreateReservationView(communication, representatives).render().$el) ;
+            communication.getRepresentatives().done(function (response) {
+                const filteredRepresentatives = response.representatives.filter(function (e) {
+                     return e.user_id == communication.getUserId(); 
+                })
+                slider.slidePage(new CreateReservationView(communication, filteredRepresentatives).render().$el) ;
             })
         })
 
@@ -63,6 +73,12 @@
             slider.slidePage(new CreateUserView(communication).render().$el);
         })
 
+        router.addRoute('users/:id/edit', function (id) {
+            communication.getUserById(id).done(function (response) {
+                slider.slidePage(new UpdateUserView(communication, response.user).render().$el);
+            })
+        })
+
         // user index
         router.addRoute('administrator/super/users/:id', function (id) {
             communication.getUserById(id).done(function (response) {
@@ -73,6 +89,14 @@
         // representatives list
         router.addRoute('representatives', function () {
             slider.slidePage(new RepresentativesView(communication).render().$el) ;
+        })
+
+        router.addRoute('administrator/map', function () {
+            slider.slidePage(new BigMapView(communication).render().$el) ;
+        })
+
+        router.addRoute('administrator/super/finance', function () {
+             slider.slidePage(new FinanceView(communication).render().$el) ;
         })
 
 
@@ -103,6 +127,12 @@
         router.load(user.credentials === "coordinator" ? 'reservations' : 'administrator' );
     })
 
+    events.on('logOutSuccess', function (user) {
+        router.load('');
+        events.emit('toastRequest', 'Signed Out');
+        communication.clearSessionTokens();
+    })
+
     events.on('reservationCreated', function () {
         router.load("reservations"); 
         events.emit('toastRequest', "Reservation Created!");
@@ -123,30 +153,96 @@
         Materialize.toast($toastContent, 2500);
     })
 
+    events.on('LogOut', function () {
+         communication.terminateSession(); 
+    })
+
     /* ---------------------------------- Local Functions ---------------------------------- */
     /* ---------------------------------- Handlebars Helpers ------------------------------- */
 
     Handlebars.registerPartial('serviceCollapsible', $('#service-collapsible-li-tpl').html());
     Handlebars.registerPartial('createTable', $('#create-service-li-tpl').html());
 
-    Handlebars.registerHelper('reservationIcon', function (text) {
+    Handlebars.registerHelper('reservationIcon', function (status) {
          // const text = Handlebars.escapeExpression(text);
         var returnText = "";
-        if (text === "pending") {
+        if (status === "pending") {
             returnText = new Handlebars.SafeString(
-            ''
+            '<i class="material-icons">query_builder</i>'
             );
-        } else if(text === "accepted"){
+        } else if(status === "accepted"){
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">done</i>'
             );
-        } else if(text === "rejected"){
+        } else if(status === "rejected"){
             returnText = new Handlebars.SafeString(
             '<i class="material-icons">not_interested</i>'
             );
-        } else if(text === "seated") {
+        } else if(status === "seated") {
             returnText = new Handlebars.SafeString(
-            '<i class="material-icons">all_done</i>'
+            '<i class="material-icons">done_all</i>'
+            );
+        }
+        return returnText;
+    })
+
+    Handlebars.registerHelper('dateParser', function (date) {
+        var returnText = new Date(date).toDateString();
+        return returnText;
+    })
+
+    Handlebars.registerHelper('tableNumberHelper', function (tableNumber) {
+        var returnText = "";
+        if (tableNumber) {
+            returnText = new Handlebars.SafeString(
+                '<div class="table_number"> #' + tableNumber + '</div>'
+            );
+        };
+        return returnText;
+    })
+
+    Handlebars.registerHelper('rejectButtonHelper', function (reservation) {
+        var returnText = "";
+        if (reservation.status === "pending") {
+            returnText = new Handlebars.SafeString(
+                '<div class="reject-res-btn btn waves-effect waves-light red" type="submit" name="action" data-reservation-id="' + reservation.id + '">Reject <i class="material-icons right">no_sim</i> </div> '
+            );
+        };
+        return returnText;
+    })
+
+    Handlebars.registerHelper('ammountDisplayHelper', function (service) {
+        var returnText = "";
+        if (service.status === "complete") {
+            returnText = new Handlebars.SafeString(
+                '<div class="row">'
+                +' <div class="input-field col s10">' 
+                +'   <i class="material-icons prefix">shopping_basket</i>'
+                +'   <input disabled type="number" id="ammount"class="validate" value="'+ service.ammount + '">' 
+                +'   <label class="active" for="ammount">$</label>' 
+                +' </div>'
+                +'</div>'
+            );
+        };
+        return returnText;
+    })
+
+    /**
+     * Shows an icon indicating whether the coordinator 
+     * can see the table number or not.
+     * @param {Reservation} reservation
+     * @return {Number} div containing an appropriate icon
+    */
+    Handlebars.registerHelper('visibilityIcon', function (reservation) {
+        var returnText = "";
+        const validStatus = reservation.status === "accepted" || reservation.status === "seated"
+        if (reservation.visible && validStatus) {
+            returnText = new Handlebars.SafeString(
+                '<i class="visibility-btn material-icons prefix" data-reservation-id="' + reservation.id + '" data-visibility="' + reservation.visible + '">visibility</i>'
+            );
+        } else if(validStatus){
+            returnText = new Handlebars.SafeString(
+                '<i class="visibility-btn material-icons prefix" data-reservation-id="' + reservation.id + '" data-visibility="' + reservation.visible + '">visibility_off</i>'
             );
         }
         return returnText;
@@ -180,7 +276,7 @@
         var returnText = "";
         if(status === "accepted" || status === "rejected") {
             returnText = new Handlebars.SafeString(
-            'class="hidden"'
+            // 'class="hidden"' Removed temporarily
             );
         } 
         return returnText;
@@ -206,7 +302,6 @@
         var ps = Handlebars.partials;
         if(typeof ps[name] !== 'function')
             ps[name] = Handlebars.compile(ps[name]);
-        debugger
         return ps[name](ctx, hash);
     });
 
@@ -235,6 +330,34 @@
          if (service.status === "complete") {
             return ps["serviceCollapsible"](service);
         };
+    })
+
+    Handlebars.registerHelper('reservationStatusHelper', function (status) {
+        var returnText = "";
+        if(status === "pending") {
+            returnText = new Handlebars.SafeString("accept-btn");
+        } else {
+            returnText = new Handlebars.SafeString("red delete-res-btn");
+        }
+        return returnText;
+    })
+
+    Handlebars.registerHelper('reservationStatusTextHelper', function (status) {
+        var returnText = "";
+        if(status === "pending") {
+            returnText = new Handlebars.SafeString("Accept");
+        } else {
+            returnText = new Handlebars.SafeString("Cancel");
+        }
+        return returnText;
+    })
+
+    Handlebars.registerHelper('disableIfAccepted', function (status) {
+        var returnText = "";
+        if(status === "accepted") {
+            returnText = new Handlebars.SafeString("disabled");
+        }
+        return returnText;
     })
 
     Handlebars.registerHelper('servicesCounter', function (services) {
@@ -266,6 +389,10 @@
 
     Handlebars.registerHelper('dateHelper', function (date) {
         return moment(new Date(date)).format('MMMM Do YYYY, h:mm:ss a');
+    })
+
+    Handlebars.registerHelper('numberWithCommas', function (x) {
+         return x ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0 ;
     })
 
 

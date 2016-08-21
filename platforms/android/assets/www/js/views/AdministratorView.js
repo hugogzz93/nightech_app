@@ -1,75 +1,89 @@
  var AdministratorView = function (communication) {
 
-	var reservationsListView
+	var pendingReservationsListView
+	var acceptedReservationsListView
 	var servicesListView
 	var tableChooseModalView
 	var tables
 	var currentUser
+	var progressBar
 	 
-	 this.initialize = function () {
-	 	 this.$el = $('<div/>') ;
-         reservationsListView = new ReservationsListView(true);
-         servicesListView = new ServicesListView();
-         tableChooseModalView = new TableChooseModalView();
+	this.initialize = function () {
+	 	this.$el = $('<div/>') ;
+        this.setEventHandlers()
+        pendingReservationsListView = new ReservationsListView(true);
+        acceptedReservationsListView = new ReservationsListView(true);
+        servicesListView = new ServicesListView();
+        tableChooseModalView = new TableChooseModalView();
 
-	 	 this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
-	 	 this.$el.on('click', '.tab', function () {
-	 	 	$('.tab-data').addClass('hidden')
-	 	 	$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
-	 	 })
-
-	 	 this.$el.on('click', '.service-submit', $.proxy(this.submitService, this));
-	 	 this.$el.on('click', '.delete-btn', $.proxy(this.destroyService, this));
-	 	 this.$el.on('click', '.accept-btn', $.proxy(this.displayTablesModal, this));
-	 	 this.$el.on('click', '.modal-content .table-option.blue', $.proxy(this.acceptReservation, this));
-	 	 this.$el.on('click', '.service-btn', $.proxy(this.handleServiceAction, this));
-	 	 this.$el.on('click', '#ammount-submit-btn', $.proxy(this.submitAmmount, this));
-
-	 	 this.findByDate(new Date());
-	 	 this.render();
-	 } 
+	 	this.findByDate(new Date());
+	 	this.render();
+	} 
 
 	this.render = function () {
-		const credentials = {isSuper: communication.currentCredentials() === "super"};
+		const credentials = {isSuper: communication.currentCredentials() === "super", id: communication.getUserId()};
 
 	 	this.$el.html(this.template(credentials));
 	 	this.$el.append(tableChooseModalView.$el);
+		progressBar = $(".progress", this.$el);
 
-	    $('#reservationsTabCol', this.$el).html(reservationsListView.$el);
-	    $('#servicesTabCol', this.$el).html(servicesListView.$el);
+	    $('#pendingTab', this.$el).html(pendingReservationsListView.$el);
+	    $('#acceptedTab', this.$el).html(acceptedReservationsListView.$el);
+	    $('#servicesTab', this.$el).html(servicesListView.$el);
 
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	const $tabs = this.$el.find('ul.tabs');
 
-	 	$datepicker.pickadate({});
+	 	$datepicker.pickadate({container: 'body'});
 		$datepicker.val( $datepicker.val() === "" ? new Date().toDateString() : $datepicker.val());
 	 	$tabs.tabs();
 
-	 	$('input', this.$el).focus(); //fixes bug with input css
 	 	return this;
 	}
 
 	this.datePickerChange = function () {
-		const date = new Date(this.$el.find('.datepicker').val());
+		const dateVal = this.$el.find('.datepicker').val();
+		var date;
+		if(dateVal === "") {
+			this.$el.find('.datepicker').val(new Date().toDateString());
+			date = new Date(this.$el.find('.datepicker').val());
+		} else {
+			date = new Date(dateVal);
+			
+		}
+	 	const $tabs = this.$el.find('ul.tabs');
 		this.findByDate(date);
+		$tabs.tabs();
 	}
 
 	this.findByDate = function(date) {
 		date.setHours(0,0,0,0);
-
+		if (progressBar) {
+			progressBar.removeClass('hidden');
+		};
 		communication.getReservationsByDate(date).done(function(response) {
-	        reservationsListView.setReservations(response.reservations);
+			const pendingReservations = response.reservations.filter(function (e) {
+				 return e.status === "pending";
+			});
+			const acceptedReservations = response.reservations.filter(function (e) {
+				 return e.status === "accepted" || e.status === "seated";
+			});
+	        pendingReservationsListView.setReservations(pendingReservations);
+	        acceptedReservationsListView.setReservations(acceptedReservations);
 	    });
 
 	    communication.getTablesByDate(date).done(function(response) {
 	        servicesListView.setTables(response.tables);
 	        tableChooseModalView.setTables(response.tables);
+	        if (progressBar) {
+				progressBar.addClass('hidden');
+	        };
 	    });
 	}
 
 	// ---------------------------Service functionality------------------------------
 
-	this.submitService = function () {
+	this.submitService = function (e) {
 		const form = this.$el.find('.active form');
 	 	const clientName = form.find('#client-name').val();
 	 	const quantity = form.find('#quantity').val();
@@ -79,19 +93,25 @@
 	 	const serviceJson = {client: clientName, comment: comment, quantity: quantity, date: date, table_id: table_id} 
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 
+	 	progressBar.removeClass('hidden');
 	 	communication.submitService(serviceJson).done(function () {
 	 	 	updateView();
 	 	 	events.emit("toastRequest", "Service Created!");
+		 	
+	 	}).always(function () {
+	 		 progressBar.addClass('hidden'); 
 	 	}); 
 	}
 
 	this.destroyService = function (event) {
 		const serviceId = $(event.target).attr('data-service-id');
 	 	const updateView = $.proxy(this.datePickerChange, this); 
-
+	 	progressBar.removeClass('hidden');
+	 	
 		communication.destroyService(serviceId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Service Canceled"); 
+		 	progressBar.addClass('hidden');
 		})
 	}
 
@@ -111,7 +131,7 @@
 	}
 
 	this.displayAmmountModal = function (serviceId) {
-		window.scrollTo(0) //else the modal will not be always viewable
+		window.scrollTo(0,0) //else the modal will not be always viewable
 		const modal = $('#service-ammount-modal', this.$el);
 		$('#service-ammount', modal).attr('data-service-id', serviceId);
 		modal.openModal();
@@ -120,26 +140,35 @@
 	this.completeService = function (serviceId) {
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 	 	const serviceJson = { status: "complete" };
+	 	progressBar.removeClass('hidden');
 
 		communication.updateService(serviceId, serviceJson).done(function () {
 		 	updateView(); 
 			events.emit('toastRequest', "Reservation Accepted!"); 
+		 	progressBar.addClass('hidden');
 		});
 	}
 
 	this.seatService = function (serviceId) {
 		const updateView = $.proxy(this.datePickerChange, this); 
 	 	const serviceJson = { status: "seated" };
+	 	progressBar.removeClass('hidden');
 
 		communication.updateService(serviceId, serviceJson).done(function () {
 		 	updateView(); 
 			events.emit('toastRequest', "Seated!"); 
+		 	progressBar.addClass('hidden');
 		});
 	}
 
 	this.submitAmmount = function (event) {
 		const field = $('#service-ammount', this.$el);
-		const ammount = field.val();
+		const ammount = field.val().replace(',', '');
+		if (field.val().match(/[^0-9,.]/g)) {
+			// if it is not a number
+			alert('Must be a number').
+			return
+		};
 		const serviceId = field.attr('data-service-id');
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 
@@ -149,30 +178,144 @@
 			 updateView(); 
 			 events.emit('toastRequest', "Ammount Updated!"); 
 		})
+
+		field.val('');
 	}
 
 	// ---------------------------Reservation functionality------------------------------
 
 	this.acceptReservation = function (event) {
-		const tableId = $(event.target).attr('data-table-number');
 		const reservationId = $(event.target).attr('data-reservation-id');
+		const tableId = $('.tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val();
 	 	const updateView = $.proxy(this.datePickerChange, this); 
+	 	progressBar.removeClass('hidden');
 
 		communication.acceptReservation(reservationId, tableId).done(function () {
-			 $('#chooseTableModal').closeModal();
 			 updateView();
 			 events.emit('toastRequest', "Reservation Accepted!"); 
+		 	progressBar.addClass('hidden');
 		})
 	}
 
+	this.cancelReservation = function (event) {
+		const reservationId = $(event.target).attr('data-reservation-id');
+		const tableId = $('#tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val();
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+	 	progressBar.removeClass('hidden');
+		communication.cancelReservation(reservationId, tableId).done(function () {
+			 updateView();
+			 events.emit('toastRequest', "Reservation Canceled!"); 
+		 	progressBar.addClass('hidden');
+		})
+	}
+
+	this.rejectReservation = function (e) {
+		const id = $(e.target).attr('data-reservation-id');
+		const progressBar = $(".progress", this.$el);
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+
+		progressBar.removeClass('hidden');
+		communication.rejectReservation(id).done(function (response) {
+			progressBar.addClass('hidden');
+			updateView();
+			events.emit('toastRequest', "Reservation Rejected"); 
+		})
+	}
+
+	this.saveTableNumber = function (event) {
+		const tableId = $(event.target).attr('data-table-number');
+		const reservationId = $(event.target).attr('data-reservation-id');
+		$('.tableNumber[data-reservation-id=' + reservationId + ']').val(tableId);
+		$('#chooseTableModal').closeModal();
+		$('label[for="tableNumber"][data-reservation-id="' + reservationId + '"]').addClass('active')
+	}
+
 	this.displayTablesModal = function (event) {
-		window.scrollTo(0) //else the modal will not be always viewable
+		window.scrollTo(0,0) //else the modal will not be always viewable
    		const reservationId = $(event.target).attr('data-reservation-id');
 		$('#chooseTableModal .table-option', this.$el).attr('data-reservation-id', reservationId);
 
 		this.$el.find('#chooseTableModal').openModal();
 	}
 
+	this.toggleReservationVisibility = function (event) {
+		const $target = $(event.target);
+		const id = $target.attr('data-reservation-id');
+		const json = {visible: $target.attr('data-visibility') === "true" ? "false" : "true"};
+	 	const updateView = $.proxy(this.datePickerChange, this); 
+
+		communication.updateReservation(id, json).done(updateView);
+	}
+
 	// ---------------------------Other functionality------------------------------
+
+	this.setEventHandlers = function () {
+		this.$el.on('change', '.datepicker', $.proxy(this.datePickerChange, this));
+	 	this.$el.on('click', '.tab', function () {
+	 	 	$('.tab-data').addClass('hidden')
+	 	 	$("#" + $(this).attr("data-tab-id")).removeClass('hidden');
+	 	})
+
+	 	const submitService =  $.proxy(this.submitService, this)
+		const destroyService =  $.proxy(this.destroyService, this)
+		const displayTablesModal =  $.proxy(this.displayTablesModal, this)
+		const acceptReservation =  $.proxy(this.acceptReservation, this)
+		const cancelReservation =  $.proxy(this.cancelReservation, this)
+		const handleServiceAction =  $.proxy(this.handleServiceAction, this)
+		const submitAmmount =  $.proxy(this.submitAmmount, this)
+		const toggleReservationVisibility =  $.proxy(this.toggleReservationVisibility, this)
+		const saveTableNumber = $.proxy(this.saveTableNumber, this);
+		const rejectReservation = $.proxy(this.rejectReservation, this);
+	 	const datePickerChange = $.proxy(this.datePickerChange, this);
+
+
+	 	this.$el.on('click', '.service-submit', function (e) {
+	 		const target = $(e.target);
+	 		if(!target.attr('disabled')) {
+	 			target.attr('disabled', true);
+	 		 	submitService(e);
+	 		}
+	 	});
+
+	 	this.$el.on('click', '.delete-btn', function (e) {
+	 		destroyService(e);
+	 	});
+	 	this.$el.on('click', '.reject-res-btn', rejectReservation);
+
+	 	this.$el.on('click', '.delete-res-btn', function (e) {
+	 		cancelReservation(e);
+	 	});
+	 	this.$el.on('click', '.accept-btn', function (e) {
+	 		acceptReservation(e);
+	 	});
+	 	this.$el.on('click', '#tableNumber.validate', function (e) {
+	 		$(e.target).blur();
+	 		displayTablesModal(e);
+	 		
+	 	});
+	 	this.$el.on('click', '.modal-content .table-option.blue', function (e) {
+	 		saveTableNumber(e);
+	 	});
+	 	this.$el.on('click', '.service-btn', function (e) {
+	 		e.stopPropagation();
+	 		handleServiceAction(e);
+	 	});
+	 	this.$el.on('click', '#ammount-submit-btn', function (e) {
+	 		submitAmmount(e);
+	 	});
+	 	this.$el.on('click', '.visibility-btn', function (e) {
+	 		toggleReservationVisibility(e);
+	 	});
+
+	 	this.$el.on('click', '.button-collapse', function (e) {
+	 		if ($('.button-collapse').attr('data-triggered') == undefined) {
+		 		$('.button-collapse').attr('data-triggered', 1);
+				$('.button-collapse').sideNav();
+	 		};
+			$('.button-collapse').sideNav('show');
+	 	});
+
+	}
+
 	this.initialize();
 }

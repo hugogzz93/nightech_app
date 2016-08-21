@@ -8,6 +8,7 @@
     <link href="assets/css/styles.css" rel="stylesheet">
     <link href="assets/css/pageslider-fix.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name = "format-detection" content = "telephone=no">
 </head>
 <body>
   
@@ -16,17 +17,21 @@
 <!-- frederique.kautzer@thiel.biz -->
 
 <script id="log-in-tpl" type="text/template">
+  <div class="progress hidden">
+    <div class="indeterminate"></div>
+  </div>
+
   <div class="row valign-wrapper">
     <div class="col s12 valign">
       <div class="row">
         <div class="input-field col s12">
-          <input placeholder="Email" id="email-field" type="text" class="validate" value="mohammed@ruecker.ca">
+          <input placeholder="" id="email-field" type="text" class="validate" >
           <label for="email-field">Email</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <input placeholder="Placeholder" id="password-field" type="text" class="validate" value="12345678">
+          <input placeholder="" id="password-field" type="password" class="validate" value="12345678">
           <label for="password-field">Password</label>
         </div>
       </div>
@@ -41,11 +46,20 @@
 
 <script id="coordinator-menu-tpl" type="text/template">
   <nav>
+
+    <ul id="slide-out" class="side-nav">
+      <li><a href="#users/{{id}}/edit">Account</a></li>
+      <li><a href="#">Log Out</a></li>
+    </ul>
+
     <div class="nav-wrapper">
-      <a href="#reservations" class="brand-logo">Reservation</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#representatives"><i class="material-icons">supervisor_account</i></a></li>
-      </ul>
+        <a href="#reservations/" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
+        <a href="reservations" class="brand-logo">Reservations</a>
+        <a href="#representatives"><i class="material-icons right">supervisor_account</i></a>
+    </div>
+
+    <div class="progress hidden">
+      <div class="indeterminate"></div>
     </div>
   </nav>
 
@@ -62,11 +76,21 @@
 
 <script id="administrator-menu-tpl" type="text/template">
   <nav>
-    <div class="nav-wrapper">
-      <a href="reservations" class="brand-logo">Reservations</a>
+    <ul id="slide-out" class="side-nav">
+      <li><a href="#users/{{id}}/edit">Account</a></li>
       {{#if isSuper}}
-          <a href="#administrator/super"><i class="material-icons right">view_module</i></a>
+        <li><a href="#administrator/super">Users</a></li>
+        <li><a href="#administrator/super/finance">Finance</a></li>
       {{/if}}
+      <li><a href="#">Log Out</a></li>
+    </ul>
+    <div class="nav-wrapper">
+      <a href="#administrator" class="brand-logo">Reservations</a>
+          <a href="#administrator/map"><i class="material-icons right">location_on</i></a>
+          <a href="#administrator/" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
+    </div>
+    <div class="progress">
+      <div class="indeterminate"></div>
     </div>
   </nav>
 
@@ -75,21 +99,24 @@
   <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s3" id="reservationTab" data-tab-id="reservationsTabCol"><a class="active" >Pending</a></li>
-        <li class="tab col s3" id="serviceTab" data-tab-id="servicesTabCol"><a>Confirmed</a></li>
+        <li class="tab col s3" data-tab-id="pendingTab"><a class="active" >Pending</a></li>
+        <li class="tab col s3" data-tab-id="acceptedTab"><a>Accepted</a></li>
+        <li class="tab col s3" data-tab-id="servicesTab"><a>Tables</a></li>
       </ul>
     </div>
   </div>
 
-  <div id="reservationsTabCol" class="col s12  tab-data"></div>
-  <div id="servicesTabCol" class="col s12  tab-data"></div>
+  <div id="pendingTab" class="col s12  tab-data"></div>
+  <div id="acceptedTab" class="col s12  tab-data"></div>
+  <div id="servicesTab" class="col s12  tab-data"></div>
+  <div class="col s12  tab-data separator"></div>
 
   <!-- Set service ammount Modal -->
   <div id="service-ammount-modal" class="modal">
     <div class="modal-content">
-      <h4>Set Ammount</h4>
+      <h4>Set Amount</h4>
       <div class="input-field">
-        <input id="service-ammount" type="number">
+        <input id="service-ammount" type="text" pattern="[0-9]+(\.|\,)?[0-9]+" data-error="Not a number">
         <label for="service-ammount">Ammount: $</label>
       </div>
     </div>
@@ -103,49 +130,74 @@
   <ul class="collapsible popout" data-collapsible="accordion">
     {{#each reservations}}
     <li {{showPending status}}>
-      <div class="collapsible-header">{{ client }}{{reservationIcon status}}</div>
-      <div class="collapsible-body">
+      <div class="collapsible-header truncate">
+        {{ client }} <span class="grayText">{{ coordinator_name }} </span>
+        {{reservationIcon status}}
+        {{#if ../isAdmin}}  {{visibilityIcon this}} {{else}} {{ tableNumberHelper table_number }} {{/if}}
+      </div>
+      <div class="collapsible-body" data-reservation-id="{{id}}">
         <div class="row">
           <form class="col s12">
             <div class="row">
 
               <div class="input-field col s12">
                 <i class="material-icons prefix">account_circle</i>
-                <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
-                <label for="icon_prefix">First Name</label>
+                <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }} ">
+                <label class="active" for="icon_prefix">Client</label>
+              </div>
+
+              <div class="input-field col s12">
+                <i class="material-icons prefix">perm_identity</i>
+                <input disabled id="icon_prefix" type="text" class="validate" value="{{ coordinator_name }} ">
+                <label class="active" for="icon_prefix">Coordinator</label>
               </div>
 
               <div class="input-field col s12">
                 <i class="material-icons prefix">person_pin</i>
-                <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
-                <label for="icon_rp">Representante</label>
-              </div>
-
-              <div class="input-field col s4 offset-s2">
-                <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
-                  <label for="icon_quantity"># People</label>
-                </input>
+                <input disabled id="icon_rp" type="text" class="validate" value="{{representative_name}}">
+                <label class="active" for="icon_rp">Representative</label>
               </div>
 
               <div class="input-field col s6">
-                <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
-                <label for="date" class="">Date</label>
+                <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{quantity }}">
+                  <label class="active" for="icon_quantity"># People </label>
+                </input>
               </div>
+
+              {{#if ../isAdmin}}
+                <div class="input-field col s6">
+                  <input {{disableIfAccepted status }} type="number" class="validate tableNumber" id="tableNumber" value="" data-reservation-id="{{id}}">
+                  <label class="active" for="tableNumber" data-reservation-id="{{id}}">Table</label>
+                </div>
+              {{/if}}
+
+              <div class="input-field col s6">
+                <input disabled type="date" class="datepicker" id="date" value="{{dateParser date}}">
+                <label class="active" for="date">Date</label>
+              </div>
+
 
               <div class="row">
                 <div class="input-field col s12">
                 <i class="material-icons prefix">message</i>
-                  <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
+                  <textarea disabled id="comment-textarea" class="materialize-textarea" value="">
+                    {{comment}}
+                  </textarea>
                   <label for="comment-textarea">Comment</label>
                 </div>
               </div>
 
               {{#if ../isAdmin}}
-                  <div class="btn waves-effect waves-light accept-btn" type="submit" name="action" data-reservation-id="{{ id }}">Accept
-                    <i class="material-icons right">send</i>
+                  <div class="row">
+                    <div class="btn waves-effect waves-light {{reservationStatusHelper status}}" type="submit" name="action" data-reservation-id="{{ id }}">{{reservationStatusTextHelper status}}
+                      <i class="material-icons right">send</i>
+                    </div>
+
+                    {{rejectButtonHelper this}}
+
                   </div>
               {{ else }}
-                  <div class="btn waves-effect waves-light red" type="submit" name="action" data-reservation-id="{{ id }}">Delete
+                  <div class="delete-res-btn btn waves-effect waves-light red" type="submit" name="action" data-reservation-status="{{status}}" data-reservation-id="{{ id }}">Delete
                     <i class="material-icons right">send</i>
                   </div>
               {{/if}}
@@ -167,9 +219,9 @@
         <a href="#reservations/create" class="breadcrumb">Create Reservation</a>
       </div>
     </div>
-    <div class="progress hidden">
-      <div class="indeterminate"></div>
-    </div>
+      <div class="progress hidden">
+        <div class="indeterminate"></div>
+      </div>
   </nav>
 
  <div class="row">
@@ -185,20 +237,20 @@
         <div class="input-field col s12">
           <select class="browser-default">
             <option value="" disabled selected>Representative</option>
-              {{#each representatives}}
+              {{#each this}}
                 <option value="{{ id }}">{{ name }}</option>
               {{/each}}
           </select>
         </div>
 
         <div class="input-field col s4 offset-s2">
-          <input type="number" class="validate" id="quantity" min="1" max="15">
+          <input type="number" class="validate" id="quantity" min="1" data-error="Numbers only">
             <label for="quantity"># People</label>
           </input>
         </div>
 
         <div class="input-field col s6">
-          <input type="date" class="datepicker" id="date">
+          <input type="date" class="datepicker" id="date" data-error="Not a date">
           <label for="date" class="">Date</label>
         </div>
 
@@ -212,9 +264,9 @@
       </div>
     </form>
 
-        <button class="btn waves-effect waves-light" >Submit
-          <i class="material-icons right">send</i>
-        </button>
+    <button class="btn waves-effect waves-light" >Submit
+      <i class="material-icons right">send</i>
+    </button>
   </div>
 </script>
 
@@ -226,7 +278,7 @@
   </ul>
 
     <ul class="collapsible popout" data-collapsible="accordion">
-    <h4>Completed</h4>
+    <div class="section header">Completed</div>
     {{#each this}}
         {{#each services}}
               {{{serviceHelper this}}}
@@ -252,49 +304,56 @@
 
 <script id="service-collapsible-li-tpl" type="text/template">
   <li>
-     <div class="collapsible-header {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">{{ table_number }}  {{ client }}{{serviceIcon this}}</div>
+     <div class="collapsible-header truncate {{#if ammount}} finished {{/if}} {{serviceStatusColor status}}">{{ table_number }}  {{ client }}{{serviceIcon this}}</div>
      <div class="collapsible-body">
        <div class="row">
-         <form class="col s12">
-           <div class="row">
+          <form class="col s12">
+            <div class="row">
 
-             <div class="input-field col s12">
-               <i class="material-icons prefix">account_circle</i>
-               <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
-               <label for="icon_prefix">First Name</label>
-             </div>
+              <div class="input-field col s12">
+                <i class="material-icons prefix">account_circle</i>
+                <input disabled id="icon_prefix" type="text" class="validate" value="{{ client }}">
+                <label class="active" for="icon_prefix">First Name</label>
+              </div>
 
-             <div class="input-field col s12">
-               <i class="material-icons prefix">person_pin</i>
-               <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
-               <label for="icon_rp">Representante</label>
-             </div>
+              <div class="input-field col s12">
+                <i class="material-icons prefix">perm_identity</i>
+                <input disabled id="icon_prefix" type="text" class="validate" value="{{ coordinator_name }} ">
+                <label class="active" for="icon_prefix">Coordinator</label>
+              </div>
 
-             <div class="input-field col s4 offset-s2">
-               <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
-                 <label for="icon_quantity"># People</label>
-               </input>
-             </div>
+              <div class="input-field col s12">
+                <i class="material-icons prefix">person_pin</i>
+                <input disabled id="icon_rp" type="text" class="validate" value="{{ representative.name }}">
+                <label class="active" for="icon_rp">Representante</label>
+              </div>
 
-             <div class="input-field col s6">
-               <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
-               <label for="date" class="">Date</label>
-             </div>
+              <div class="input-field col s4 offset-s2">
+                <input disabled type="number" class="validate" id="icon_quantity" min="1" max="15" value="{{ quantity }}">
+                <label class="active" for="icon_quantity"># People</label>
+                </input>
+              </div>
 
-             <div class="row">
-               <div class="input-field col s12">
-               <i class="material-icons prefix">message</i>
-                 <textarea disabeld id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
-                 <label for="comment-textarea">Comment</label>
-               </div>
-             </div>
+              <div class="input-field col s6">
+                <input disabled type="date" class="datepicker" id="date" value="{{ date }}">
+                <label class="active" for="date" class="">Date</label>
+              </div>
 
-             <div class="btn waves-effect waves-light red delete-btn" type="submit" name="action" data-service-id="{{ id }}">Delete
-               <i class="material-icons right">send</i>
-             </div>
+              {{ammountDisplayHelper this}}
 
-           </div>
-         </form>
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">message</i>
+                  <textarea disabled id="comment-textarea" class="materialize-textarea" value="{{ comment }}"></textarea>
+                  <label class="active" for="comment-textarea">Comment</label>
+                </div>
+              </div>
+
+              <div class="btn waves-effect waves-light red delete-btn" type="submit" name="action" data-service-id="{{ id }}">Delete
+                <i class="material-icons right">send</i>
+              </div>
+          </div>
+        </form>
        </div>
      </div>
  </li>
@@ -302,7 +361,7 @@
 
 <script id="create-service-li-tpl" type="text/template">
   <li>
-   <div class="collapsible-header collapse-btn"><i class="material-icons">library_add</i>{{ number }}</div>
+   <div class="collapsible-header truncate collapse-btn"><i class="material-icons">library_add</i>{{ number }}</div>
    <div class="collapsible-body">
      <form class="col s11">
        <div class="row">
@@ -313,9 +372,9 @@
            <label for="client-name">Client Name</label>
          </div>
 
-         <div class="input-field col s4">
-         <i class="material-icons prefix">supervisor_account</i>
-           <input type="number" class="validate" id="quantity" min="1" max="15">
+         <div class="input-field col s6">
+           <i class="material-icons prefix">supervisor_account</i>
+           <input type="number" class="validate" id="quantity" min="1" data-error="Numbers only">
              <label for="quantity"># People</label>
            </input>
          </div>
@@ -356,6 +415,9 @@
         <a href="#administrator" class="breadcrumb">Reservations</a>
         <a href="#administrator/super" class="breadcrumb">Users</a>
       </div>
+    </div>
+    <div class="progress hidden">
+      <div class="indeterminate"></div>
     </div>
   </nav>
 
@@ -399,7 +461,7 @@
       </div>
 
       <div class="card-action">
-        <a href="#administrator/super/users/{{ id }}">Edit</a>
+        <a href="#users/{{ id }}/edit">Edit</a>
         <a href="#administrator/super/users/{{ id }}" class="delete-btn", data-user-id="{{ id }}">Delete</a>
       </div>
     </div>
@@ -455,7 +517,7 @@
 
         <div class="input-field col s12">
           <i class="material-icons prefix">email</i>
-          <input id="email" type="text" class="validate">
+          <input id="email" type="email" class="validate" data-error="Not a valid Email">
           <label for="email">email</label>
         </div>
 
@@ -471,9 +533,6 @@
           <label for="password-confirmation">Password Confirmation</label>
         </div>
 
-
-
-        <div class="input-field col s12">
           <p>
             <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
             <label for="administrator-radio">Administrator</label>
@@ -482,13 +541,96 @@
             <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
             <label for="coordinator-radio">Coordinator</label>
           </p>
-        </div>
         
     </form>
 
         <div class="submit-btn btn waves-effect waves-light" >Submit
           <i class="material-icons right">send</i>
         </div>
+  </div>
+</script>
+
+<script id="update-user-tpl" type="text/template">
+  <nav>
+    <div class="nav-wrapper">
+      <div class="col s12">
+        {{#if isAdmin}}
+          <a href="#administrator" class="breadcrumb">Menu</a>
+        {{else}}
+          <a href="#reservations" class="breadcrumb">Reservations</a>
+        {{/if}}
+        <a href="#users/{{id}}/edit" class="breadcrumb">Edit</a>
+      </div>
+    </div>
+    <div class="progress hidden">
+      <div class="indeterminate"></div>
+    </div>
+  </nav>
+
+  <div class="wrapper">
+
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">General</span>
+
+        <div class="input-field col s12">
+          <i class="material-icons prefix">account_circle</i>
+          <input id="user-name" type="text" class="validate" value="{{name}}">
+          <label class="active" for="user-name">name</label>
+        </div>
+
+        <div class="input-field col s12">
+          <i class="material-icons prefix">email</i>
+          <input id="email" type="text" class="validate" value="{{email}}">
+          <label class="active" for="email">email</label>
+        </div>
+      </div>
+
+      <div class="card-action">
+        <a href="#users/{{id}}/edit" class="update-info-btn">Update Information</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Password</span>
+
+        <div class="input-field col s12">
+          <i class="material-icons prefix">lock</i>
+          <input id="password" type="password" class="validate">
+          <label for="password">Password</label>
+        </div>
+
+        <div class="input-field col s12">
+          <i class="material-icons prefix">lock_outline</i>
+          <input id="password-confirmation" type="password" class="validate">
+          <label for="password-confirmation">Password Confirmation</label>
+        </div>
+      </div>
+
+      <div class="card-action">
+        <a href="#users/{{id}}/edit" class="update-password-btn">Update Password</a>
+      </div>
+    </div>
+
+    {{#if selfUpdate}}
+    {{else}}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Credentials</span>
+            <div class="row">
+              <input name="credentials" type="radio" id="administrator-radio" value="administrator"/>
+              <label class="active" for="administrator-radio">Administrator</label>
+              <input name="credentials" type="radio" id="coordinator-radio" value="coordinator"/>
+              <label class="active" for="coordinator-radio">Coordinator</label>
+            </div>
+
+        <div class="card-action">
+          <a href="#users/{{id}}/edit" class="update-cred-btn">Update Credentials</a>
+        </div>
+      </div>
+    {{/if}}
+
   </div>
 </script>
 
@@ -534,35 +676,128 @@
   </div>
 </script>
 
-  <!-- <script src="cordova.js"></script> -->
-  <script src="cordova.js"></script>
-  <script src="lib/fastclick.js"></script>
-  <script src="lib/handlebars.js"></script>
-  <script src="lib/jquery.js"></script>
-  <script src="lib/pageslider.js"></script>
-  <script src="lib/router.js"></script>
-  <script src="lib/jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
-  <script src="js/services/events.js"></script>
-  <!-- // <script src="js/services/ErrorHandler.js"></script> -->
-  <script src="js/services/CommunicationService.js"></script>
-  <script src="js/views/LogInView.js"></script>
-  <script src="js/views/ReservationsListView.js"></script>
-  <script src="js/views/ServicesListView.js"></script>
-  <script src="js/views/ReservationsView.js"></script>
-  <script src="js/views/CreateReservationView.js"></script>
-  <script src="js/views/TableChooseModalView.js"></script>
-  <script src="js/views/AdministratorView.js"></script>
-  <script src="js/views/SuperAdministratorView.js"></script>
-  <script src="js/views/UserListView.js"></script>
-  <script src="js/views/UserView.js"></script>
-  <script src="js/views/CreateUserView.js"></script>
-  <script src="js/views/RepresentativesListView.js"></script>
-  <script src="js/views/RepresentativesView.js"></script>
-  <script src="js/app.js"></script>
-  <script type="text/javascript" src="assets/materialize/js/materialize.min.js"></script>
-  <script type="text/javascript" src="assets/moment.js"></script>
+<script id="map-view" type="text/template">
+  <div class="mapCanvas"></div>
+</script>
+
+<script id="big-map-view" type="text/template">
+  <nav>
+    <div class="nav-wrapper">
+      <div class="col s12">
+        <a href="#administrator" class="breadcrumb">Reservations</a>
+        <a href="#administrator/map" class="breadcrumb">Map</a>
+      </div>
+    </div>
+    
+    <div class="progress hidden">
+      <div class="indeterminate"></div>
+    </div>
+  </nav>
+
+  <input type="date" class="datepicker">
+  
+
+  <div class="content"></div>
+</script>
+
+<script id="chart-tpl" type="text/template">
+  <canvas id="canvas"/>
+</script>
+
+<script id="finance-tpl" type="text/template">
+  <nav>
+    <ul id="slide-out" class="side-nav">
+      <li><a href="#administrator">Reservations</a></li>
+      <li><a href="#users/{{id}}/edit">Account</a></li>
+      {{#if credentials.isSuper}}
+        <li><a href="#administrator/super">Users</a></li>
+      {{/if}}
+      <li><a href="#">Log Out</a></li>
+    </ul>
+
+    <div class="nav-wrapper" id="finance-nav-wrapper">
+      <a href="#administrator" class="brand-logo">Finance</a>
+          <a href="#administrator/" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
+    </div>
+  </nav>
+  <div class="progress">
+    <div class="indeterminate"></div>
+  </div>
+  
+  <ul class="tabs" id="finance-tab">
+    <li class="tab col s3" data-tab-id="DailyTab" data-scope="day"><a id="day-a" data-scope="day">Daily</a></li>
+    <li class="tab col s3" data-tab-id="WeeklyTab" data-scope="week"><a id="week-a" data-scope="week">Weekly</a></li>
+    <li class="tab col s3" data-tab-id="MonthlyTab"data-scope="month"><a id="month-a" data-scope="month">Monthly</a></li>
+  </ul>
 
 
+  <input type="date" class="datepicker">
+
+  <div class="row finance-headers">
+    <h5 class="center-align blue-gray semi-thin">$ {{numberWithCommas totalAmmount}}</h5>
+    <div class="row">
+      <div class="center-align semi-thin subtext uppercase">Earnings</div>
+      <div class="row">
+        <h5 class="col s5 blue-gray center-align semi-thin">10,123</h5>
+        <h5 class="col s5 offset-s2 blue-gray center-align semi-thin">5,200</h5>
+        <div class="row no-marign-botton">
+          <div class="col s5 center-align semi-thin subtext uppercase">Tables Served</div>
+          <div class="col s5 offset-s2 center-align semi-thin subtext uppercase">Incomplete</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="chartContent"></div>
+  <div class="container">
+    {{#each tables}}
+      <div class="row pseudo-table">
+        <div class="col s6 blue-gray thin left-align"> {{ number }} </div>
+        <div class="col s6 blue-gray normal-weight right-align">$ {{numberWithCommas totalAmmount }} </div>
+      </div>
+    {{/each}}
+  </div>
+
+</script>
+
+
+
+
+<script src="cordova.js"></script>
+<script src="lib/fastclick.js"></script>
+<script src="lib/handlebars.js"></script>
+<script src="lib/jquery.js"></script>
+<script src="lib/pageslider.js"></script>
+<script src="lib/router.js"></script>
+<script src="lib/raphael.js"></script>
+<script src="lib/jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
+<script src="lib/jquery.p2r.min.js"></script>
+<script src="lib/Chart.bundle.js"></script>
+<script src="js/services/Map.js"></script>
+<script src="js/services/events.js"></script>
+<script src="js/services/CommunicationService.js"></script>
+<script src="js/views/LogInView.js"></script>
+<script src="js/views/ReservationsListView.js"></script>
+<script src="js/views/ServicesListView.js"></script>
+<script src="js/views/ReservationsView.js"></script>
+<script src="js/views/CreateReservationView.js"></script>
+<script src="js/views/MapView.js"></script>
+<script src="js/views/BigMapView.js"></script>
+<script src="js/views/TableChooseModalView.js"></script>
+<script src="js/views/AdministratorView.js"></script>
+<script src="js/views/SuperAdministratorView.js"></script>
+<script src="js/views/UserListView.js"></script>
+<script src="js/views/UserView.js"></script>
+<script src="js/views/CreateUserView.js"></script>
+<script src="js/views/UpdateUserView.js"></script>
+<script src="js/views/RepresentativesListView.js"></script>
+<script src="js/views/RepresentativesView.js"></script>
+<script src="js/views/ChartView.js"></script>
+<script src="js/views/FinanceView.js"></script>
+<script src="js/app.js"></script>
+<script type="text/javascript" src="assets/materialize/js/materialize.js"></script>
+<script type="text/javascript" src="assets/moment.js"></script>
 
 </body>
 </html>

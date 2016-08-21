@@ -408,6 +408,9 @@ if ($) {
 
       // Add click handler to only direct collapsible header children
       $this.on('click.collapse', '> li > .collapsible-header', function(e) {
+      	if($(e.target).hasClass('material-icons')) {
+      		return;
+      	}
         var $header = $(this),
             element = $(e.target);
 

@@ -4,8 +4,8 @@ var RepresentativesView = function (communication) {
 	this.initialize = function () {
 	 	this.$el = $('<div/>') ;
 		listView = new RepresentativesListView();
-		this.$el.on('click', '.add-rep-btn', function () {
-			window.scrollTo(0) //else the modal will not be always viewable
+		$('body').on('click', '.add-rep-btn', function () {
+			window.scrollTo(0,0) //else the modal will not be always viewable
 	 	 	$('#add-rep-modal').openModal(); 
 	 	});
 
@@ -23,16 +23,24 @@ var RepresentativesView = function (communication) {
 
 	this.updateRepresentatives = function() {		
 		communication.getRepresentatives().done(function (response) {
-			 listView.setRepresentatives(response.representatives);
+			const representatives = response.representatives.filter(function(e) { 
+				return e.user_id == communication.getUserId();
+			})
+			listView.setRepresentatives(representatives);
 		})
 	}
 
 	this.createRepresentative = function () {
+		const progressBar = $(".progress", this.$el);
 		const representativeName = $('#representative-name').val();
 		const repJson = { name: representativeName };
 		const updateRepresentatives = $.proxy(this.updateRepresentatives, this);
 
-		communication.createRepresentative(repJson).done(updateRepresentatives());
+		progressBar.removeClass('hidden');
+		communication.createRepresentative(repJson).done(function () {
+			 updateRepresentatives()
+			 progressBar.addClass('hidden');
+		});
 	}
 
 	this.deleteRepresentative = function (e) {

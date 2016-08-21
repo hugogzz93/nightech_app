@@ -3,33 +3,60 @@ const Communication = function () {
 	 var url;
 	 var auth_token;
 	 var credentials;
+	 var user_id;
 
 	 this.initialize = function (nightech_url) {
 	 	url = nightech_url ? nightech_url : "http://api.nightech_api.dev";
-	 	auth_token = null;
-	 	credentials = null;
+	 	this.clearSessionTokens();
 
 
 	 	var deferred = $.Deferred();
         deferred.resolve();
         return deferred.promise();
 	 }
-	 	// event registration
-	 	events.on("logInAttempt", function (parameters) {
-	 		 this.logIn(parameters);
-	 	}.bind(this));
+ 	// event registration
+ 	events.on("logInAttempt", function (parameters) {
+ 		this.logIn(parameters);
+ 	}.bind(this));
 
-	 	events.on("reservationSubmitted", function (parameters) {
-	 		 this.submitReservation(parameters);
-	 	}.bind(this));
+ 	events.on("reservationSubmitted", function (parameters) {
+ 		this.submitReservation(parameters);
+ 	}.bind(this));
 
+ 	this.getUserId = function () {
+ 		 return user_id; 
+ 	}
+
+ 	this.currentCredentials = function () {
+		return credentials;
+	}
 
 /* ---------------------------------- Session Handling ---------------------------------- */
 
 	this.startSession = function (user) {
-	 	 auth_token = user.auth_token;
-	 	 credentials = user.credentials; 
-	 	 console.log(credentials);
+	 	auth_token = user.auth_token;
+	 	credentials = user.credentials; 
+	 	user_id = user.id;
+	 	console.log(credentials);
+	}
+
+	this.clearSessionTokens = function () {
+		auth_token = null;
+		credentials = null;
+		user_id = null; 
+	}
+
+	this.terminateSession = function () {
+		$.ajax({
+	 	 	url: url + '/sessions/' + auth_token,
+	 	 	type: 'DELETE',
+	 	 	dataType: 'json',
+	 	 	data: {id: auth_token},
+	 	 }).done(function (response) {
+			events.emit("logOutSuccess");
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
 	}
 
 	this.logIn = function (parameters) {
@@ -44,12 +71,9 @@ const Communication = function () {
 	 	 	 events.emit("logInSuccess", response.user);
 	 	 	 logIn(response.user);
 	 	 }).fail(function (response) {
-	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 		alert(JSON.parse(response.responseText).errors);
+	 		$(".progress").addClass('hidden');
 	 	 });
-	}
-
-	this.currentCredentials = function () {
-		return credentials;
 	}
 
 /* ---------------------------------- Reservations Handling ---------------------------------- */
@@ -68,6 +92,7 @@ const Communication = function () {
 	 	  })
 	 	  .fail(function() {
 	 		alert("Connection Error 001");
+	 		events.emit("LogOut");
 	 	  });
 	 	   
 	 }
@@ -90,7 +115,7 @@ const Communication = function () {
 	}
 
 	this.acceptReservation = function (reservationId, table_number) {
-		 return $.ajax({
+		return $.ajax({
 	 	 	url: url + '/reservations/' + reservationId,
 	 	 	type: 'PATCH',
 	 	 	dataType: 'json',
@@ -99,13 +124,62 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-	 	 }).fail(function (response) {
+	 	}).fail(function (response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
-	 	 });
+	 	});
 	}
 
+	this.cancelReservation = function (reservationId, table_number) {
+		return $.ajax({
+	 	 	url: url + '/reservations/' + reservationId,
+	 	 	type: 'PATCH',
+	 	 	dataType: 'json',
+	 	 	data: {id: reservationId, table_number: table_number, reservation: { status: "pending" }},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	}).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	});
+	}
 
-/* ---------------------------------- Service Handling ---------------------------------- */
+	this.rejectReservation = function (reservationId) {
+		const reservationJson = { status: "rejected" };
+		return this.updateReservation(reservationId, reservationJson);
+	}
+
+	this.updateReservation = function (reservationId, reservationJson) {
+		return $.ajax({
+	 	 	url: url + '/reservations/' + reservationId,
+	 	 	type: 'PATCH',
+	 	 	dataType: 'json',
+	 	 	data: {reservation: reservationJson},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	}).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	});
+	}
+
+	this.destroyReservation = function (reservationId) {
+  		return $.ajax({
+  	 	 	url: url + '/reservations/' + reservationId,
+  	 	 	type: 'DELETE',
+  	 	 	dataType: 'json',
+  	 	 	data: {id: reservationId},
+  	 	 	beforeSend: function (request)
+	        {
+	            request.setRequestHeader("Authorization", auth_token);
+	        }
+  	 	}).fail(function (response) {
+  	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+  	 	});
+	}
+
+/* -------------------\--------------- Service Handling ---------------------------------- */
 
 	 this.getServicesByDate = function (date) {
 	 	 const dateString = date.toISOString();
@@ -121,16 +195,35 @@ const Communication = function () {
 	 	  })
 	 	  .fail(function() {
 	 		alert("Connection Error 003");
+	 		events.emit("LogOut");
 	 	  });
 	 }
 
-	this.getTablesByDate = function (date) {
+	this.getTablesByDate = function (date, scope) {
+		scope = scope || "day"
 		const dateString = date.toISOString();
 		 return $.ajax({
 	 	 	url: url + '/tables',
 	 	 	type: 'GET',
 	 	 	dataType: 'json',
-	 	 	data: {date : dateString},
+	 	 	data: {date : dateString, scope: scope},
+	 	 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+	 	 }).fail(function (response) {
+	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+	 	 });
+	}
+
+	this.getServices = function (date, scope) {
+		scope = scope || "day"
+		const dateString = date.toISOString();
+		 return $.ajax({
+	 	 	url: url + '/services',
+	 	 	type: 'GET',
+	 	 	dataType: 'json',
+	 	 	data: {date : dateString, scope: scope},
 	 	 	beforeSend: function (request)
             {
                 request.setRequestHeader("Authorization", auth_token);
@@ -141,7 +234,7 @@ const Communication = function () {
 	}
 
 	this.submitService = function (serviceJson) {
-		 return $.ajax({
+		return $.ajax({
 	 	 	url: url + '/services',
 	 	 	type: 'POST',
 	 	 	dataType: 'json',
@@ -150,13 +243,13 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-	 	 }).fail(function (response) {
+	 	}).fail(function (response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
-	 	 });
+	 	});
 	}
 
 	this.destroyService = function (serviceId) {
-		 return $.ajax({
+		return $.ajax({
 	 	 	url: url + '/services/' + serviceId,
 	 	 	type: 'DELETE',
 	 	 	dataType: 'json',
@@ -165,13 +258,13 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-	 	 }).fail(function (response) {
+	 	}).fail(function (response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
-	 	 });
+	 	});
 	}
 
 	this.completeService = function (serviceId) {
-		 return $.ajax({
+		return $.ajax({
 	 	 	url: url + '/services/' + serviceId,
 	 	 	type: 'PATCH',
 	 	 	dataType: 'json',
@@ -180,9 +273,9 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-	 	 }).fail(function (response) {
+	 	}).fail(function (response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
-	 	 });
+	 	});
 	}
 
 	this.updateService = function (serviceId, serviceJson) {
@@ -203,7 +296,7 @@ const Communication = function () {
 /* ---------------------------------- Representatives Handling ---------------------------------- */
 
 	this.getRepresentatives = function () {
-		 return $.ajax({
+		return $.ajax({
 		 	url: url + '/representatives',
 		 	type: 'GET',
 		 	dataType: 'json',
@@ -211,14 +304,15 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-		 })
+		})
 		 .fail(function() {
 	 		alert("Connection Error 002");
-		 });	  
+	 		events.emit("LogOut");
+		});	  
 	}
 
 	this.createRepresentative = function (repJson) {
-		 return $.ajax({
+		return $.ajax({
 		 	url: url + '/representatives',
 		 	type: 'POST',
 		 	dataType: 'json',
@@ -227,14 +321,14 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-		 })
+		})
 		 .fail(function() {
 		 	console.log("error");
-		 });
+		});
 	}
 
 	this.destroyRepresentative = function (id) {
-		 return $.ajax({
+		return $.ajax({
 		 	url: url + '/representatives/' + id,
 		 	type: 'DELETE',
 		 	dataType: 'json',
@@ -243,10 +337,10 @@ const Communication = function () {
             {
                 request.setRequestHeader("Authorization", auth_token);
             }
-		 })
+		})
 		 .fail(function() {
 		 	console.log("error");
-		 }); 
+		}); 
 	}
 
 /* ---------------------------------- Users Handling ---------------------------------- */
@@ -263,6 +357,7 @@ const Communication = function () {
 		 })
 		 .fail(function() {
 	 		alert("Connection Error 005");
+	 		events.emit("LogOut");
 		 });
 	}
 
@@ -280,6 +375,7 @@ const Communication = function () {
 		 })
 		 .fail(function() {
 	 		alert("Connection Error 006");
+	 		events.emit("LogOut");
 		 });
 	}
 
@@ -300,6 +396,23 @@ const Communication = function () {
 		 });	 
 	}
 
+	this.updateUser = function (userId, userJson) {
+		  return $.ajax({
+		  	url: url + '/users/' + userId,
+		  	type: 'PATCH',
+		  	dataType: 'json',
+		  	data: {user: userJson},
+		 	beforeSend: function (request)
+            {
+                request.setRequestHeader("Authorization", auth_token);
+            }
+		  })
+		  .fail(function(response) {
+		  	$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
+		  })
+		  
+	}
+
 	this.deleteUser = function (userId) {
 		 return $.ajax({
 		 	url: url + '/users/' + userId,
@@ -314,7 +427,7 @@ const Communication = function () {
 		 .done(function (response) {
 		 	 events.emit('userDeleted', null);
 		 })
-		 .fail(function() {
+		 .fail(function(response) {
 	 		$.each(JSON.parse(response.responseText).errors, function(key, message) {alert(key + " " + message)} );
 		 });
 	}

@@ -8,6 +8,7 @@
     <link href="assets/css/styles.css" rel="stylesheet">
     <link href="assets/css/pageslider-fix.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name = "format-detection" content = "telephone=no">
 </head>
 <body>
   
@@ -715,8 +716,8 @@
     </ul>
 
     <div class="nav-wrapper" id="finance-nav-wrapper">
-      <a href="#administrator" class="brand-logo">Finance</a>
-          <a href="#administrator/" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
+      <a href="#administrator/super/finance" class="brand-logo">Finance</a>
+          <a href="#administrator/super/finance" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
     </div>
   </nav>
   <div class="progress">
@@ -732,31 +733,70 @@
 
   <input type="date" class="datepicker">
 
-  <div class="row">
-    <h5 class="center-align">$ {{numberWithCommas totalAmmount}}</h5>
+  <div class="row finance-headers">
+    <h5 class="center-align blue-gray semi-thin">$ {{numberWithCommas totalAmmount}}</h5>
+    <div class="row">
+      <div class="center-align semi-thin subtext uppercase">Earnings</div>
+      <div class="row">
+        <h5 class="col s5 blue-gray center-align semi-thin">10,123</h5>
+        <h5 class="col s5 offset-s2 blue-gray center-align semi-thin">5,200</h5>
+        <div class="row no-marign-botton">
+          <div class="col s5 center-align semi-thin subtext uppercase">Tables Served</div>
+          <div class="col s5 offset-s2 center-align semi-thin subtext uppercase">Incomplete</div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="row">
-    <div class="center-align semi-thin subtext uppercase">Earnings</div>
+
+
+  <div id="chartContent"></div>
+
+  
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a href="#administrator/super/finance" class="btn-floating btn-large green" id="user-finance-btn">
+      <i id="user-finance-btn-icon" class="large material-icons">supervisor_account</i>
+    </a>
   </div>
-  <div class="row">
-    <div class="col s5 offset-s1">{{total}}</div>
-    <div class="col s5">{{missingAmmount}}</div>
+
+  <div id="userList" class="hidden"></div>
+  <div id="tableList" class="container">
+    {{#each tables}}
+      <div class="row pseudo-table">
+        <div class="col s6 blue-gray thin left-align"> {{ number }} </div>
+        <div class="col s6 blue-gray normal-weight right-align">$ {{numberWithCommas totalAmmount }} </div>
+      </div>
+    {{/each}}
   </div>
-  <div class="row">
-    <div class="col s5 offset-s1 center-align semi-thin subtext uppercase">Tables Served</div>
-    <div class="col s5 center-align semi-thin subtext uppercase">Incomplete</div>
+
+</script>
+
+<script id="user-finance-tpl" type="text/template">
+  <nav>
+    <ul id="slide-out" class="side-nav">
+      <li><a href="#administrator">Reservations</a></li>
+      <li><a href="#users/{{id}}/edit">Account</a></li>
+      {{#if credentials.isSuper}}
+        <li><a href="#administrator/super">Users</a></li>
+      {{/if}}
+      <li><a href="#">Log Out</a></li>
+    </ul>
+
+    <div class="nav-wrapper" id="finance-nav-wrapper">
+      <a href="#administrator/super/finance/" class="brand-logo">{{name}}</a>
+          <a href="#administrator/super/finance" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
+    </div>
+  </nav>
+  <div class="progress">
+    <div class="indeterminate"></div>
   </div>
+</script>
 
-
-  <div class="chartContent"></div>
-
-
-  <div id="DailyTab" class="col s12  tab-data"></div>
-  <div id="WeeklyTab" class="col s12  tab-data"></div>
-  <div id="MonthlyTab" class="col s12  tab-data"></div>
-
-
-
+<script id="user-finance-list-tpl" type="text/template">
+  <ul class="collection">
+      {{#each this}}
+        <li class="collection-item user-li" data-user-id="{{id}}"><a href="#administrator/super/finance">{{ name }} <span class="right">${{numberWithCommas totalAmmount}}</span></a></li>
+      {{/each}}
+  </ul>
 </script>
 
 
@@ -793,7 +833,9 @@
 <script src="js/views/RepresentativesListView.js"></script>
 <script src="js/views/RepresentativesView.js"></script>
 <script src="js/views/ChartView.js"></script>
+<script src="js/views/UserFinanceList.js"></script>
 <script src="js/views/FinanceView.js"></script>
+<script src="js/views/UserFinanceView.js"></script>
 <script src="js/app.js"></script>
 <script type="text/javascript" src="assets/materialize/js/materialize.js"></script>
 <script type="text/javascript" src="assets/moment.js"></script>

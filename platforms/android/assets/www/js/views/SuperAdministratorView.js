@@ -20,10 +20,13 @@ var SuperAdministratorView = function (communication) {
 	 	 return this;
 	 }
 
-	 this.updateUsers = function () {
-	 	 communication.getUsers().done(function (response) {
-	 	 	 var administrators = [];
-			 var coordinators = [];
+	this.updateUsers = function () {
+	 	const progressBar = $("progress", this.$el);
+
+	 	progressBar.removeClass('hidden');
+	 	communication.getUsers().done(function (response) {
+	 	 	var administrators = [];
+			var coordinators = [];
 
 	 	 	for (var i = response.users.length - 1; i >= 0; i--) {
  	 		 	if(response.users[i].credentials === "administrator") {
@@ -31,12 +34,13 @@ var SuperAdministratorView = function (communication) {
  	 		 	} else {
  	 		 		coordinators.push(response.users[i]);
  	 		 	}
- 	 		 };	 
+ 	 		};	 
  	 		 
- 	 		 administratorsListView.setUsers(administrators);
-		 	 coordinatorsListView.setUsers(coordinators);	
-	 	 })
-	 }
+ 	 		administratorsListView.setUsers(administrators);
+		 	coordinatorsListView.setUsers(coordinators);	
+		 	progressBar.addClass('hidden');
+	 	})
+	}
 
 	 this.initialize();
 }
