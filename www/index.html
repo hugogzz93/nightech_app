@@ -783,12 +783,34 @@
 
     <div class="nav-wrapper" id="finance-nav-wrapper">
       <a href="#administrator/super/finance/" class="brand-logo">{{name}}</a>
-          <a href="#administrator/super/finance" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
+          <a href="#administrator/super/finance" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
     </div>
   </nav>
-  <div class="progress">
-    <div class="indeterminate"></div>
-  </div>
+
+    <div class="row">
+      <div class="col s6">
+        <h5 class="center-align blue-gray semi-thin">$ {{numberWithCommas totalAmmount}} </h5><br>
+        <div class="center-align-semi-thin subtext uppercase"> Earnings </div>
+      </div>
+      <div class="col s6">
+          <div class="progress light-blue lighten-2" style="height:10px;">
+              <div class="light-blue darken-4 determinate" style="width: {{ selfPercent }}%"></div>
+          </div>
+          <div class="progress yellow darken-4" style="height:10px;">
+              <div class="determinate orange darken-4" style="width: {{ rpPercent }}%"></div>
+          </div>
+      </div>
+    </div>
+
+    <ul class="collapsible" data-collapsible="accordion">
+        {{#each repArray}} 
+          <li>
+            <div class="collapsible-header">{{name}}</div>
+            <div class="collapsible-body"><p></p></div>
+          </li>
+        {{/each}}
+      </ul>
+
 </script>
 
 <script id="user-finance-list-tpl" type="text/template">

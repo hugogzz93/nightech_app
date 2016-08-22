@@ -174,7 +174,7 @@ var FinanceView = function (communication) {
 					id: users[i].id,
 					totalAmmount: 0,
 					totalServices: 0,
-					reps:{"-1":[]}
+					reps:{"-1":{services:[]}}
 				})
 				index.users[users[i].id] = _data.coordinators.length - 1;
 			}
@@ -213,12 +213,12 @@ var FinanceView = function (communication) {
 	  				if(service.representative) {
 	  					var rep = coordinator.reps[service.representative.id];
 			  			if(rep) {
-			  				rep.push(service);
+			  				rep.services.push(service);
 			  			}  else {
-			  				coordinator.reps[service.representative.id] = [service];
+			  				coordinator.reps[service.representative.id] = {name: service.representative.name, services: [service]};
 			  			}
 	  				} else {
-	  					coordinator.reps[-1].push(service)
+	  					coordinator.reps[-1].services.push(service)
 	  				}
 		  			
 	  			};
