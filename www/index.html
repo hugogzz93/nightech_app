@@ -781,16 +781,19 @@
       <li><a href="#">Log Out</a></li>
     </ul>
 
-    <div class="nav-wrapper" id="finance-nav-wrapper">
-      <a href="#administrator/super/finance/" class="brand-logo">{{name}}</a>
+    <div class="nav-wrapper" id="user-finance-nav-wrapper">
+      <a href="#administrator/super/finance/" class="brand-logo">
+          {{ name }}
+          <div class="subtitle">{{date}}</div>
+      </a>
           <a href="#administrator/super/finance" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
     </div>
   </nav>
 
-    <div class="row">
+    <div class="row finance-dashboard">
       <div class="col s6">
-        <h5 class="center-align blue-gray semi-thin">$ {{numberWithCommas totalAmmount}} </h5><br>
         <div class="center-align-semi-thin subtext uppercase"> Earnings </div>
+        <h5 class="center-align blue-gray semi-thin">{{numberWithCommas totalAmmount}} <sup>$</sup></h5><br>
       </div>
       <div class="col s6">
           <div class="progress light-blue lighten-2" style="height:10px;">
@@ -802,15 +805,27 @@
       </div>
     </div>
 
-    <ul class="collapsible" data-collapsible="accordion">
+<div class="container">
+    <ul class="collapsible popout" data-collapsible="expandable">
         {{#each repArray}} 
           <li>
-            <div class="collapsible-header">{{name}}</div>
-            <div class="collapsible-body"><p></p></div>
+            <div class="grey lighten-2 finance-rp collapsible-header active">{{name}}<span class="right" style="font-weight: 500;">$ {{totalAmmount}} </span></div>
+            <div class="collapsible-body">
+              {{#each services}}
+                <div class="service left-align">
+                  <h5 class="row"><strong>{{client}}</strong></h5>
+                  <div class="row">${{ammount}}  
+                    <div class="subtext"><i class="tiny material-icons">query_builder</i>{{elapsedTime}}M</div> 
+                  </div>
+                  <div class="row grayText">{{date}}</div>
+                </div>
+                <div class="theme-break"/>
+              {{/each}}
+            </div>
           </li>
         {{/each}}
       </ul>
-
+</div>
 </script>
 
 <script id="user-finance-list-tpl" type="text/template">

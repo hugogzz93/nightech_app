@@ -174,7 +174,13 @@ var FinanceView = function (communication) {
 					id: users[i].id,
 					totalAmmount: 0,
 					totalServices: 0,
-					reps:{"-1":{services:[]}}
+					reps:{"-1":{
+						name:"No Rp",
+						totalAmmount: 0,
+						totalServices: 0,
+						services:[],
+
+					}}
 				})
 				index.users[users[i].id] = _data.coordinators.length - 1;
 			}
@@ -214,11 +220,17 @@ var FinanceView = function (communication) {
 	  					var rep = coordinator.reps[service.representative.id];
 			  			if(rep) {
 			  				rep.services.push(service);
+			  				rep.totalAmmount += parseInt(service.ammount);
+			  				rep.totalServices += 1;
 			  			}  else {
-			  				coordinator.reps[service.representative.id] = {name: service.representative.name, services: [service]};
+			  				coordinator.reps[service.representative.id] = {name: service.representative.name, 
+			  					services: [service], totalAmmount: parseInt(service.ammount), totalServices: 1};
 			  			}
 	  				} else {
-	  					coordinator.reps[-1].services.push(service)
+	  					rep = coordinator.reps[-1]
+	  					rep.services.push(service)
+		  				rep.totalAmmount += parseInt(service.ammount);
+		  				rep.totalServices += 1;
 	  				}
 		  			
 	  			};

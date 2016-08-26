@@ -1,3 +1,40 @@
+.finance-rp {
+	color: #868686;
+	text-transform: uppercase;
+	font-weight: 300;
+}
+.theme-break {
+	border-bottom: 1px solid #d3d3d3;
+	margin-left: 10%;
+}
+
+.theme-break:last-child {
+	display: none;
+}
+
+.service .subtext {
+	display: inline;
+	margin-left: 2em;
+}
+.service .row {
+	margin-left: 0px !important;
+}
+
+.service {
+	padding: 2% 5%;
+}
+
+.finance-dashboard {
+	padding-top: 1.5em;
+
+}
+
+.subtitle {
+	margin-top: -4.6em;
+	color: white
+	font-size: 0.3em;
+}
+
 body {
     overflow: auto !important; 
 }
