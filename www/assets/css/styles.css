@@ -1,197 +1,244 @@
-.finance-rp {
-	color: #868686;
-	text-transform: uppercase;
-	font-weight: 300;
-}
-.theme-break {
-	border-bottom: 1px solid #d3d3d3;
-	margin-left: 10%;
-}
-
-.theme-break:last-child {
-	display: none;
-}
-
-.service .subtext {
-	display: inline;
-	margin-left: 2em;
-}
-.service .row {
-	margin-left: 0px !important;
-}
-
-.service {
-	padding: 2% 5%;
-}
-
-.finance-dashboard {
-	padding-top: 1.5em;
-
-}
-
-.subtitle {
-	margin-top: -4.6em;
-	color: white
-	font-size: 0.3em;
-}
-
+/* line 1, ../sass/partials/_base.scss */
 body {
-    overflow: auto !important; 
+  overflow: auto !important;
 }
 
+/* line 8, ../sass/styles.scss */
+.finance-rp {
+  color: #868686;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+/* line 13, ../sass/styles.scss */
+.theme-break {
+  border-bottom: 1px solid #dfdfdf;
+  margin-left: 10%;
+}
+/* line 16, ../sass/styles.scss */
+.theme-break:last-child {
+  display: none;
+}
+
+/* line 21, ../sass/styles.scss */
+.service {
+  padding: 2% 5%;
+}
+/* line 23, ../sass/styles.scss */
+.service .subtext {
+  display: inline;
+  margin-left: 2em;
+}
+/* line 27, ../sass/styles.scss */
+.service .row {
+  margin-left: 0px !important;
+}
+
+/* line 32, ../sass/styles.scss */
+.finance-dashboard {
+  padding-top: 1.5em;
+}
+
+/* line 37, ../sass/styles.scss */
+.subtitle {
+  margin-top: -4.6em;
+  color: white;
+  font-size: 0.3em;
+}
+
+/* line 43, ../sass/styles.scss */
 .pseudo-table {
-	border-bottom: 1px solid #f2f2f6;
-	margin-bottom: 1%;
-	font-size: 1.1em;
+  border-bottom: 1px solid white;
+  margin-bottom: 1%;
+  font-size: 1.1em;
 }
 
+/* line 49, ../sass/styles.scss */
 .no-marign-botton {
-	margin-bottom: 0px;
+  margin-bottom: 0px;
 }
-.blue-gray{
-	color: #315e83;
+
+/* line 52, ../sass/styles.scss */
+.blue-gray {
+  color: #315e83;
 }
+
+/* line 55, ../sass/styles.scss */
 .finance-headers {
-	margin-bottom: 0px;
+  margin-bottom: 0px;
 }
+
+/* line 58, ../sass/styles.scss */
 #finance-nav-wrapper {
-	background: #46e3c5;
+  background: #46e3c5;
 }
 
+/* line 62, ../sass/styles.scss */
 #finance-tab {
-    background: #64edd1; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(left top, #64edd1, #aff2d6); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(bottom right, #64edd1, #aff2d6); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(bottom right, #64edd1, #aff2d6); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(to bottom right, #64edd1, #aff2d6); /* Standard syntax (must be last) */
+  background: #72ead3;
+  /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, #72ead3, #aff2d6);
+  /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, #72ead3, #aff2d6);
+  /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, #72ead3, #aff2d6);
+  /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, #72ead3, #aff2d6);
+  /* Standard syntax (must be last) */
 }
-
+/* line 64, ../sass/styles.scss */
 #finance-tab a {
-	color: green;
+  color: green;
+}
+/* line 65, ../sass/styles.scss */
+#finance-tab .indicator {
+  display: none;
+}
+/* line 66, ../sass/styles.scss */
+#finance-tab .active {
+  font-weight: bold;
+  border-bottom: 2px solid green;
 }
 
-#finance-tab a.active {
-	font-weight: bold;
-	border-bottom: 2px solid green;
-}
-
-#finance-tab  .indicator {
-	display: none;
-}
-
+/* line 73, ../sass/styles.scss */
 .thin {
-	font-weight: 100;
+  font-weight: 100;
 }
 
+/* line 77, ../sass/styles.scss */
 .semi-thin {
-	font-weight: 300;
+  font-weight: 300;
 }
 
+/* line 81, ../sass/styles.scss */
 .normal-weight {
-	font-weight: 500;
+  font-weight: 500;
 }
 
+/* line 85, ../sass/styles.scss */
 .uppercase {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 
+/* line 89, ../sass/styles.scss */
 .subtext {
-	font-size: 0.6em;
-	color: #a2bacc;
+  font-size: 0.6em;
+  color: #a2bacc;
 }
+
+/* line 93, ../sass/styles.scss */
 input {
-	color:black !important;
+  color: black !important;
 }
 
-.grayText { 
-	color: #a6a6a6;
+/* line 97, ../sass/styles.scss */
+.grayText {
+  color: #b9b9b9;
 }
+
+/* line 100, ../sass/styles.scss */
 .mapCanvas {
-    display: block;
-	border: 1px solid #ccc;
-	margin: 3%;
-	width: 95vw;
-	height: 95vh;
-	background: #fff;
+  display: block;
+  border: 1px solid #868686;
+  margin: 3%;
+  width: 95vw;
+  height: 95vh;
+  background: white;
 }
 
+/* line 109, ../sass/styles.scss */
 .separator {
-	margin: 5px;
-	width: 1px;
-	height: 1px;
+  margin: 5px;
+  width: 1px;
+  height: 1px;
 }
 
+/* line 115, ../sass/styles.scss */
 .table_number {
-	float: right;
-	margin-right: 5%;
+  float: right;
+  margin-right: 5%;
 }
 
+/* line 120, ../sass/styles.scss */
 .page.transition.center {
-	background-color: #FCFCFC;
+  background-color: white;
 }
 
+/* line 124, ../sass/styles.scss */
 ul.collection {
-	text-align: left;
+  text-align: left;
 }
 
-.collapsible-header:active {
-    background-color: #26A69A;
-    color: white;
-    transition: all 0.3s;
-}
-
+/* line 128, ../sass/styles.scss */
 .datepicker {
-    text-align: center;
+  text-align: center;
 }
 
+/* line 132, ../sass/styles.scss */
 .collapsible-header {
-	text-align:left;
+  text-align: left;
 }
-
+/* line 134, ../sass/styles.scss */
 .collapsible-header i {
-	float: right;
+  float: right;
+}
+/* line 138, ../sass/styles.scss */
+.collapsible-header:active {
+  background-color: #26A69A;
+  color: white;
+  transition: all 0.3s;
 }
 
+/* line 145, ../sass/styles.scss */
 .progress {
-	margin: 0;
+  margin: 0;
 }
 
+/* line 149, ../sass/styles.scss */
 .hidden {
-	display: none;
+  display: none;
 }
 
+/* line 153, ../sass/styles.scss */
 .collapse-btn {
-	background-color: #26a69a;
-	color: white;
+  background-color: #26A69A;
+  color: white;
 }
 
+/* line 158, ../sass/styles.scss */
 .finished {
-	background-color: #c5c5c5;
+  background-color: #c6c6c6;
 }
 
+/* line 162, ../sass/styles.scss */
 .header {
-	text-transform: capitalize;
-	color: #ee6e73;
-    font-weight: 300;
+  text-transform: capitalize;
+  color: #ee6e73;
+  font-weight: 300;
 }
 
+/* line 168, ../sass/styles.scss */
 .capitalize {
-	text-transform: capitalize;
+  text-transform: capitalize;
 }
 
+/* line 172, ../sass/styles.scss */
 .wrapper {
-	padding: 0 10px;
+  padding: 0 10px;
 }
 
+/* line 177, ../sass/styles.scss */
 .card-content:not(:first-child) {
-    border-top: 1px solid rgba(160,160,160,0.2);
+  border-top: 1px solid #ececec;
 }
 
+/* line 182, ../sass/styles.scss */
 .picker {
-  position: fixed ;
-  z-index: 10000 ;
+  position: fixed;
+  z-index: 10000;
 }
 
-div.ui-datepicker{
- font-size: 7px;
+/* line 187, ../sass/styles.scss */
+div.ui-datepicker {
+  font-size: 7px;
 }
