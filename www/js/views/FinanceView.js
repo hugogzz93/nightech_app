@@ -14,6 +14,7 @@ var FinanceView = function (communication) {
 	var credentials;
 	var userList;
 	var listToggle = false;
+	var renders = 0;
 
 	labelString = "$"
 	prevLabelString = "$"
@@ -44,7 +45,6 @@ var FinanceView = function (communication) {
  			$('.button-collapse').sideNav('show');
  	 	});
 
-
 	 	this.findByDate(new Date());
 		this.render();
 	}
@@ -58,8 +58,6 @@ var FinanceView = function (communication) {
 	 	const $datepicker = this.$el.find('.datepicker');
 	 	$datepicker.pickadate({container: 'body'});
 		$datepicker.val( this.date.toDateString() || ($datepicker.val() === "" ? new Date().toDateString() : $datepicker.val()));
-		const $tabs = this.$el.find('ul.tabs');
-		$tabs.tabs();
 
 		$('.tab a', this.$el).removeClass('active');
 		if(scope === "day") 		{ $('#day-a', this.$el).addClass('active'); }
@@ -67,12 +65,13 @@ var FinanceView = function (communication) {
 		else if(scope === "month") 	{ $('#month-a', this.$el).addClass('active'); }
 
 		$('.fixed-action-btn', '.page.transition.center').remove(); //fixes pageslider error
-		$('#user-finance-btn').on('click', function(){
-			 $('#tableList', this.$el).toggleClass("hidden");
-			 $('#userList', this.$el).toggleClass("hidden");
-			 $('#user-finance-btn-icon').html(listToggle ? USER_ICON_NAME: TABLE_ICON_NAME);
-			 listToggle = !listToggle;
-		})
+		console.log(renders)
+		if(renders < 3) $('#user-finance-btn').on('click', this.toggleList.bind(this));
+
+		renders += 1;
+		const $tabs = this.$el.find('ul.tabs');
+		$tabs.tabs();
+		this.toggleList(false);
 		return this; 
 	}
 
@@ -262,8 +261,6 @@ var FinanceView = function (communication) {
 		}
 		date.setHours(0,0,0,0);
 		this.findByDate(date);
-		const $tabs = this.$el.find('ul.tabs');
-		$tabs.tabs();
 	}
 
 	this.findByDate = function(date, def) {
@@ -313,6 +310,23 @@ var FinanceView = function (communication) {
 		if (progressBar) {
 			progressBar.toggleClass('hidden');
 		};
+	}
+
+	this.toggleList = function () {
+		 if(listToggle) {
+		 	$('#tableList', this.$el).addClass("hidden");
+			$('#userList', this.$el).removeClass("hidden");
+		 } else {
+		 	$('#tableList', this.$el).removeClass("hidden");
+			$('#userList', this.$el).addClass("hidden");
+		 }
+		 $('#user-finance-btn-icon').html(listToggle ? USER_ICON_NAME: TABLE_ICON_NAME);
+		 listToggle = !listToggle;
+	}
+
+	this.setList = function (bool) {
+		 listToggle = bool;
+		 this.toggleList();
 	}
 
 	this.tabPicked = function (e) {

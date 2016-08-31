@@ -1,6 +1,131 @@
+/**
+ * A gray color variable.
+ *
+ * @color
+ * @section Global
+ */
+/**
+ * A grayish-blue color variable.
+ *
+ * @color
+ * @section Global
+ */
+/**
+ * A blue-gray color variable.
+ *
+ * @color
+ * @section Global
+ */
+/**
+ * A lime-green color variable.
+ *
+ * @color
+ * @section Global
+ */
+/**
+ * A soft-cyan color variable.
+ *
+ * @color
+ * @section Global
+ */
+/**
+ * A dark-cyan color variable.
+ *
+ * @color
+ * @section Global
+ */
+/**
+ * A soft-red color variable.
+ *
+ * @color
+ * @section Global
+ */
+/**
+ * A dark-orange color variable.
+ *
+ * @color
+ * @section Global
+ */
+/**
+ * A dark-soft-blue color variable.
+ *
+ * @color
+ * @section Global
+ */
+/**
+ * Adds a left-right gradient to the element
+ * 
+ * @mixin
+ * @section Style Mixins
+ * @param $start-color The color displayed initially
+ * @param $end-color The ending color of the gradient
+ * @example
+ *   @include linear-gradient-left-top(red, blue);
+ */
 /* line 1, ../sass/partials/_base.scss */
 body {
   overflow: auto !important;
+}
+
+/* line 5, ../sass/partials/_base.scss */
+.hidden {
+  display: none;
+}
+
+/* line 10, ../sass/partials/_base.scss */
+.dark-blue {
+  color: #01579b;
+}
+
+/* line 14, ../sass/partials/_base.scss */
+.dark-orange {
+  color: #e65100;
+}
+
+/* line 18, ../sass/partials/_base.scss */
+.blue-gray {
+  color: #315e83;
+}
+
+/* line 22, ../sass/partials/_base.scss */
+.grayText {
+  color: #b9b9b9;
+}
+
+/* line 26, ../sass/partials/_base.scss */
+.no-marign-botton {
+  margin-bottom: 0px;
+}
+
+/* line 32, ../sass/partials/_base.scss */
+.thin {
+  font-weight: 100;
+}
+
+/* line 36, ../sass/partials/_base.scss */
+.semi-thin {
+  font-weight: 300;
+}
+
+/* line 40, ../sass/partials/_base.scss */
+.normal-weight {
+  font-weight: 500;
+}
+
+/* line 45, ../sass/partials/_base.scss */
+.subtext {
+  font-size: 0.6em;
+  color: #a2bacc;
+}
+
+/* line 50, ../sass/partials/_base.scss */
+.uppercase {
+  text-transform: uppercase;
+}
+
+/* line 54, ../sass/partials/_base.scss */
+.capitalize {
+  text-transform: capitalize;
 }
 
 /* line 8, ../sass/styles.scss */
@@ -54,26 +179,16 @@ body {
 }
 
 /* line 49, ../sass/styles.scss */
-.no-marign-botton {
-  margin-bottom: 0px;
-}
-
-/* line 52, ../sass/styles.scss */
-.blue-gray {
-  color: #315e83;
-}
-
-/* line 55, ../sass/styles.scss */
 .finance-headers {
   margin-bottom: 0px;
 }
 
-/* line 58, ../sass/styles.scss */
+/* line 52, ../sass/styles.scss */
 #finance-nav-wrapper {
   background: #46e3c5;
 }
 
-/* line 62, ../sass/styles.scss */
+/* line 56, ../sass/styles.scss */
 #finance-tab {
   background: #72ead3;
   /* For browsers that do not support gradients */
@@ -86,57 +201,26 @@ body {
   background: linear-gradient(to bottom right, #72ead3, #aff2d6);
   /* Standard syntax (must be last) */
 }
-/* line 64, ../sass/styles.scss */
+/* line 58, ../sass/styles.scss */
 #finance-tab a {
   color: green;
 }
-/* line 65, ../sass/styles.scss */
+/* line 59, ../sass/styles.scss */
 #finance-tab .indicator {
   display: none;
 }
-/* line 66, ../sass/styles.scss */
+/* line 60, ../sass/styles.scss */
 #finance-tab .active {
   font-weight: bold;
   border-bottom: 2px solid green;
 }
 
-/* line 73, ../sass/styles.scss */
-.thin {
-  font-weight: 100;
-}
-
-/* line 77, ../sass/styles.scss */
-.semi-thin {
-  font-weight: 300;
-}
-
-/* line 81, ../sass/styles.scss */
-.normal-weight {
-  font-weight: 500;
-}
-
-/* line 85, ../sass/styles.scss */
-.uppercase {
-  text-transform: uppercase;
-}
-
-/* line 89, ../sass/styles.scss */
-.subtext {
-  font-size: 0.6em;
-  color: #a2bacc;
-}
-
-/* line 93, ../sass/styles.scss */
+/* line 66, ../sass/styles.scss */
 input {
   color: black !important;
 }
 
-/* line 97, ../sass/styles.scss */
-.grayText {
-  color: #b9b9b9;
-}
-
-/* line 100, ../sass/styles.scss */
+/* line 70, ../sass/styles.scss */
 .mapCanvas {
   display: block;
   border: 1px solid #868686;
@@ -146,99 +230,89 @@ input {
   background: white;
 }
 
-/* line 109, ../sass/styles.scss */
+/* line 79, ../sass/styles.scss */
 .separator {
   margin: 5px;
   width: 1px;
   height: 1px;
 }
 
-/* line 115, ../sass/styles.scss */
+/* line 85, ../sass/styles.scss */
 .table_number {
   float: right;
   margin-right: 5%;
 }
 
-/* line 120, ../sass/styles.scss */
+/* line 90, ../sass/styles.scss */
 .page.transition.center {
   background-color: white;
 }
 
-/* line 124, ../sass/styles.scss */
+/* line 94, ../sass/styles.scss */
 ul.collection {
   text-align: left;
 }
 
-/* line 128, ../sass/styles.scss */
+/* line 98, ../sass/styles.scss */
 .datepicker {
   text-align: center;
 }
 
-/* line 132, ../sass/styles.scss */
+/* line 102, ../sass/styles.scss */
 .collapsible-header {
   text-align: left;
 }
-/* line 134, ../sass/styles.scss */
+/* line 104, ../sass/styles.scss */
 .collapsible-header i {
   float: right;
 }
-/* line 138, ../sass/styles.scss */
+/* line 108, ../sass/styles.scss */
 .collapsible-header:active {
   background-color: #26A69A;
   color: white;
   transition: all 0.3s;
 }
 
-/* line 145, ../sass/styles.scss */
+/* line 115, ../sass/styles.scss */
 .progress {
   margin: 0;
 }
 
-/* line 149, ../sass/styles.scss */
-.hidden {
-  display: none;
-}
-
-/* line 153, ../sass/styles.scss */
+/* line 119, ../sass/styles.scss */
 .collapse-btn {
   background-color: #26A69A;
   color: white;
 }
 
-/* line 158, ../sass/styles.scss */
+/* line 124, ../sass/styles.scss */
 .finished {
   background-color: #c6c6c6;
 }
 
-/* line 162, ../sass/styles.scss */
+/* line 128, ../sass/styles.scss */
 .header {
   text-transform: capitalize;
   color: #ee6e73;
   font-weight: 300;
 }
 
-/* line 168, ../sass/styles.scss */
-.capitalize {
-  text-transform: capitalize;
-}
-
-/* line 172, ../sass/styles.scss */
+/* line 135, ../sass/styles.scss */
 .wrapper {
   padding: 0 10px;
 }
 
-/* line 177, ../sass/styles.scss */
+/* line 140, ../sass/styles.scss */
 .card-content:not(:first-child) {
   border-top: 1px solid #ececec;
 }
 
-/* line 182, ../sass/styles.scss */
+/* line 145, ../sass/styles.scss */
 .picker {
   position: fixed;
   z-index: 10000;
 }
 
-/* line 187, ../sass/styles.scss */
+/* line 150, ../sass/styles.scss */
 div.ui-datepicker {
   font-size: 7px;
 }

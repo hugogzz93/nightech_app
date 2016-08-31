@@ -46,12 +46,6 @@
 	font-size: 1.1em;
 }
 
-.no-marign-botton {
-	margin-bottom: 0px;
-}
-.blue-gray{
-	color: $blue-gray;
-}
 .finance-headers {
 	margin-bottom: 0px;
 }
@@ -69,34 +63,10 @@
 	}
 }
 
-
-.thin {
-	font-weight: 100;
-}
-
-.semi-thin {
-	font-weight: 300;
-}
-
-.normal-weight {
-	font-weight: 500;
-}
-
-.uppercase {
-    text-transform: uppercase;
-}
-
-.subtext {
-	font-size: 0.6em;
-	color: $grayish-blue;
-}
 input {
 	color:black !important;
 }
 
-.grayText { 
-	color: lighten($gray, 20%);
-}
 .mapCanvas {
     display: block;
 	border: 1px solid $gray;
@@ -146,10 +116,6 @@ ul.collection {
 	margin: 0;
 }
 
-.hidden {
-	display: none;
-}
-
 .collapse-btn {
 	background-color: $dark-cyan;
 	color: white;
@@ -165,9 +131,6 @@ ul.collection {
     font-weight: 300;
 }
 
-.capitalize {
-	text-transform: capitalize;
-}
 
 .wrapper {
 	padding: 0 10px;

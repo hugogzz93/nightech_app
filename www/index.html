@@ -767,7 +767,6 @@
       </div>
     {{/each}}
   </div>
-
 </script>
 
 <script id="user-finance-tpl" type="text/template">
@@ -790,42 +789,48 @@
     </div>
   </nav>
 
-    <div class="row finance-dashboard">
-      <div class="col s6">
-        <div class="center-align-semi-thin subtext uppercase"> Earnings </div>
-        <h5 class="center-align blue-gray semi-thin">{{numberWithCommas totalAmmount}} <sup>$</sup></h5><br>
-      </div>
-      <div class="col s6">
+  <div class="row finance-dashboard">
+    <div class="col s6">
+      <div class="center-align-semi-thin subtext uppercase"> Earnings </div>
+      <h5 class="center-align blue-gray semi-thin">{{numberWithCommas totalAmmount}} <sup>$</sup></h5><br>
+    </div>
+    <div class="col s6">
+        <div class="row">
+          <i class="left tiny material-icons">perm_identity</i> <span class="left dark-blue">${{numberWithCommas selfAmmount}}</span>
           <div class="progress light-blue lighten-2" style="height:10px;">
               <div class="light-blue darken-4 determinate" style="width: {{ selfPercent }}%"></div>
           </div>
+        </div>
+        <div class="row"> 
+          <i class="left tiny material-icons">supervisor_account</i> <span class="left dark-orange">${{numberWithCommas rpAmmount}}</span>
           <div class="progress yellow darken-4" style="height:10px;">
               <div class="determinate orange darken-4" style="width: {{ rpPercent }}%"></div>
           </div>
-      </div>
+        </div>
     </div>
+  </div>
 
-<div class="container">
-    <ul class="collapsible popout" data-collapsible="expandable">
-        {{#each repArray}} 
-          <li>
-            <div class="grey lighten-2 finance-rp collapsible-header active">{{name}}<span class="right" style="font-weight: 500;">$ {{totalAmmount}} </span></div>
-            <div class="collapsible-body">
-              {{#each services}}
-                <div class="service left-align">
-                  <h5 class="row"><strong>{{client}}</strong></h5>
-                  <div class="row">${{ammount}}  
-                    <div class="subtext"><i class="tiny material-icons">query_builder</i>{{elapsedTime}}M</div> 
+  <div class="container">
+      <ul class="collapsible popout" data-collapsible="expandable">
+          {{#each repArray}} 
+            <li>
+              <div class="grey lighten-2 finance-rp collapsible-header active">{{name}}<span class="right" style="font-weight: 500;">$ {{totalAmmount}} </span></div>
+              <div class="collapsible-body">
+                {{#each services}}
+                  <div class="service left-align">
+                    <h5 class="row"><strong>{{client}}</strong></h5>
+                    <div class="row">${{ammount}}  
+                      <div class="subtext"><i class="tiny material-icons">query_builder</i>{{elapsedTime}}M</div> 
+                    </div>
+                    <div class="row grayText">{{date}}</div>
                   </div>
-                  <div class="row grayText">{{date}}</div>
-                </div>
-                <div class="theme-break"/>
-              {{/each}}
-            </div>
-          </li>
-        {{/each}}
-      </ul>
-</div>
+                  <div class="theme-break"/>
+                {{/each}}
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+  </div>
 </script>
 
 <script id="user-finance-list-tpl" type="text/template">
@@ -850,6 +855,7 @@
 <script src="lib/jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
 <script src="lib/jquery.p2r.min.js"></script>
 <script src="lib/Chart.bundle.js"></script>
+<script src="lib/helpers.js"></script>
 <script src="js/services/Map.js"></script>
 <script src="js/services/events.js"></script>
 <script src="js/services/CommunicationService.js"></script>
