@@ -1,4 +1,4 @@
-var MapView = function () {
+var MapView = function (organization_map) {
 
 	var tables = []
 	
@@ -15,7 +15,7 @@ var MapView = function () {
 	this.render = function () {
 		this.$el.html(this.template());
 		const map = $('.mapCanvas', this.$el)
-		var canvas = new Map(map[0]);
+		var canvas = new Map(map[0], organization_map);
 		canvas.createFromList(tables);
 		return this;
 	}

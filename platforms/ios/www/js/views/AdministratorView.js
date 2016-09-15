@@ -144,7 +144,7 @@
 
 		communication.updateService(serviceId, serviceJson).done(function () {
 		 	updateView(); 
-			events.emit('toastRequest', "Reservation Accepted!"); 
+			events.emit('toastRequest', "Reservation Completed!"); 
 		 	progressBar.addClass('hidden');
 		});
 	}

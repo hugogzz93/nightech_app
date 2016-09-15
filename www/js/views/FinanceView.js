@@ -5,6 +5,8 @@ var FinanceView = function (communication) {
 	const ADMINISTRATOR_CREDENTIAL = "administrator"
 	const SUPER_CREDENTIAL = "super"
 	const COORDINATOR_CREDENTIAL = "coordinator"
+	const COMPLETED_STATUS = "complete"
+	const SEATED_STATUS = "seated"
 
 	var data = {}
 	var prevData = {}
@@ -30,6 +32,7 @@ var FinanceView = function (communication) {
 		this.$el.on('click', '.user-li', function (e) {
 			 for (var i = 0; i < data.coordinators.length; i++) {
 			 	if(data.coordinators[i].id	== $(e.target).attr('data-user-id')) {
+			 		data.coordinators[i].date = data.date.toDateString();
 			 		events.emit('setData', data.coordinators[i]);
 			 		events.emit('navigationRequest', '#administrator/super/finance/users/'+data.coordinators[i]);
 			 		break;
@@ -65,19 +68,18 @@ var FinanceView = function (communication) {
 		else if(scope === "month") 	{ $('#month-a', this.$el).addClass('active'); }
 
 		$('.fixed-action-btn', '.page.transition.center').remove(); //fixes pageslider error
-		console.log(renders)
 		if(renders < 3) $('#user-finance-btn').on('click', this.toggleList.bind(this));
 
 		renders += 1;
 		const $tabs = this.$el.find('ul.tabs');
 		$tabs.tabs();
-		this.toggleList(false);
+		this.setList(false);
 		return this; 
 	}
 
 	this.dataHandler = function (users, services, prevServices, rps, tables, prevTables) {
-		data = this.digestData(users, services, rps, tables);
-		prevData = this.digestData(users, prevServices, rps, prevTables);
+		data = this.digestData(users, services, rps, tables, this.date);
+		prevData = this.digestData(users, prevServices, rps, prevTables, this.prevDate);
 		labels = [];
 		ticks = [], prevTicks = [];
 		
@@ -126,6 +128,8 @@ var FinanceView = function (communication) {
 		if(ticks.length > 0) {
 			chartView.setData(ticks, labels, 'line', labelString);
 			chartView.addData(prevTicks,'line', prevLabelString);
+		} else {
+
 		}
 
 		
@@ -135,7 +139,7 @@ var FinanceView = function (communication) {
 
 	//takes a list of services
 	// extracts information such as total ammount..etc
-	this.digestData = function (usersRes, servicesRes, repsRes, tablesRes) {
+	this.digestData = function (usersRes, servicesRes, repsRes, tablesRes, date) {
 		const daysInScope = $.proxy(this.daysInScope, this);
 		const services = servicesRes[0].services;
 		const users = usersRes[0].users;
@@ -146,8 +150,8 @@ var FinanceView = function (communication) {
 			users: {},
 			tables: {}
 		}
-
 		var _data = {
+			date: date,
 			total: services.length,
 			totalAmmount: 0,
 			missingAmmount: 0,
@@ -156,7 +160,6 @@ var FinanceView = function (communication) {
 			tables: [],
 			days: []
 		}
-
 		for (var i = 0; i < users.length; i++) {
 			if (users[i].credentials === ADMINISTRATOR_CREDENTIAL || users[i].credentials === SUPER_CREDENTIAL) {
 				_data.administrators.push({
@@ -173,10 +176,14 @@ var FinanceView = function (communication) {
 					id: users[i].id,
 					totalAmmount: 0,
 					totalServices: 0,
+					completedServices: 0,
+					seatedServices: 0,
 					reps:{"-1":{
 						name:"No Rp",
 						totalAmmount: 0,
 						totalServices: 0,
+						completedServices: 0,
+						seatedServices: 0,
 						services:[],
 
 					}}
@@ -215,6 +222,8 @@ var FinanceView = function (communication) {
 	  				var coordinator = _data.coordinators[index.users[service.coordinator_id]];
 	  				coordinator.totalAmmount += parseInt(service.ammount);
 		  			coordinator.totalServices++;
+		  			coordinator.seatedServices += service.status === SEATED_STATUS ? 1 : 0;
+		  			coordinator.completedServices += service.status === COMPLETED_STATUS ? 1 : 0;
 	  				if(service.representative) {
 	  					var rep = coordinator.reps[service.representative.id];
 			  			if(rep) {
@@ -230,6 +239,8 @@ var FinanceView = function (communication) {
 	  					rep.services.push(service)
 		  				rep.totalAmmount += parseInt(service.ammount);
 		  				rep.totalServices += 1;
+		  				rep.seatedServices += service.status === SEATED_STATUS ? 1 : 0;
+			  			rep.completedServices += service.status === COMPLETED_STATUS ? 1 : 0;
 	  				}
 		  			
 	  			};
@@ -265,6 +276,7 @@ var FinanceView = function (communication) {
 
 	this.findByDate = function(date, def) {
 		this.date = date;
+		this.prevDate = this.getPrevious(date, scope);
 		const dataHandler = $.proxy(this.dataHandler, this);
 		const digestUsers = $.proxy(this.digestUsers, this);
 		const toggleLoading = $.proxy(this.toggleLoading, this);
@@ -273,23 +285,17 @@ var FinanceView = function (communication) {
 		const getServices = communication.getServices;
 		const getRps = communication.getRepresentatives;
 		const getTables = communication.getTablesByDate;
-		const prevDate = this.getPrevious(date, scope);
-		console.log(date)
-		console.log(prevDate)
-
-
 
 		toggleLoading();
-		$.when(getUsers(), getServices(date, scope), getServices(prevDate, scope), getRps(), getTables(date), getTables(prevDate)).done(dataHandler)
+		$.when(getUsers(), getServices(this.date, scope), getServices(this.prevDate, scope), getRps(), getTables(this.date), getTables(this.prevDate)).done(dataHandler)
 		.always(toggleLoading);
 	}
 
 	// ----------------------------------- helpers -----------------------------------
-	this.daysInScope = function (scope) {
+	this.daysInScope = function (date, scope) {
 		var days;
 		if (scope === "month") {
-		 	var currentDate = new Date();
-		 	days = new Date(currentDate.getYear(), currentDate.getMonth() + 1, 0).getDate();
+		 	days = new Date(date.getYear(), date.getMonth() + 1, 0).getDate();
 		} else if(scope === "week") {
 		 	days = 7;
 		} else if(scope === "day") {
@@ -300,8 +306,8 @@ var FinanceView = function (communication) {
 	}
 
 	this.getPrevious = function (date, scope) {
-		var newDate = new Date()
-		newDate.setDate(date.getDate() - this.daysInScope(scope))
+		var newDate = new Date(date)
+		newDate.setDate(date.getDate() - this.daysInScope(date, scope))
 		return newDate;
 	}
 
@@ -313,20 +319,20 @@ var FinanceView = function (communication) {
 	}
 
 	this.toggleList = function () {
-		 if(listToggle) {
+		if(listToggle) {
 		 	$('#tableList', this.$el).addClass("hidden");
 			$('#userList', this.$el).removeClass("hidden");
-		 } else {
+		} else {
 		 	$('#tableList', this.$el).removeClass("hidden");
 			$('#userList', this.$el).addClass("hidden");
-		 }
-		 $('#user-finance-btn-icon').html(listToggle ? USER_ICON_NAME: TABLE_ICON_NAME);
-		 listToggle = !listToggle;
+		}
+		$('#user-finance-btn-icon').html(listToggle ? USER_ICON_NAME: TABLE_ICON_NAME);
+		listToggle = !listToggle;
 	}
 
 	this.setList = function (bool) {
-		 listToggle = bool;
-		 this.toggleList();
+		listToggle = bool;
+		this.toggleList();
 	}
 
 	this.tabPicked = function (e) {

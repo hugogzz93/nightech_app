@@ -716,8 +716,8 @@
     </ul>
 
     <div class="nav-wrapper" id="finance-nav-wrapper">
-      <a href="#administrator" class="brand-logo">Finance</a>
-          <a href="#administrator/" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
+      <a href="#administrator/super/finance" class="brand-logo">Finance</a>
+          <a href="#administrator/super/finance" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a
     </div>
   </nav>
   <div class="progress">
@@ -738,8 +738,8 @@
     <div class="row">
       <div class="center-align semi-thin subtext uppercase">Earnings</div>
       <div class="row">
-        <h5 class="col s5 blue-gray center-align semi-thin">10,123</h5>
-        <h5 class="col s5 offset-s2 blue-gray center-align semi-thin">5,200</h5>
+        <h5 class="col s5 blue-gray center-align semi-thin">{{numberWithCommas total}}</h5>
+        <h5 class="col s5 offset-s2 blue-gray center-align semi-thin">{{numberWithCommas missingAmmount}}</h5>
         <div class="row no-marign-botton">
           <div class="col s5 center-align semi-thin subtext uppercase">Tables Served</div>
           <div class="col s5 offset-s2 center-align semi-thin subtext uppercase">Incomplete</div>
@@ -749,8 +749,17 @@
   </div>
 
 
-  <div class="chartContent"></div>
-  <div class="container">
+  <div id="chartContent"></div>
+
+  
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a href="#administrator/super/finance" class="btn-floating btn-large green" id="user-finance-btn">
+      <i id="user-finance-btn-icon" class="large material-icons">supervisor_account</i>
+    </a>
+  </div>
+
+  <div id="userList" class="hidden"></div>
+  <div id="tableList" class="container">
     {{#each tables}}
       <div class="row pseudo-table">
         <div class="col s6 blue-gray thin left-align"> {{ number }} </div>
@@ -758,8 +767,80 @@
       </div>
     {{/each}}
   </div>
-
 </script>
+
+<script id="user-finance-tpl" type="text/template">
+  <nav>
+    <ul id="slide-out" class="side-nav">
+      <li><a href="#administrator">Reservations</a></li>
+      <li><a href="#users/{{id}}/edit">Account</a></li>
+      {{#if credentials.isSuper}}
+        <li><a href="#administrator/super">Users</a></li>
+      {{/if}}
+      <li><a href="#">Log Out</a></li>
+    </ul>
+
+    <div class="nav-wrapper" id="user-finance-nav-wrapper">
+      <a href="#administrator/super/finance/" class="brand-logo">
+          {{ name }}
+          <div class="subtitle">{{date}}</div>
+      </a>
+          <a href="#administrator/super/finance" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
+    </div>
+  </nav>
+
+  <div class="row finance-dashboard">
+    <div class="col s6">
+      <div class="center-align-semi-thin subtext uppercase"> Earnings </div>
+      <h5 class="center-align blue-gray semi-thin">{{numberWithCommas totalAmmount}} <sup>$</sup></h5><br>
+    </div>
+    <div class="col s6">
+        <div class="row">
+          <i class="left tiny material-icons">perm_identity</i> <span class="left dark-blue">${{numberWithCommas selfAmmount}}</span>
+          <div class="progress light-blue lighten-2" style="height:10px;">
+              <div class="light-blue darken-4 determinate" style="width: {{ selfPercent }}%"></div>
+          </div>
+        </div>
+        <div class="row"> 
+          <i class="left tiny material-icons">supervisor_account</i> <span class="left dark-orange">${{numberWithCommas rpAmmount}}</span>
+          <div class="progress yellow darken-4" style="height:10px;">
+              <div class="determinate orange darken-4" style="width: {{ rpPercent }}%"></div>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="container">
+      <ul class="collapsible popout" data-collapsible="expandable">
+          {{#each repArray}} 
+            <li>
+              <div class="grey lighten-2 finance-rp collapsible-header active">{{name}}<span class="right" style="font-weight: 500;">{{totalServices}}/{{completedServices}}&#160;&#160;&#160;${{numberWithCommas totalAmmount}} </span></div>
+              <div class="collapsible-body">
+                {{#each services}}
+                  <div class="service left-align">
+                    <h5 class="row"><strong>{{client}}</strong></h5>
+                    <div class="row">${{ammount}}  
+                      <div class="subtext"><i class="tiny material-icons">query_builder</i>{{elapsedTime}}M</div> 
+                    </div>
+                    <div class="row grayText">{{date}}</div>
+                  </div>
+                  <div class="theme-break"/>
+                {{/each}}
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+  </div>
+</script>
+
+<script id="user-finance-list-tpl" type="text/template">
+  <ul class="collection">
+      {{#each this}}
+        <li class="collection-item user-li" data-user-id="{{id}}"><a href="#administrator/super/finance">{{ name }} <span class="right">${{numberWithCommas totalAmmount}}</span></a></li>
+      {{/each}}
+  </ul>
+</script>
+
 
 
 
@@ -774,6 +855,7 @@
 <script src="lib/jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
 <script src="lib/jquery.p2r.min.js"></script>
 <script src="lib/Chart.bundle.js"></script>
+<script src="lib/helpers.js"></script>
 <script src="js/services/Map.js"></script>
 <script src="js/services/events.js"></script>
 <script src="js/services/CommunicationService.js"></script>
@@ -794,7 +876,9 @@
 <script src="js/views/RepresentativesListView.js"></script>
 <script src="js/views/RepresentativesView.js"></script>
 <script src="js/views/ChartView.js"></script>
+<script src="js/views/UserFinanceList.js"></script>
 <script src="js/views/FinanceView.js"></script>
+<script src="js/views/UserFinanceView.js"></script>
 <script src="js/app.js"></script>
 <script type="text/javascript" src="assets/materialize/js/materialize.js"></script>
 <script type="text/javascript" src="assets/moment.js"></script>

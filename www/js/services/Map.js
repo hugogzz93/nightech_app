@@ -1,47 +1,8 @@
-var Map = function (el) {
+var Map = function (el, organization_map) {
 	 var canvas;
 	 var width, height;
 	 var ratioX, ratioY;
 	 const planeX = 100, planeY = 100;
-
-
-	 t = [
-	 	{
-	 		C: "M",
-	 		X: 20,
-	 		Y: 15
-	 	},
-	 	{
-	 		C: "L",
-	 		X: 30,
-	 		Y: 7
-	 	},
-	 	{
-	 		C: "L",
-	 		X: 90,
-	 		Y: 7
-	 	},
-	 	{
-	 		C: "M",
-	 		X: 90,
-	 		Y: 70
-	 	},
-	 	{
-	 		C: "L",
-	 		X: 65,
-	 		Y: 70
-	 	},
-	 	{
-	 		C: "L",
-	 		X: 65,
-	 		Y: 30
-	 	},
-	 	{
-	 		C: "L",
-	 		X: 90,
-	 		Y: 30
-	 	}
-	 ]
 
 	 this.initialize = function () {
 	 	 canvas = Raphael(el);
@@ -49,9 +10,7 @@ var Map = function (el) {
 	 	 height = $(el).height();
 	 	 ratioX = planeX/width;
 	 	 ratioY = planeY/height;
-	 	 this.transformLine(t);
-
-	 	 // canvas.setViewBox(0,0, $(el).width(), $(el).height())
+	 	 this.addLines(organization_map)
 	 } 
 
 	 this.addCircle = function (x, y, status, text) {
@@ -59,12 +18,9 @@ var Map = function (el) {
 	 	 var circle = canvas.circle(x, y, 10);
 	 	 var text = canvas.text(x, y, text);
 	 	 const color = status == 0 ? green : status == 1 ? red : blue ;
-	 	 // const textColor = status == 2 ? white : black ;
-	 	 // circle.attr("fill", color);
 	 	 circle.attr("stroke", color);
 	 	 circle.attr("stroke-width", 3);
 	 	 circle.attr("class", "table");
-	 	 // text.attr("fill", textColor);
 
 	 }
 

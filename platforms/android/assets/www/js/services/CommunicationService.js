@@ -5,6 +5,12 @@ const Communication = function () {
 	 var credentials;
 	 var user_id;
 
+	 /**
+	 * Sets the session variables
+	 * @constructor
+	 * @param {string} nightech_url - Server Url
+	 */
+
 	 this.initialize = function (nightech_url) {
 	 	url = nightech_url ? nightech_url : "http://api.nightech_api.dev";
 	 	this.clearSessionTokens();

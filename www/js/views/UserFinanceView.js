@@ -35,7 +35,6 @@ var UserFinanceView = function (data) {
 	this.digestData = function (data) {
 		const reps = data.reps;
 		const keys = Object.keys(reps);
-		data.date = (new Date()).toDateString();
 		data.services = keys
 					.reduce(function(sum, rep){return sum + reps[rep].services
 					.reduce(function(s,ser){return s+parseInt(ser.ammount);},0)},0);

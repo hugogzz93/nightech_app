@@ -21,11 +21,14 @@
     BigMapView.prototype.template = Handlebars.compile($('#big-map-view').html());
     ChartView.prototype.template = Handlebars.compile($('#chart-tpl').html());
     FinanceView.prototype.template = Handlebars.compile($('#finance-tpl').html());
+    UserFinanceView.prototype.template = Handlebars.compile($('#user-finance-tpl').html());
+    UserFinanceList.prototype.template = Handlebars.compile($('#user-finance-list-tpl').html());
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
     // const mainUrl = "http://localhost:3000";
     const mainUrl = "http://boiling-mountain-93593.herokuapp.com"
+    var auxData = {};
 
 
 
@@ -99,6 +102,10 @@
              slider.slidePage(new FinanceView(communication).render().$el) ;
         })
 
+        router.addRoute('administrator/super/finance/users/:id', function () {
+             slider.slidePage(new UserFinanceView(auxData).render().$el) ;
+        })
+
 
         router.start();
     });
@@ -155,6 +162,14 @@
 
     events.on('LogOut', function () {
          communication.terminateSession(); 
+    })
+
+    events.on('setData', function(data) {
+        auxData = data;
+    })
+
+    events.on('getData', function () {
+         return data; 
     })
 
     /* ---------------------------------- Local Functions ---------------------------------- */
