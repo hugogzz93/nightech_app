@@ -89,6 +89,9 @@ var ChartView = function (communication) {
  		 	options: { 
  		         	responsive: true,
  		        	maintainAspectRatio: false,
+ 		        	tooltips:{
+ 		        		mode: 'label'
+ 		        	},
  		        	scales: {
         	            xAxes: [{
                             display: false
