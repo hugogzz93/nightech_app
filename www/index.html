@@ -99,15 +99,15 @@
   <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s3" data-tab-id="pendingTab"><a class="active" >Pending</a></li>
+        <li class="tab col s3" data-tab-id="pendingTab"><a>Pending</a></li>
         <li class="tab col s3" data-tab-id="acceptedTab"><a>Accepted</a></li>
-        <li class="tab col s3" data-tab-id="servicesTab"><a>Tables</a></li>
+        <li class="tab col s3" data-tab-id="servicesTab"><a class="active">Tables</a></li>
       </ul>
     </div>
   </div>
 
-  <div id="pendingTab" class="col s12  tab-data"></div>
-  <div id="acceptedTab" class="col s12  tab-data"></div>
+  <div id="pendingTab" class="col s12 hidden tab-data"></div>
+  <div id="acceptedTab" class="col s12 hidden tab-data"></div>
   <div id="servicesTab" class="col s12  tab-data"></div>
   <div class="col s12  tab-data separator"></div>
 
@@ -166,7 +166,7 @@
 
               {{#if ../isAdmin}}
                 <div class="input-field col s6">
-                  <input {{disableIfAccepted status }} type="number" class="validate tableNumber" id="tableNumber" value="" data-reservation-id="{{id}}">
+                  <input {{disableIfAccepted status }} type="number" class="validate tableNumber" id="tableNumber" value="{{table_number}}" data-reservation-id="{{id}}">
                   <label class="active" for="tableNumber" data-reservation-id="{{id}}">Table</label>
                 </div>
               {{/if}}
@@ -361,7 +361,7 @@
 
 <script id="create-service-li-tpl" type="text/template">
   <li>
-   <div class="collapsible-header truncate collapse-btn"><i class="material-icons">library_add</i>{{ number }}</div>
+   <div class="collapsible-header truncate collapse-btn"><i class="material-icons add-service-icon">library_add</i>{{ number }}</div>
    <div class="collapsible-body">
      <form class="col s11">
        <div class="row">
