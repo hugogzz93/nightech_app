@@ -4,6 +4,7 @@ const Communication = function () {
 	 var auth_token;
 	 var credentials;
 	 var user_id;
+	 var organization;
 
 	 /**
 	 * Sets the session variables
@@ -12,7 +13,7 @@ const Communication = function () {
 	 */
 
 	 this.initialize = function (nightech_url) {
-	 	url = nightech_url ? nightech_url : "http://api.nightech_api.dev";
+	 	url = nightech_url ? nightech_url : "http://boiling-mountain-93593.herokuapp.com"
 	 	this.clearSessionTokens();
 
 
@@ -37,13 +38,17 @@ const Communication = function () {
 		return credentials;
 	}
 
+	this.getOrganization = function () {
+		 return organization; 
+	}
+
 /* ---------------------------------- Session Handling ---------------------------------- */
 
 	this.startSession = function (user) {
 	 	auth_token = user.auth_token;
-	 	credentials = user.credentials; 
+	 	credentials = user.credentials;
+	 	organization = user.organization 
 	 	user_id = user.id;
-	 	console.log(credentials);
 	}
 
 	this.clearSessionTokens = function () {
@@ -66,7 +71,7 @@ const Communication = function () {
 	}
 
 	this.logIn = function (parameters) {
-	 	const logIn = $.proxy(this.startSession, this);
+	 	const startSession = $.proxy(this.startSession, this);
 
 	 	$.ajax({
 	 	 	url: url + '/sessions',
@@ -75,7 +80,7 @@ const Communication = function () {
 	 	 	data: {session: parameters},
 	 	 }).done(function (response) {
 	 	 	 events.emit("logInSuccess", response.user);
-	 	 	 logIn(response.user);
+	 	 	 startSession(response.user);
 	 	 }).fail(function (response) {
 	 		alert(JSON.parse(response.responseText).errors);
 	 		$(".progress").addClass('hidden');

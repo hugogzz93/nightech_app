@@ -1,5 +1,6 @@
 var TableChooseModalView = function () {
-	 
+	
+	const COMPLETED_STATUS = "complete";	 
 	 var tables;
 
 	 this.initialize = function () {
@@ -8,7 +9,9 @@ var TableChooseModalView = function () {
 	 } 
 
 	 this.setTables = function (list) {
-	 	 tables = list;
+	 	 for (var i = 0; i < list.length; i++)
+	 	 	list[i].services = list[i].services.filter(function(e) {return e.status != COMPLETED_STATUS});
+	 	 tables = list
 	 	 this.render();
 	 }
 

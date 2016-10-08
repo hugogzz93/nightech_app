@@ -61,6 +61,7 @@
 		if (progressBar) {
 			progressBar.removeClass('hidden');
 		};
+
 		communication.getReservationsByDate(date).done(function(response) {
 			const pendingReservations = response.reservations.filter(function (e) {
 				 return e.status === "pending";
@@ -93,26 +94,21 @@
 	 	const serviceJson = {client: clientName, comment: comment, quantity: quantity, date: date, table_id: table_id} 
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 
-	 	progressBar.removeClass('hidden');
-	 	communication.submitService(serviceJson).done(function () {
+	 	return communication.submitService(serviceJson).done(function () {
 	 	 	updateView();
 	 	 	events.emit("toastRequest", "Service Created!");
 		 	
-	 	}).always(function () {
-	 		 progressBar.addClass('hidden'); 
 	 	}); 
 	}
 
 	this.destroyService = function (event) {
 		const serviceId = $(event.target).attr('data-service-id');
 	 	const updateView = $.proxy(this.datePickerChange, this); 
-	 	progressBar.removeClass('hidden');
 	 	
-		communication.destroyService(serviceId).done(function () {
+		return communication.destroyService(serviceId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Service Canceled"); 
-		 	progressBar.addClass('hidden');
-		})
+		});
 	}
 
 	this.handleServiceAction = function (event) {
@@ -140,24 +136,21 @@
 	this.completeService = function (serviceId) {
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 	 	const serviceJson = { status: "complete" };
-	 	progressBar.removeClass('hidden');
 
-		communication.updateService(serviceId, serviceJson).done(function () {
+		return communication.updateService(serviceId, serviceJson).done(function () {
 		 	updateView(); 
 			events.emit('toastRequest', "Reservation Completed!"); 
-		 	progressBar.addClass('hidden');
+
 		});
 	}
 
 	this.seatService = function (serviceId) {
 		const updateView = $.proxy(this.datePickerChange, this); 
 	 	const serviceJson = { status: "seated" };
-	 	progressBar.removeClass('hidden');
 
-		communication.updateService(serviceId, serviceJson).done(function () {
+		return communication.updateService(serviceId, serviceJson).done(function () {
 		 	updateView(); 
 			events.emit('toastRequest', "Seated!"); 
-		 	progressBar.addClass('hidden');
 		});
 	}
 
@@ -174,10 +167,10 @@
 
 	 	const serviceJson = {ammount: ammount}
 
-		communication.updateService(serviceId, serviceJson).done(function () {
+		return communication.updateService(serviceId, serviceJson).done(function () {
 			 updateView(); 
 			 events.emit('toastRequest', "Ammount Updated!"); 
-		})
+		});
 
 		field.val('');
 	}
@@ -188,24 +181,20 @@
 		const reservationId = $(event.target).attr('data-reservation-id');
 		const tableId = $('.tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val();
 	 	const updateView = $.proxy(this.datePickerChange, this); 
-	 	progressBar.removeClass('hidden');
 
-		communication.acceptReservation(reservationId, tableId).done(function () {
+		return communication.acceptReservation(reservationId, tableId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Reservation Accepted!"); 
-		 	progressBar.addClass('hidden');
-		})
+		});
 	}
 
 	this.cancelReservation = function (event) {
 		const reservationId = $(event.target).attr('data-reservation-id');
 		const tableId = $('#tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val();
 	 	const updateView = $.proxy(this.datePickerChange, this); 
-	 	progressBar.removeClass('hidden');
-		communication.cancelReservation(reservationId, tableId).done(function () {
+		return communication.cancelReservation(reservationId, tableId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Reservation Canceled!"); 
-		 	progressBar.addClass('hidden');
 		})
 	}
 
@@ -214,9 +203,7 @@
 		const progressBar = $(".progress", this.$el);
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 
-		progressBar.removeClass('hidden');
-		communication.rejectReservation(id).done(function (response) {
-			progressBar.addClass('hidden');
+		return communication.rejectReservation(id).done(function (response) {
 			updateView();
 			events.emit('toastRequest', "Reservation Rejected"); 
 		})
@@ -268,43 +255,38 @@
 		const rejectReservation = $.proxy(this.rejectReservation, this);
 	 	const datePickerChange = $.proxy(this.datePickerChange, this);
 
-
-	 	this.$el.on('click', '.service-submit', function (e) {
-	 		const target = $(e.target);
-	 		if(!target.attr('disabled')) {
-	 			target.attr('disabled', true);
-	 		 	submitService(e);
+	 	buttonClick = function (e) {
+	 		if(!$(e.target).hasClass('disabled')) {
+	 			progressBar.removeClass('hidden');
+	 			$(e.target).addClass('disabled')
+		 		e.data.fn(e).always(function() {
+		 			progressBar.addClass('hidden');
+					$(e.target).removeClass('disabled')
+		 		})
 	 		}
-	 	});
+	 	}
 
-	 	this.$el.on('click', '.delete-btn', function (e) {
-	 		destroyService(e);
-	 	});
-	 	this.$el.on('click', '.reject-res-btn', rejectReservation);
+	 	
 
-	 	this.$el.on('click', '.delete-res-btn', function (e) {
-	 		cancelReservation(e);
-	 	});
-	 	this.$el.on('click', '.accept-btn', function (e) {
-	 		acceptReservation(e);
-	 	});
+
+
+	 	this.$el.on('click', '.service-submit', {fn: submitService }, buttonClick);
+	 	this.$el.on('click', '.delete-btn', {fn: destroyService}, buttonClick);
+	 	this.$el.on('click', '.reject-res-btn', {fn:rejectReservation}, buttonClick);
+	 	this.$el.on('click', '.delete-res-btn', {fn: cancelReservation}, buttonClick);
+	 	this.$el.on('click', '.accept-btn', {fn: acceptReservation}, buttonClick);
+	 	this.$el.on('click', '#ammount-submit-btn',{fn:submitAmmount}, buttonClick);
+	 	this.$el.on('click', '.visibility-btn', {fn: toggleReservationVisibility}, buttonClick);
+
 	 	this.$el.on('click', '#tableNumber.validate', function (e) {
 	 		$(e.target).blur();
 	 		displayTablesModal(e);
 	 		
 	 	});
-	 	this.$el.on('click', '.modal-content .table-option.blue', function (e) {
-	 		saveTableNumber(e);
-	 	});
-	 	this.$el.on('click', '.service-btn', function (e) {
+	 	this.$el.on('click', '.modal-content .table-option.blue', saveTableNumber);
+	 	this.$el.on('click', '.service-btn', {fn:handleServiceAction}, function (e) {
 	 		e.stopPropagation();
-	 		handleServiceAction(e);
-	 	});
-	 	this.$el.on('click', '#ammount-submit-btn', function (e) {
-	 		submitAmmount(e);
-	 	});
-	 	this.$el.on('click', '.visibility-btn', function (e) {
-	 		toggleReservationVisibility(e);
+	 		buttonClick(e)
 	 	});
 
 	 	this.$el.on('click', '.button-collapse', function (e) {
@@ -314,6 +296,10 @@
 	 		};
 			$('.button-collapse').sideNav('show');
 	 	});
+
+	 	this.$el.on('click', '.add-service-icon', function (e) {
+	 		$(e.target).parent().click()
+	 	})
 
 	}
 
