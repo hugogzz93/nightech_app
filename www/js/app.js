@@ -26,8 +26,8 @@
     
     const communication = new Communication();
     const slider = new PageSlider($('body'));
-    const mainUrl = "http://localhost:3000";
-    // const mainUrl = "http://boiling-mountain-93593.herokuapp.com"
+    // const mainUrl = "http://localhost:3000";
+    const mainUrl = "http://boiling-mountain-93593.herokuapp.com"
     // const mainUrl = "http://baboon5.com"
     var auxData = {};
 
@@ -39,18 +39,12 @@
          // Front Page
         router.addRoute('', function() {
             if (!communication.auth_token) {
-                console.log("Log In");
                 slider.slidePage(new LogInView().render().$el);
-
-            } else {
-                console.log("Logged In");
             }
         });
 
         // Coordinator reservations menu
         router.addRoute('reservations', function() {
-            console.log('empty');
-            const date = new Date()
              slider.slidePage(new ReservationsView(communication).render().$el);
         });
 
@@ -135,7 +129,7 @@
         router.load(user.credentials === "coordinator" ? 'reservations' : 'administrator' );
     })
 
-    events.on('logOutSuccess', function (user) {
+    events.on('logOutSuccess', function () {
         router.load('');
         events.emit('toastRequest', 'Signed Out');
         communication.clearSessionTokens();
@@ -151,7 +145,7 @@
         events.emit('toastRequest', "User Deleted");
     })
 
-    events.on('userCreated', function (response) {
+    events.on('userCreated', function () {
         router.load('administrator/super');
         events.emit('toastRequest', "User Created!");
     })
@@ -265,7 +259,6 @@
     })
 
     Handlebars.registerHelper('serviceIcon', function (service) {
-         // const text = Handlebars.escapeExpression(text);
         status = service.status
         var returnText = "";
         if (status === "incomplete") {

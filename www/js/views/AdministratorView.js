@@ -94,27 +94,21 @@
 	 	const serviceJson = {client: clientName, comment: comment, quantity: quantity, date: date, table_id: table_id} 
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 
-	 	progressBar.removeClass('hidden');
-	 	communication.submitService(serviceJson).done(function () {
+	 	return communication.submitService(serviceJson).done(function () {
 	 	 	updateView();
 	 	 	events.emit("toastRequest", "Service Created!");
 		 	
-	 	}).always(function () {
-	 		 progressBar.addClass('hidden'); 
 	 	}); 
 	}
 
 	this.destroyService = function (event) {
 		const serviceId = $(event.target).attr('data-service-id');
 	 	const updateView = $.proxy(this.datePickerChange, this); 
-	 	progressBar.removeClass('hidden');
 	 	
-		communication.destroyService(serviceId).done(function () {
+		return communication.destroyService(serviceId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Service Canceled"); 
-		}).always(function () {
-		 	progressBar.addClass('hidden');
-		})
+		});
 	}
 
 	this.handleServiceAction = function (event) {
@@ -142,27 +136,21 @@
 	this.completeService = function (serviceId) {
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 	 	const serviceJson = { status: "complete" };
-	 	progressBar.removeClass('hidden');
 
-		communication.updateService(serviceId, serviceJson).done(function () {
+		return communication.updateService(serviceId, serviceJson).done(function () {
 		 	updateView(); 
 			events.emit('toastRequest', "Reservation Completed!"); 
 
-		}).always(function () {
-		 	progressBar.addClass('hidden');
 		});
 	}
 
 	this.seatService = function (serviceId) {
 		const updateView = $.proxy(this.datePickerChange, this); 
 	 	const serviceJson = { status: "seated" };
-	 	progressBar.removeClass('hidden');
 
-		communication.updateService(serviceId, serviceJson).done(function () {
+		return communication.updateService(serviceId, serviceJson).done(function () {
 		 	updateView(); 
 			events.emit('toastRequest', "Seated!"); 
-		}).always(function () {
-		 	progressBar.addClass('hidden');
 		});
 	}
 
@@ -178,13 +166,10 @@
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 
 	 	const serviceJson = {ammount: ammount}
-	 	progressBar.removeClass('hidden')
 
-		communication.updateService(serviceId, serviceJson).done(function () {
+		return communication.updateService(serviceId, serviceJson).done(function () {
 			 updateView(); 
 			 events.emit('toastRequest', "Ammount Updated!"); 
-		}).always(function () {
-		 	progressBar.addClass('hidden');
 		});
 
 		field.val('');
@@ -196,27 +181,20 @@
 		const reservationId = $(event.target).attr('data-reservation-id');
 		const tableId = $('.tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val();
 	 	const updateView = $.proxy(this.datePickerChange, this); 
-	 	progressBar.removeClass('hidden');
 
-		communication.acceptReservation(reservationId, tableId).done(function () {
+		return communication.acceptReservation(reservationId, tableId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Reservation Accepted!"); 
-		}).always(function () {
-		 	progressBar.addClass('hidden');
-			$(event.target).removeClass('disabled')
-		})
+		});
 	}
 
 	this.cancelReservation = function (event) {
 		const reservationId = $(event.target).attr('data-reservation-id');
 		const tableId = $('#tableNumber[data-reservation-id=' + $(event.target).attr('data-reservation-id') + ']').val();
 	 	const updateView = $.proxy(this.datePickerChange, this); 
-	 	progressBar.removeClass('hidden');
-		communication.cancelReservation(reservationId, tableId).done(function () {
+		return communication.cancelReservation(reservationId, tableId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Reservation Canceled!"); 
-		}).always(function () {
-		 	progressBar.addClass('hidden');
 		})
 	}
 
@@ -225,12 +203,9 @@
 		const progressBar = $(".progress", this.$el);
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 
-		progressBar.removeClass('hidden');
-		communication.rejectReservation(id).done(function (response) {
+		return communication.rejectReservation(id).done(function (response) {
 			updateView();
 			events.emit('toastRequest', "Reservation Rejected"); 
-		}).always(function () {
-		 	progressBar.addClass('hidden');
 		})
 	}
 
@@ -282,10 +257,16 @@
 
 	 	buttonClick = function (e) {
 	 		if(!$(e.target).hasClass('disabled')) {
+	 			progressBar.removeClass('hidden');
 	 			$(e.target).addClass('disabled')
-		 		e.data.fn(e);
+		 		e.data.fn(e).always(function() {
+		 			progressBar.addClass('hidden');
+					$(e.target).removeClass('disabled')
+		 		})
 	 		}
 	 	}
+
+	 	
 
 
 
@@ -302,7 +283,7 @@
 	 		displayTablesModal(e);
 	 		
 	 	});
-	 	this.$el.on('click', '.modal-content .table-option.blue', {fn: saveTableNumber}, buttonClick);
+	 	this.$el.on('click', '.modal-content .table-option.blue', saveTableNumber);
 	 	this.$el.on('click', '.service-btn', {fn:handleServiceAction}, function (e) {
 	 		e.stopPropagation();
 	 		buttonClick(e)

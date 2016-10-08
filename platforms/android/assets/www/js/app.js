@@ -28,6 +28,7 @@
     const slider = new PageSlider($('body'));
     // const mainUrl = "http://localhost:3000";
     const mainUrl = "http://boiling-mountain-93593.herokuapp.com"
+    // const mainUrl = "http://baboon5.com"
     var auxData = {};
 
 

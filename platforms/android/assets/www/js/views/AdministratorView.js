@@ -61,6 +61,7 @@
 		if (progressBar) {
 			progressBar.removeClass('hidden');
 		};
+
 		communication.getReservationsByDate(date).done(function(response) {
 			const pendingReservations = response.reservations.filter(function (e) {
 				 return e.status === "pending";
@@ -111,6 +112,7 @@
 		communication.destroyService(serviceId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Service Canceled"); 
+		}).always(function () {
 		 	progressBar.addClass('hidden');
 		})
 	}
@@ -145,6 +147,8 @@
 		communication.updateService(serviceId, serviceJson).done(function () {
 		 	updateView(); 
 			events.emit('toastRequest', "Reservation Completed!"); 
+
+		}).always(function () {
 		 	progressBar.addClass('hidden');
 		});
 	}
@@ -157,6 +161,7 @@
 		communication.updateService(serviceId, serviceJson).done(function () {
 		 	updateView(); 
 			events.emit('toastRequest', "Seated!"); 
+		}).always(function () {
 		 	progressBar.addClass('hidden');
 		});
 	}
@@ -173,11 +178,14 @@
 	 	const updateView = $.proxy(this.datePickerChange, this); 
 
 	 	const serviceJson = {ammount: ammount}
+	 	progressBar.removeClass('hidden')
 
 		communication.updateService(serviceId, serviceJson).done(function () {
 			 updateView(); 
 			 events.emit('toastRequest', "Ammount Updated!"); 
-		})
+		}).always(function () {
+		 	progressBar.addClass('hidden');
+		});
 
 		field.val('');
 	}
@@ -193,7 +201,9 @@
 		communication.acceptReservation(reservationId, tableId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Reservation Accepted!"); 
+		}).always(function () {
 		 	progressBar.addClass('hidden');
+			$(event.target).removeClass('disabled')
 		})
 	}
 
@@ -205,6 +215,7 @@
 		communication.cancelReservation(reservationId, tableId).done(function () {
 			 updateView();
 			 events.emit('toastRequest', "Reservation Canceled!"); 
+		}).always(function () {
 		 	progressBar.addClass('hidden');
 		})
 	}
@@ -216,9 +227,10 @@
 
 		progressBar.removeClass('hidden');
 		communication.rejectReservation(id).done(function (response) {
-			progressBar.addClass('hidden');
 			updateView();
 			events.emit('toastRequest', "Reservation Rejected"); 
+		}).always(function () {
+		 	progressBar.addClass('hidden');
 		})
 	}
 
@@ -268,43 +280,34 @@
 		const rejectReservation = $.proxy(this.rejectReservation, this);
 	 	const datePickerChange = $.proxy(this.datePickerChange, this);
 
+	 	buttonClick = function (e) {
+	 		// if(!$(e.target).hasClass('disabled')) {
+	 			// $(e.target).addClass('disabled')
+		 		e.data.fn(e);
+	 		// }
+	 	}
 
-	 	this.$el.on('click', '.service-submit', function (e) {
-	 		const target = $(e.target);
-	 		if(!target.attr('disabled')) {
-	 			target.attr('disabled', true);
-	 		 	submitService(e);
-	 		}
-	 	});
+	 	
 
-	 	this.$el.on('click', '.delete-btn', function (e) {
-	 		destroyService(e);
-	 	});
-	 	this.$el.on('click', '.reject-res-btn', rejectReservation);
 
-	 	this.$el.on('click', '.delete-res-btn', function (e) {
-	 		cancelReservation(e);
-	 	});
-	 	this.$el.on('click', '.accept-btn', function (e) {
-	 		acceptReservation(e);
-	 	});
+
+	 	this.$el.on('click', '.service-submit', {fn: submitService }, buttonClick);
+	 	this.$el.on('click', '.delete-btn', {fn: destroyService}, buttonClick);
+	 	this.$el.on('click', '.reject-res-btn', {fn:rejectReservation}, buttonClick);
+	 	this.$el.on('click', '.delete-res-btn', {fn: cancelReservation}, buttonClick);
+	 	this.$el.on('click', '.accept-btn', {fn: acceptReservation}, buttonClick);
+	 	this.$el.on('click', '#ammount-submit-btn',{fn:submitAmmount}, buttonClick);
+	 	this.$el.on('click', '.visibility-btn', {fn: toggleReservationVisibility}, buttonClick);
+
 	 	this.$el.on('click', '#tableNumber.validate', function (e) {
 	 		$(e.target).blur();
 	 		displayTablesModal(e);
 	 		
 	 	});
-	 	this.$el.on('click', '.modal-content .table-option.blue', function (e) {
-	 		saveTableNumber(e);
-	 	});
-	 	this.$el.on('click', '.service-btn', function (e) {
+	 	this.$el.on('click', '.modal-content .table-option.blue', saveTableNumber);
+	 	this.$el.on('click', '.service-btn', {fn:handleServiceAction}, function (e) {
 	 		e.stopPropagation();
-	 		handleServiceAction(e);
-	 	});
-	 	this.$el.on('click', '#ammount-submit-btn', function (e) {
-	 		submitAmmount(e);
-	 	});
-	 	this.$el.on('click', '.visibility-btn', function (e) {
-	 		toggleReservationVisibility(e);
+	 		buttonClick(e)
 	 	});
 
 	 	this.$el.on('click', '.button-collapse', function (e) {
@@ -314,6 +317,10 @@
 	 		};
 			$('.button-collapse').sideNav('show');
 	 	});
+
+	 	this.$el.on('click', '.add-service-icon', function (e) {
+	 		$(e.target).parent().click()
+	 	})
 
 	}
 

@@ -29,14 +29,16 @@ var Map = function (el, organization_map) {
 	 }
 
 	 this.createFromList = function (list) {
+	 	debugger
 	 	 for (var i = list.length - 1; i >= 0; i--) {
-	 	 	if (list[i].services.length == 0) {
-	 	 		var status = 0;
-	 	 	} else if (list[i].services[0].status == "incomplete") {
+	 	 	var lst = list[i].services.length - 1
+	 	 	if (lst == -1) {
+	 	 		var status = 0; 
+	 	 	} else if (list[i].services[lst].status == "incomplete") {
 	 	 		var status = 1;	
-	 	 	} else if (list[i].services[0].status == "seated") {
+	 	 	} else if (list[i].services[lst].status == "seated") {
 	 	 		var status = 2;
-	 	 	} else if (list[i].services[0].status == "complete") {
+	 	 	} else if (list[i].services[lst].status == "complete") {
 	 	 		var status = 0;
 	 	 	}
 	 	 	this.addCircle(list[i].x/ratioX, list[i].y/ratioY, status, list[i].number); 
